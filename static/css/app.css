@@ -1,0 +1,104 @@
+html {
+  font-size: 62.5%;
+  font-family: "Microsoft YaHei", serif;
+  color: #ffffff;
+}
+
+.container {
+  min-height: 100%;
+  min-width: 100%;
+  background: url(../images/background.jpg) no-repeat;
+  background-size: 31.5rem;
+  max-width: calc(768px + 16px * 2);
+  maxWidth: -webkit-calc(768px + 16px * 2);
+  margin: 0 auto;
+  display: -webkit-box;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5rem;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.correct {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  background-color: #8f96a1;
+  margin: 5rem;
+}
+
+.correct-logo {
+  width: 5rem;
+  height: 4rem;
+}
+
+.form-group {
+  text-align: center;
+  flex-flow: row nowrap;
+}
+
+.form-control {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.form-control .form-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  height: 4rem;
+}
+
+.form-control .btn-submit {
+  border: .24rem solid #ffffff;
+  padding: 1.2em;
+  width: 25rem;
+  border-radius: 25px;
+  -moz-border-radius: 25px;
+}
+
+footer {
+  display: -webkit-box;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-box-pack: space-between;
+  -ms-flex-pack: space-between;
+  -webkit-justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  padding: 1em 0;
+}
+
+.sign-in {
+  margin: 5.3rem 0;
+}
+
+.icon {
+  height: 2rem;
+  width: 2rem;
+  background: url(../images/icons/icon-user.png) no-repeat;
+  background-size: 2rem 2rem;
+}
+
+.icon-user {
+  background-image: url(../images/icons/icon-user.png);
+}
