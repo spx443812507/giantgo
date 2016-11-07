@@ -4,12 +4,15 @@ html {
   color: #ffffff;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
 .container {
   min-height: 100%;
-  min-width: 100%;
   background: url(../images/background.jpg) no-repeat;
-  background-size: 31.5rem;
-  max-width: calc(768px + 16px * 2);
+  max-width: calc(718px + 16px * 2);
   maxWidth: -webkit-calc(768px + 16px * 2);
   margin: 0 auto;
   display: -webkit-box;
@@ -60,12 +63,13 @@ html {
   align-items: center;
 }
 
-.form-control .form-item{
+.form-control .form-item {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
   height: 4rem;
+  padding: 4rem;
 }
 
 .form-control .btn-submit {
@@ -101,4 +105,8 @@ footer {
 
 .icon-user {
   background-image: url(../images/icons/icon-user.png);
+}
+
+.icon-password {
+  background-image: url(../images/icons/icon-password.png);
 }
