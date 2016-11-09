@@ -1,5 +1,4 @@
 html {
-  font-size: 62.5%;
   font-family: "Microsoft YaHei", serif;
   color: #ffffff;
 }
@@ -9,11 +8,35 @@ html, body {
   width: 100%;
 }
 
+button, input, select, textarea {
+  background-color: transparent;
+  border-style: none;
+  color: inherit;
+  font-size: .14em;
+  margin: 0;
+}
+
+label {
+  font-size: .14rem;
+}
+
+footer {
+  display: -webkit-box;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-box-pack: space-between;
+  -ms-flex-pack: space-between;
+  -webkit-justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  font-size: .21rem;
+}
+
 .container {
   min-height: 100%;
   background: url(../images/background.jpg) no-repeat;
-  max-width: calc(718px + 16px * 2);
-  maxWidth: -webkit-calc(768px + 16px * 2);
+  max-width: 7.5rem;
   margin: 0 auto;
   display: -webkit-box;
   display: flex;
@@ -21,13 +44,14 @@ html, body {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
+  background-size: cover;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 5rem;
+  margin-top: .2rem;
 }
 
 .content {
@@ -40,21 +64,26 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 10rem;
-  height: 10rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   background-color: #8f96a1;
-  margin: 5rem;
+  margin: 1rem;
 }
 
 .correct-logo {
-  width: 5rem;
-  height: 4rem;
+  width: 1.4rem;
+  height: 1.1rem;
 }
 
 .form-group {
   text-align: center;
   flex-flow: row nowrap;
+}
+
+.form-group input {
+  outline: none;
+  border-bottom: 1px dotted #999;
 }
 
 .form-control {
@@ -68,39 +97,27 @@ html, body {
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
-  height: 4rem;
-  padding: 4rem;
+  height: .4rem;
+  padding: .4rem;
 }
 
 .form-control .btn-submit {
-  border: .24rem solid #ffffff;
+  border: .03rem solid #ffffff;
   padding: 1.2em;
-  width: 25rem;
-  border-radius: 25px;
-  -moz-border-radius: 25px;
-}
-
-footer {
-  display: -webkit-box;
-  display: flex;
-  display: -webkit-flex;
-  -webkit-box-pack: space-between;
-  -ms-flex-pack: space-between;
-  -webkit-justify-content: space-between;
-  justify-content: center;
-  align-items: center;
-  padding: 1em 0;
+  width: 4.5rem;
+  border-radius: .5rem;
+  -moz-border-radius: .5rem;
 }
 
 .sign-in {
-  margin: 5.3rem 0;
+  margin: .53rem 0;
 }
 
 .icon {
-  height: 2rem;
-  width: 2rem;
+  height: .46rem;
+  width: .5rem;
   background: url(../images/icons/icon-user.png) no-repeat;
-  background-size: 2rem 2rem;
+  background-size: cover;
 }
 
 .icon-user {
