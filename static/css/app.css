@@ -1,42 +1,7 @@
-html {
-  font-family: "Microsoft YaHei", serif;
-  color: #ffffff;
-}
-
-html, body {
-  height: 100%;
-  width: 100%;
-}
-
-button, input, select, textarea {
-  background-color: transparent;
-  border-style: none;
-  color: inherit;
-  font-size: .14em;
-  margin: 0;
-}
-
-label {
-  font-size: .14rem;
-}
-
-footer {
-  display: -webkit-box;
-  display: flex;
-  display: -webkit-flex;
-  -webkit-box-pack: space-between;
-  -ms-flex-pack: space-between;
-  -webkit-justify-content: space-between;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 0;
-  font-size: .21rem;
-}
-
 .container {
   min-height: 100%;
   background: url(../images/background.jpg) no-repeat;
-  max-width: 7.5rem;
+  max-width: 41.6rem;
   margin: 0 auto;
   display: -webkit-box;
   display: flex;
