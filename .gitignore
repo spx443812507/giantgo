@@ -8,3 +8,7 @@ stats.json
 .DS_Store
 npm-debug.log
 .idea
+static/sass/app.css
+static/sass/app.css.map
+stylesheets/
+/static/.sass-cache/
