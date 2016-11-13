@@ -11,14 +11,17 @@
   background-size: cover;
   justify-content: space-between;
 }
+
 .header {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .content {
   margin: .5rem;
 }
+
 .correct {
   display: flex;
   justify-content: center;
@@ -29,47 +32,51 @@
   background-color: #8f96a1;
   margin-top: 2.5rem;
 }
+
 .correct-logo {
   width: 1.45rem;
   height: 1.12rem;
 }
+
 .form-group {
   text-align: center;
   justify-content: space-around;
   flex-flow: column nowrap;
   display: flex;
+  input {
+    outline: none;
+    border-bottom: .05rem dotted #999;
+  }
 }
-.form-group input {
-  outline: none;
-  border-bottom: .05rem dotted #999;
-}
+
 .form-control {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  .form-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin: .2rem;
+    width: 100%;
+  }
+  .btn-submit {
+    border: .03rem solid #ffffff;
+    padding: .3rem;
+    width: 100%;
+    border-radius: .5rem;
+    -moz-border-radius: .5rem;
+  }
+  label {
+    font-size: .3rem;
+  }
+  input {
+    width: 100%;
+    font-size: .3rem;
+  }
 }
-.form-control .form-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
-  margin: .2rem;
-  width: 100%;
-}
-.form-control .btn-submit {
-  border: .03rem solid #ffffff;
-  padding: .3rem;
-  width: 100%;
-  border-radius: .5rem;
-  -moz-border-radius: .5rem;
-}
-.form-control label {
-  font-size: .3rem;
-}
-.form-control input {
-  width: 100%;
-  font-size: .3rem;
-}
+
 footer {
   display: -webkit-box;
   display: flex;
@@ -82,16 +89,20 @@ footer {
   padding: .2rem 0;
   font-size: .25rem;
 }
+
 .icon {
   height: 0.46rem;
   width: 0.57rem;
   background: url(../images/icons/icon-user.png) no-repeat;
   background-size: cover;
-  margin-top: -0.2rem;
+  margin-top: -.2rem;
 }
+
 .icon-user {
   background-image: url(../images/icons/icon-user.png);
 }
+
 .icon-password {
   background-image: url(../images/icons/icon-password.png);
 }
+
