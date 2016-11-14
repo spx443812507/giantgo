@@ -1,4 +1,7 @@
 @import "util";
+@import "compass/layout";
+@import "compass/utilities/sprites";
+@import "icon/*.png";
 
 .container {
   min-height: 100%;
@@ -61,8 +64,8 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
-    @include px2rem(margin, 20px);
-    width: 100%;
+    @include px2rem(margin, 10px);
+    width: 90%;
   }
   .btn-submit {
     border: 3px solid #ffffff;
@@ -94,17 +97,10 @@ footer {
 }
 
 .icon {
-  @include px2rem(height, 46px);
-  @include px2rem(width, 55px);
-  background: url(../images/icons/icon-user.png) no-repeat;
+  height: 52px;
+  width: 52px;
   background-size: cover;
   @include px2rem(margin-top, -20px);
 }
 
-.icon-user {
-  background-image: url(../images/icons/icon-user.png);
-}
-
-.icon-password {
-  background-image: url(../images/icons/icon-password.png);
-}
+@include all-icon-sprites;
