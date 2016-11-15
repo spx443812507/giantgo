@@ -1,5 +1,3 @@
-.icon-sprite, .icon-birthday, .icon-camera, .icon-check, .icon-close, .icon-droplet, .icon-ellipses, .icon-email, .icon-food, .icon-location-pin, .icon-location, .icon-menu, .icon-mouse, .icon-password, .icon-people, .icon-phone, .icon-profile, .icon-search, .icon-time, .icon-twitter, .icon-weather { background-image: url('../images/icon-sc59d483f06.png'); background-repeat: no-repeat; }
-
 .container { min-height: 100%; background: url(../images/background.jpg) no-repeat; max-width: 10rem; margin: 0 auto; display: -webkit-box; display: flex; display: -webkit-flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -webkit-flex-direction: column; background-size: cover; justify-content: space-between; }
 
 .header { display: flex; align-items: center; justify-content: center; }
@@ -27,44 +25,6 @@ footer { display: -webkit-box; display: flex; display: -webkit-flex; -webkit-box
 [data-dpr="2"] footer { font-size: 32px; }
 [data-dpr="3"] footer { font-size: 48px; }
 
-.icon { height: 52px; width: 52px; background-size: cover; margin-top: -0.26667rem; }
-
-.icon-birthday { background-position: 0 0; }
-
-.icon-camera { background-position: 0 -52px; }
-
-.icon-check { background-position: 0 -104px; }
-
-.icon-close { background-position: 0 -156px; }
-
-.icon-droplet { background-position: 0 -208px; }
-
-.icon-ellipses { background-position: 0 -260px; }
-
-.icon-email { background-position: 0 -312px; }
-
-.icon-food { background-position: 0 -364px; }
-
-.icon-location-pin { background-position: 0 -416px; }
-
-.icon-location { background-position: 0 -468px; }
-
-.icon-menu { background-position: 0 -520px; }
-
-.icon-mouse { background-position: 0 -572px; }
-
-.icon-password { background-position: 0 -624px; }
-
-.icon-people { background-position: 0 -676px; }
-
-.icon-phone { background-position: 0 -728px; }
-
-.icon-profile { background-position: 0 -780px; }
-
-.icon-search { background-position: 0 -832px; }
-
-.icon-time { background-position: 0 -884px; }
-
-.icon-twitter { background-position: 0 -936px; }
-
-.icon-weather { background-position: 0 -988px; }
+.icon { display: inline-block; }
+.icon-profile { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 78.94737%; background-size: 0.69333rem 16.4rem; }
+.icon-password { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 63.15789%; background-size: 0.69333rem 16.4rem; }

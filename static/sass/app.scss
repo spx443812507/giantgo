@@ -1,7 +1,5 @@
 @import "util";
-@import "compass/layout";
-@import "compass/utilities/sprites";
-@import "icon/*.png";
+@import "var";
 
 .container {
   min-height: 100%;
@@ -96,11 +94,4 @@ footer {
   @include font-dpr(16px);
 }
 
-.icon {
-  height: 52px;
-  width: 52px;
-  background-size: cover;
-  @include px2rem(margin-top, -20px);
-}
-
-@include all-icon-sprites;
+@import "sprite";

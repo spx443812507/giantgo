@@ -1,0 +1,10 @@
+.icon {
+  display: inline-block;
+  $sprites: creatSprite('icon/*.png'); // 将icons下所有png图片生成图片精灵。
+  &-profile { // 响应式图标
+    @include icon('profile', $sprites, true);
+  }
+  &-password {
+    @include icon('password', $sprites, true);
+  }
+}
