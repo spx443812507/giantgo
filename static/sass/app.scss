@@ -3,7 +3,7 @@
 
 .container {
   min-height: 100%;
-  background: url(../images/background.jpg) no-repeat;
+  background: url(../images/background.png) no-repeat;
   @include px2rem(max-width, 750px);
   margin: 0 auto;
   display: -webkit-box;
@@ -22,24 +22,25 @@
   justify-content: center;
 }
 
-.content {
-  @include px2rem(margin, 50px);
-}
-
-.correct {
+.footer {
+  display: -webkit-box;
   display: flex;
+  display: -webkit-flex;
+  -webkit-box-pack: space-between;
+  -ms-flex-pack: space-between;
+  -webkit-justify-content: space-between;
   justify-content: center;
   align-items: center;
-  @include px2rem(width, 300px);
-  @include px2rem(height, 300px);
-  border-radius: 50%;
-  background-color: #8f96a1;
-  margin-top: 2.5rem;
+  @include px2rem(padding, 20px);
+  @include font-dpr(16px);
 }
 
-.correct-logo {
-  @include px2rem(width, 145px);
-  @include px2rem(height, 112px);
+.content {
+  @include px2rem(margin, 50px);
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .form-group {
@@ -48,8 +49,20 @@
   flex-flow: column nowrap;
   display: flex;
   input {
+    width: 100%;
     outline: none;
     border-bottom: .05rem dotted #999;
+    @include font-dpr(16px);
+  }
+  .btn-submit {
+    border: 3px solid #ffffff;
+    width: 100%;
+    @include px2rem(padding, 20px);
+    @include px2rem(border-radius, 50px);
+    @include px2rem(-moz-border-radius, 50px);
+  }
+  label {
+    @include font-dpr(16px);
   }
 }
 
@@ -65,33 +78,23 @@
     @include px2rem(margin, 10px);
     width: 90%;
   }
-  .btn-submit {
-    border: 3px solid #ffffff;
-    width: 100%;
-    @include px2rem(padding, 20px);
-    @include px2rem(border-radius, 50px);
-    @include px2rem(-moz-border-radius, 50px);
-  }
-  label {
-    @include font-dpr(16px);
-  }
-  input {
-    width: 100%;
-    @include font-dpr(16px);
-  }
+
 }
 
-footer {
-  display: -webkit-box;
+.correct {
   display: flex;
-  display: -webkit-flex;
-  -webkit-box-pack: space-between;
-  -ms-flex-pack: space-between;
-  -webkit-justify-content: space-between;
   justify-content: center;
   align-items: center;
-  @include px2rem(padding, 20px);
-  @include font-dpr(16px);
+  @include px2rem(width, 200px);
+  @include px2rem(height, 200px);
+  border-radius: 50%;
+  background-color: #ffffff;
+  margin-top: 2.5rem;
+}
+
+.correct-logo {
+  @include px2rem(width, 145px);
+  @include px2rem(height, 112px);
 }
 
 @import "sprite";

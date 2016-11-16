@@ -1,87 +1,1 @@
-@import "compass/utilities/sprites";
-
-@function px2em($px, $base-font-size: 75px) {
-  @if (unitless($px)) {
-    @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels for you";
-    @return px2em($px + 0px); // That may fail.
-  } @else if (unit($px) == em) {
-    @return $px;
-  }
-  @return ($px / $base-font-size) * 1em;
-}
-
-// 将 px 转化成 rem
-@function pxToRem($pxVal,$baseline-px:75) {
-  $pxVal: $pxVal / ($pxVal * 0 + 1); // 去单位
-  @if $pxVal == 0 {
-    @return 0;
-  } @else {
-    @return $pxVal/$baseline-px * 1rem;
-  }
-}
-
-// 生成图片精灵
-@function creatSprite($globImgPath, $spacing: 10px) {
-  @return sprite-map($globImgPath, $spacing: $spacing, $layout: vertical);
-}
-
-@mixin px2rem($property,$px-values,$baseline-px:75px,$support-for-ie:false) {
-  //Conver the baseline into rems
-  $baseline-rem: $baseline-px / 1rem * 1;
-  //Print the first line in pixel values
-  @if $support-for-ie {
-    #{$property}: $px-values;
-  }
-  //if there is only one (numeric) value, return the property/value line for it.
-  @if type-of($px-values) == "number" {
-    #{$property}: $px-values / $baseline-rem;
-  } @else {
-    //Create an empty list that we can dump values into
-    $rem-values: ();
-    @each $value in $px-values {
-      // If the value is zero or not a number, return it
-      @if $value == 0 or type-of($value) != "number" {
-        $rem-values: append($rem-values, $value / $baseline-rem);
-      }
-    }
-    // Return the property and its list of converted values
-    #{$property}: $rem-values;
-  }
-}
-
-@mixin font-dpr($font-size) {
-  font-size: $font-size;
-
-  [data-dpr="2"] & {
-    font-size: $font-size * 2;
-  }
-
-  [data-dpr="3"] & {
-    font-size: $font-size * 3;
-  }
-}
-
-@mixin icon($name, $sprites, $isRem: false) {
-  $iconPath: sprite-file($sprites, $name); // 图标文件的路径
-  $iconWidth: image-width($iconPath);
-  $iconHeight: image-height($iconPath);
-  $iconPosXInSprite: 0; // 垂直放的
-  $iconPosYInSprite: nth(sprite-position($sprites, $name), 2);
-  background-repeat: no-repeat;
-  background-image: sprite-url($sprites);
-  @if $isRem {
-    width: pxToRem($iconWidth);
-    height: pxToRem($iconHeight);
-    $spriteWidth: sprite-width($sprites);
-    $spriteHeight: sprite-height($sprites);
-    @if $iconPosYInSprite != 0 {
-      $iconPosYInSprite: $iconPosYInSprite / ($iconHeight - $spriteHeight) * 100%;
-    }
-    background-position: $iconPosXInSprite $iconPosYInSprite;
-    background-size: pxToRem($spriteWidth) pxToRem($spriteHeight);
-  } @else {
-    width: $iconWidth;
-    height: $iconWidth;
-    background-position: $iconPosXInSprite $iconPosYInSprite;
-  }
-}
+@import "compass/utilities/sprites";@function px2em($px, $base-font-size: 75px) {  @if (unitless($px)) {    @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels for you";    @return px2em($px + 0px); // That may fail.  } @else if (unit($px) == em) {    @return $px;  }  @return ($px / $base-font-size) * 1em;}// 将 px 转化成 rem@function pxToRem($pxVal,$baseline-px:75) {  $pxVal: $pxVal / ($pxVal * 0 + 1); // 去单位  @if $pxVal == 0 {    @return 0;  } @else {    @return $pxVal/$baseline-px * 1rem;  }}// 生成图片精灵@function creatSprite($globImgPath, $spacing: 10px) {  @return sprite-map($globImgPath, $spacing: $spacing, $layout: vertical);}@mixin px2rem($property,$px-values,$baseline-px:75px,$support-for-ie:false) {  //Conver the baseline into rems  $baseline-rem: $baseline-px / 1rem * 1;  //Print the first line in pixel values  @if $support-for-ie {    #{$property}: $px-values;  }  //if there is only one (numeric) value, return the property/value line for it.  @if type-of($px-values) == "number" {    #{$property}: $px-values / $baseline-rem;  } @else {    //Create an empty list that we can dump values into    $rem-values: ();    @each $value in $px-values {      // If the value is zero or not a number, return it      @if $value == 0 or type-of($value) != "number" {        $rem-values: append($rem-values, $value / $baseline-rem);      }    }    // Return the property and its list of converted values    #{$property}: $rem-values;  }}@mixin font-dpr($font-size) {  font-size: $font-size;  [data-dpr="2"] & {    font-size: $font-size * 2;  }  [data-dpr="3"] & {    font-size: $font-size * 3;  }}@mixin icon($name, $sprites, $isRem: false) {  $iconPath: sprite-file($sprites, $name); // 图标文件的路径  $iconWidth: image-width($iconPath);  $iconHeight: image-height($iconPath);  $iconPosXInSprite: 0; // 垂直放的  $iconPosYInSprite: nth(sprite-position($sprites, $name), 2);  background-repeat: no-repeat;  background-image: sprite-url($sprites);  @if $isRem {    width: pxToRem($iconWidth);    height: pxToRem($iconHeight);    $spriteWidth: sprite-width($sprites);    $spriteHeight: sprite-height($sprites);    @if $iconPosYInSprite != 0 {      $iconPosYInSprite: $iconPosYInSprite / ($iconHeight - $spriteHeight) * 100%;    }    background-position: $iconPosXInSprite $iconPosYInSprite;    background-size: pxToRem($spriteWidth) pxToRem($spriteHeight);  } @else {    width: $iconWidth;    height: $iconWidth;    background-position: $iconPosXInSprite $iconPosYInSprite;  }}
