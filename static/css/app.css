@@ -6,18 +6,17 @@ header .opacity { opacity: 0.1; filter: alpha(opacity=10); background-color: #ff
 header .tab { display: flex; z-index: 2; width: 100%; font-size: 16px; padding-top: 0.53333rem; }
 [data-dpr="2"] header .tab { font-size: 32px; }
 [data-dpr="3"] header .tab { font-size: 48px; }
-header .tab div { width: 50%; text-align: center; box-sizing: content-box; height: 1.06667rem; }
-header .tab div.active { border-bottom: solid 0.13333rem rebeccapurple; }
-header .tab a { color: #ffffff; text-decoration: none; }
+header .tab a { color: #ffffff; text-decoration: none; width: 50%; text-align: center; box-sizing: content-box; height: 1.06667rem; line-height: 1.06667rem; }
+header .tab a.active { border-bottom: solid 0.13333rem rebeccapurple; }
 
-footer { position: fixed; bottom: 0; width: 100%; max-width: 10rem; display: flex; display: -webkit-flex; flex-direction: column; justify-content: space-around; -webkit-justify-content: space-around; align-items: center; height: 3.33333rem; padding: 0.26667rem; font-size: 12px; }
+footer { max-width: 10rem; display: flex; display: -webkit-flex; flex-direction: column; justify-content: space-around; -webkit-justify-content: space-around; align-items: center; height: 3.33333rem; padding: 0.26667rem; font-size: 12px; }
 [data-dpr="2"] footer { font-size: 24px; }
 [data-dpr="3"] footer { font-size: 36px; }
 footer .btn-submit { width: 100%; background-color: rebeccapurple; height: 1.33333rem; font-size: 16px; }
 [data-dpr="2"] footer .btn-submit { font-size: 32px; }
 [data-dpr="3"] footer .btn-submit { font-size: 48px; }
 
-.content { margin: 0.26667rem; display: flex; display: -webkit-flex; flex-direction: column; justify-content: space-around; }
+.content { margin: 0.26667rem; display: flex; display: -webkit-flex; flex-direction: column; justify-content: flex-start; flex: 1; }
 
 .form-group { text-align: center; justify-content: space-around; flex-flow: column nowrap; display: flex; }
 .form-group input { width: 90%; height: 1.33333rem; padding-left: 0.13333rem; font-size: 13px; outline: none; }

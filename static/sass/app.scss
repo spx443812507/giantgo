@@ -41,26 +41,22 @@ header {
     width: 100%;
     @include font-dpr(16px);
     @include px2rem(padding-top, 40px);
-    div {
+    a{
+      color: #ffffff;
+      text-decoration: none;
       width: 50%;
       text-align: center;
       box-sizing: content-box;
       @include px2rem(height, 80px);
+      @include px2rem(line-height, 80px);
       &.active {
         border-bottom: solid pxToRem(10px) rebeccapurple;
       }
-    }
-    a{
-      color: #ffffff;
-      text-decoration: none;
     }
   }
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
   @include px2rem(max-width, 750px);
   display: flex;
   display: -webkit-flex;
@@ -84,7 +80,8 @@ footer {
   display: flex;
   display: -webkit-flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
+  flex: 1;
 }
 
 .form-group {
