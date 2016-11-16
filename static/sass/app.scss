@@ -6,17 +6,14 @@
   background: url(../images/background.png) no-repeat;
   @include px2rem(max-width, 750px);
   margin: 0 auto;
-  display: -webkit-box;
   display: flex;
   display: -webkit-flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
   -webkit-flex-direction: column;
   background-size: cover;
   justify-content: space-between;
 }
 
-.header {
+header {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -54,17 +51,22 @@
   }
 }
 
-.footer {
-  display: -webkit-box;
+footer {
   display: flex;
   display: -webkit-flex;
-  -webkit-box-pack: space-between;
-  -ms-flex-pack: space-between;
-  -webkit-justify-content: space-between;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
   align-items: center;
+  @include px2rem(height, 250px);
   @include px2rem(padding, 20px);
   @include font-dpr(16px);
+  .btn-submit {
+    width: 100%;
+    background-color: rebeccapurple;
+    @include px2rem(height, 100px);
+    @include font-dpr(16px);
+  }
 }
 
 .content {
