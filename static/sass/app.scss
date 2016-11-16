@@ -18,8 +18,40 @@
 
 .header {
   display: flex;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  position: relative;
+  .mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+  }
+  .opacity {
+    opacity: 0.1;
+    filter: alpha(opacity=10);
+    background-color: #ffffff;
+  }
+  .tab {
+    display: flex;
+    z-index: 2;
+    width: 100%;
+    @include font-dpr(16px);
+    @include px2rem(padding-top, 40px);
+    div {
+      width: 50%;
+      text-align: center;
+      box-sizing: content-box;
+      @include px2rem(height, 80px);
+      &.active {
+        border-bottom: solid pxToRem(10px) rebeccapurple;
+      }
+    }
+  }
 }
 
 .footer {
@@ -90,6 +122,7 @@
   border-radius: 50%;
   background-color: #ffffff;
   margin-top: 2.5rem;
+  z-index: 2;
 }
 
 .correct-logo {

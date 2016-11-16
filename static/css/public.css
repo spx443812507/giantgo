@@ -1,0 +1,21 @@
+html { font-family: "Microsoft YaHei", serif; color: #ffffff; line-height: 1.2; }
+
+html, body { height: 100%; width: 100%; }
+
+button, input, select, textarea { background-color: transparent; border-style: none; color: inherit; font-size: .14em; margin: 0; }
+
+label { font-size: .16rem; }
+
+section { padding: .6rem 10%; background: #fafafa; }
+
+section:nth-child(even) { background: #f0f0f0; }
+
+h1, h2 { line-height: 1.3; }
+
+h1 { font-size: .16rem; margin: 0 0 .16rem; }
+
+h2 { font-size: .15rem; margin: .1rem 0 .2rem; }
+
+p { font-size: .1rem; margin: .1rem 0; }
+
+a.button { display: inline-block; line-height: 2.5rem; padding: 0 1.5rem; margin-top: 1rem; color: white; background: #3c3c3c; text-decoration: none; }
