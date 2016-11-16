@@ -1,3 +1,4 @@
+@charset "utf-8";
 .icon {
   display: inline-block;
   $sprites: creatSprite('icon/*.png'); // 将icons下所有png图片生成图片精灵。
@@ -6,5 +7,11 @@
   }
   &-password {
     @include icon('password', $sprites, true);
+  }
+  &-email {
+    @include icon('email', $sprites, true);
+  }
+  &-birthday {
+    @include icon('birthday', $sprites, true);
   }
 }

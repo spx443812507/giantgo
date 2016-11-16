@@ -1,4 +1,5 @@
 # Set this to the root of your project when deployed:
+encoding = "utf-8"
 http_path = "/"
 css_dir = "css"
 sass_dir = "sass"

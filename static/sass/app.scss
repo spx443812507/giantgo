@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 @import "util";
 @import "var";
 
@@ -10,7 +12,7 @@
   display: -webkit-flex;
   -webkit-flex-direction: column;
   background-size: cover;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 header {
@@ -48,10 +50,18 @@ header {
         border-bottom: solid pxToRem(10px) rebeccapurple;
       }
     }
+    a{
+      color: #ffffff;
+      text-decoration: none;
+    }
   }
 }
 
 footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  @include px2rem(max-width, 750px);
   display: flex;
   display: -webkit-flex;
   flex-direction: column;
@@ -60,7 +70,7 @@ footer {
   align-items: center;
   @include px2rem(height, 250px);
   @include px2rem(padding, 20px);
-  @include font-dpr(16px);
+  @include font-dpr(12px);
   .btn-submit {
     width: 100%;
     background-color: rebeccapurple;
@@ -70,7 +80,7 @@ footer {
 }
 
 .content {
-  @include px2rem(margin, 50px);
+  @include px2rem(margin, 20px);
   display: flex;
   display: -webkit-flex;
   flex-direction: column;
@@ -83,10 +93,11 @@ footer {
   flex-flow: column nowrap;
   display: flex;
   input {
-    width: 100%;
+    width: 90%;
+    @include px2rem(height, 100px);
+    @include px2rem(padding-left, 10px);
+    @include font-dpr(13px);
     outline: none;
-    border-bottom: .05rem dotted #999;
-    @include font-dpr(16px);
   }
   .btn-submit {
     border: 3px solid #ffffff;
@@ -104,15 +115,8 @@ footer {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  .form-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-start;
-    @include px2rem(margin, 10px);
-    width: 90%;
-  }
-
+  border-bottom: solid 1px #5e5b5c;
+  @include px2rem(padding-top, 20px);
 }
 
 .correct {
@@ -123,7 +127,7 @@ footer {
   @include px2rem(height, 200px);
   border-radius: 50%;
   background-color: #ffffff;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   z-index: 2;
 }
 

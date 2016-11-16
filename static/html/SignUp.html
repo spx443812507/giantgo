@@ -1,15 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="format-detection" content="telephone=no"/>
+  <meta charset="utf-8">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
   <title>注册</title>
+  <link rel="stylesheet" href="../css/sanitize.css">
+  <link rel="stylesheet" href="../css/public.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <script type="text/javascript" src="../javascript/responsive.js"></script>
 </head>
 <body>
-<div style="position: relative; left: 100px; top:100px;width: 100px; height:100px; background-color:red;word-wrap: break-word;">
-  assdasdsadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  <img class="correct-logo" style="width: 50px;position: absolute;left: 20px;top: 20px;" src="../images/correct.png"/>
+<div class="container">
+  <header>
+    <div class="correct">
+      <img class="correct-logo" src="../images/correct.png"/>
+    </div>
+    <div class="tab">
+      <div>
+        <a href="SignIn.html">登录</a>
+      </div>
+      <div class="active">
+        <a href="SignUp.html">注册</a>
+      </div>
+    </div>
+    <div class="mask opacity"></div>
+  </header>
+  <div class="content">
+    <div class="form-group">
+      <div class="form-control">
+        <i class="icon icon-profile"></i>
+        <input type="text" placeholder="姓名"/>
+      </div>
+      <div class="form-control">
+        <i class="icon icon-email"></i>
+        <input type="password" placeholder="邮箱"/>
+      </div>
+      <div class="form-control">
+        <i class="icon icon-password"></i>
+        <input type="text" placeholder="密码"/>
+      </div>
+      <div class="form-control">
+        <i class="icon icon-birthday"></i>
+        <input type="password" placeholder="生日"/>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <input type="button" class="btn-submit" value="提 交"/>
+    忘记密码？
+  </footer>
 </div>
 </body>
 </html>
