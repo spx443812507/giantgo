@@ -13,40 +13,44 @@
 </head>
 <body>
 <div class="container">
-  <header>
-    <div class="correct">
-      <img class="correct-logo" src="../images/correct.png"/>
-    </div>
-    <div class="tab">
-      <a href="SignIn.html">登录</a>
-      <a href="SignUp.html" class="active">注册</a>
-    </div>
-    <div class="mask opacity"></div>
-  </header>
   <div class="content">
-    <div class="form-group">
-      <div class="form-control">
+    <div class="content-header">
+      <div class="content-header-item">
+        <i class="icon icon-close"></i>
+        <i class="icon icon-camera"></i>
+      </div>
+      <div class="correct">
+        <img class="correct-logo" src="../images/correct.png"/>
+      </div>
+      <div class="tab">
+        <a href="SignIn.html">登录</a>
+        <a href="SignUp.html" class="active">注册</a>
+      </div>
+      <div class="mask opacity"></div>
+    </div>
+    <div class="content-center">
+      <div class="form-group">
         <i class="icon icon-profile"></i>
-        <input type="text" placeholder="姓名"/>
+        <input type="text" class="form-control" placeholder="姓名"/>
       </div>
-      <div class="form-control">
+      <div class="form-group">
         <i class="icon icon-email"></i>
-        <input type="text" placeholder="邮箱"/>
+        <input type="text" class="form-control" placeholder="邮箱"/>
       </div>
-      <div class="form-control">
+      <div class="form-group">
         <i class="icon icon-password"></i>
-        <input type="password" placeholder="密码"/>
+        <input type="password" class="form-control" placeholder="密码"/>
       </div>
-      <div class="form-control">
+      <div class="form-group">
         <i class="icon icon-birthday"></i>
-        <input type="text" placeholder="生日"/>
+        <input type="text" class="form-control" placeholder="生日"/>
       </div>
+    </div>
+    <div class="content-footer">
+      <input type="button" class="btn-submit" value="提 交"/>
+      忘记密码？
     </div>
   </div>
-  <footer>
-    <input type="button" class="btn-submit" value="提 交"/>
-    版权信息
-  </footer>
 </div>
 </body>
 </html>

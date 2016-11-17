@@ -14,4 +14,10 @@
   &-birthday {
     @include icon('birthday', $sprites, true);
   }
+  &-close {
+    @include icon('close', $sprites, true);
+  }
+  &-camera {
+    @include icon('camera', $sprites, true);
+  }
 }

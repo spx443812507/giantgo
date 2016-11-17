@@ -6,75 +6,90 @@
 .container {
   width: 100%;
   height: 100%;
-  min-height: 100%;
-  background: url(../images/background.png) no-repeat;
   @include px2rem(max-width, 750px);
+  background: url(../images/background.png) no-repeat;
   margin: 0 auto;
-  display: flex;
-  display: -webkit-flex;
-  -webkit-flex-direction: column;
   background-size: cover;
-  justify-content: flex-start;
+  position: relative;
 }
 
-header {
+.bar {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  @include px2rem(max-width, 750px);
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  width: auto;
+  height: auto;
+  display: flex;
+  display: -webkit-flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+}
+
+.content-center {
+  display: flex;
+  display: -webkit-flex;
+  flex-flow: column nowrap;
+  flex: 1;
+  @include px2rem(padding, 40px);
+}
+
+.form-group {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: row nowrap;
+  border-bottom: solid 1px #645d5a;
+  @include px2rem(margin-bottom, 30px);
+}
+
+.form-control {
+  padding: pxToRem(20px) pxToRem(40px);
+  @include px2rem(height, 100px);
+  @include font-dpr(16px);
+  border-radius: 0;
+  color: inherit;
+  width: 80%;
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.content-header {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   overflow: hidden;
   position: relative;
-  .mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 1;
-  }
-  .opacity {
-    opacity: 0.1;
-    filter: alpha(opacity=10);
-    background-color: #ffffff;
-  }
-  .correct {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    @include px2rem(width, 200px);
-    @include px2rem(height, 200px);
-    border-radius: 50%;
-    background-color: #ffffff;
-    margin-top: 2rem;
-    z-index: 2;
-    .correct-logo {
-      @include px2rem(width, 145px);
-      @include px2rem(height, 112px);
-    }
-  }
-  .tab {
-    display: flex;
-    z-index: 2;
-    width: 100%;
-    @include font-dpr(16px);
-    @include px2rem(padding-top, 40px);
-    a {
-      color: #ffffff;
-      text-decoration: none;
-      width: 50%;
-      text-align: center;
-      box-sizing: content-box;
-      @include px2rem(height, 80px);
-      @include px2rem(line-height, 80px);
-      outline: none;
-      &.active {
-        border-bottom: solid pxToRem(10px) rebeccapurple;
-      }
-    }
-  }
+  @include px2rem(height, 540px);
 }
 
-footer {
+.content-footer {
   @include px2rem(max-width, 750px);
   display: flex;
   display: -webkit-flex;
@@ -82,100 +97,113 @@ footer {
   justify-content: space-around;
   -webkit-justify-content: space-around;
   align-items: center;
-  @include px2rem(height, 250px);
+  @include px2rem(height, 216px);
   @include px2rem(padding, 20px);
   @include font-dpr(12px);
-  .btn-submit {
-    width: 100%;
-    background-color: rebeccapurple;
-    @include px2rem(height, 100px);
-    @include font-dpr(16px);
-  }
 }
 
-.content {
-  @include px2rem(margin, 20px);
-  display: flex;
-  display: -webkit-flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex: 1;
-}
-
-.form-group {
-  text-align: center;
-  justify-content: space-around;
-  flex-flow: column nowrap;
-  display: flex;
-  input {
-    width: 90%;
-    @include px2rem(height, 100px);
-    @include px2rem(padding-left, 10px);
-    @include font-dpr(13px);
-    outline: none;
-  }
-  .btn-submit {
-    border: 3px solid #ffffff;
-    width: 100%;
-    @include px2rem(padding, 20px);
-    @include px2rem(border-radius, 50px);
-    @include px2rem(-moz-border-radius, 50px);
-  }
-  label {
-    @include font-dpr(16px);
-  }
-}
-
-.form-control {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border-bottom: solid 1px #5e5b5c;
-  @include px2rem(padding-top, 20px);
-}
-
-.fix-header {
-  position: fixed;
-  width: 100%;
+.bar-header {
   top: 0;
-  left: 0;
-  @include px2rem(height, 80px);
+  border-top-width: 0;
+  border-bottom-width: 1px;
+  padding: pxToRem(52px) pxToRem(30px) pxToRem(24px) pxToRem(30px);
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  background-color: white;
+  justify-content: space-between;
+  background: #494851 top;
 }
 
-.fix-footer {
-  position: fixed;
+.bar-header-item {
+  vertical-align: middle;
+}
+
+.content-header-item {
   width: 100%;
-  bottom: 0;
-  left: 0;
-  @include px2rem(height, 80px);
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  background-color: white;
+  justify-content: space-between;
+  @include px2rem(min-height, 190px);
+  padding: pxToRem(62px) pxToRem(30px) 0 pxToRem(30px);
+  z-index: 2;
 }
 
-.footer-item {
+.bar-footer {
+  bottom: 0;
+  border-top-width: 1px;
+  border-bottom-width: 0;
+  background: #494851 top;
+}
+
+.bar-footer-item {
   flex: 1;
   text-align: center;
   vertical-align: middle;
-  @include px2rem(height, 80px);
-  @include px2rem(line-height, 80px);
+  @include px2rem(height, 120px);
+  @include px2rem(line-height, 120px);
 }
 
-.header-place-holder {
-  @include px2rem(height, 80px);
+.has-header {
+  @include px2rem(top, 135px);
 }
 
-.footer-place-holder {
-  @include px2rem(height, 80px);
+.has-footer {
+  @include px2rem(bottom, 120px);
+}
+
+.correct {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include px2rem(width, 200px);
+  @include px2rem(height, 200px);
+  border-radius: 50%;
+  background-color: #ffffff;
+  z-index: 2;
+  .correct-logo {
+    @include px2rem(width, 145px);
+    @include px2rem(height, 112px);
+  }
+}
+
+.tab {
+  display: flex;
+  z-index: 2;
+  width: 100%;
+  @include font-dpr(16px);
+  @include px2rem(padding-top, 40px);
+  a {
+    color: #ffffff;
+    text-decoration: none;
+    width: 50%;
+    text-align: center;
+    box-sizing: content-box;
+    @include px2rem(height, 80px);
+    @include px2rem(line-height, 80px);
+    outline: none;
+    &.active {
+      border-bottom: solid pxToRem(10px) rebeccapurple;
+    }
+  }
+}
+
+.mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.opacity {
+  opacity: 0.1;
+  filter: alpha(opacity=10);
+  background-color: #ffffff;
+}
+
+.btn-submit {
+  width: 100%;
+  background-color: rebeccapurple;
+  @include px2rem(height, 100px);
+  @include font-dpr(16px);
 }
 
 @import "sprite";

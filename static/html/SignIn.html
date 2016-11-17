@@ -13,32 +13,34 @@
 </head>
 <body>
 <div class="container">
-  <header>
-    <div class="correct">
-      <img class="correct-logo" src="../images/correct.png"/>
+  <div class="content no-header">
+    <div class="content-header">
+      <div class="content-header-item">
+      </div>
+      <div class="correct">
+        <img class="correct-logo" src="../images/correct.png"/>
+      </div>
+      <div class="tab">
+        <a href="SignIn.html" class="active">登录</a>
+        <a href="SignUp.html">注册</a>
+      </div>
+      <div class="mask opacity"></div>
     </div>
-    <div class="tab">
-      <a href="SignIn.html" class="active">登录</a>
-      <a href="SignUp.html">注册</a>
-    </div>
-    <div class="mask opacity"></div>
-  </header>
-  <div class="content">
-    <div class="form-group">
-      <div class="form-control">
+    <div class="content-center">
+      <div class="form-group">
         <i class="icon icon-profile"></i>
-        <input type="text" placeholder="姓名"/>
+        <input type="text" class="form-control" placeholder="姓名"/>
       </div>
-      <div class="form-control">
+      <div class="form-group">
         <i class="icon icon-password"></i>
-        <input type="password" placeholder="密码"/>
+        <input type="password" class="form-control" placeholder="密码"/>
       </div>
+    </div>
+    <div class="content-footer">
+      <input type="button" class="btn-submit" value="提 交"/>
+      忘记密码？
     </div>
   </div>
-  <footer>
-    <input type="button" class="btn-submit" value="提 交"/>
-    忘记密码？
-  </footer>
 </div>
 </body>
 </html>
