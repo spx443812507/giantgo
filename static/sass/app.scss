@@ -47,6 +47,7 @@
   display: -webkit-flex;
   flex-flow: column nowrap;
   justify-content: space-between;
+  -webkit-overflow-scrolling: touch;
 }
 
 .content-center {
@@ -64,7 +65,6 @@
   align-items: center;
   flex-flow: row nowrap;
   border-bottom: solid 1px #645d5a;
-  @include px2rem(margin-bottom, 30px);
 }
 
 .form-control {
@@ -74,6 +74,9 @@
   border-radius: 0;
   color: inherit;
   width: 80%;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-appearance: none;
+  outline: none;
   &:focus {
     box-shadow: none;
   }
