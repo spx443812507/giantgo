@@ -4,6 +4,8 @@
 @import "var";
 
 .container {
+  width: 100%;
+  height: 100%;
   min-height: 100%;
   background: url(../images/background.png) no-repeat;
   @include px2rem(max-width, 750px);
@@ -35,13 +37,28 @@ header {
     filter: alpha(opacity=10);
     background-color: #ffffff;
   }
+  .correct {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include px2rem(width, 200px);
+    @include px2rem(height, 200px);
+    border-radius: 50%;
+    background-color: #ffffff;
+    margin-top: 2rem;
+    z-index: 2;
+    .correct-logo {
+      @include px2rem(width, 145px);
+      @include px2rem(height, 112px);
+    }
+  }
   .tab {
     display: flex;
     z-index: 2;
     width: 100%;
     @include font-dpr(16px);
     @include px2rem(padding-top, 40px);
-    a{
+    a {
       color: #ffffff;
       text-decoration: none;
       width: 50%;
@@ -49,6 +66,7 @@ header {
       box-sizing: content-box;
       @include px2rem(height, 80px);
       @include px2rem(line-height, 80px);
+      outline: none;
       &.active {
         border-bottom: solid pxToRem(10px) rebeccapurple;
       }
@@ -116,21 +134,48 @@ footer {
   @include px2rem(padding-top, 20px);
 }
 
-.correct {
+.fix-header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  @include px2rem(height, 80px);
   display: flex;
+  flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  @include px2rem(width, 200px);
-  @include px2rem(height, 200px);
-  border-radius: 50%;
-  background-color: #ffffff;
-  margin-top: 2rem;
-  z-index: 2;
+  z-index: 100;
+  background-color: white;
 }
 
-.correct-logo {
-  @include px2rem(width, 145px);
-  @include px2rem(height, 112px);
+.fix-footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  @include px2rem(height, 80px);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  background-color: white;
+}
+
+.footer-item {
+  flex: 1;
+  text-align: center;
+  vertical-align: middle;
+  @include px2rem(height, 80px);
+  @include px2rem(line-height, 80px);
+}
+
+.header-place-holder {
+  @include px2rem(height, 80px);
+}
+
+.footer-place-holder {
+  @include px2rem(height, 80px);
 }
 
 @import "sprite";
