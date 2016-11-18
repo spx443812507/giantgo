@@ -20,19 +20,4 @@
   &-camera {
     @include icon('camera', $sprites, true);
   }
-  &-add {
-    @include icon('add', $sprites, true);
-  }
-  &-calendar {
-    @include icon('calendar', $sprites, true);
-  }
-  &-lists {
-    @include icon('lists', $sprites, true);
-  }
-  &-overview {
-    @include icon('overview', $sprites, true);
-  }
-  &-timeline {
-    @include icon('timeline', $sprites, true);
-  }
 }

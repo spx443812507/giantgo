@@ -46,19 +46,14 @@
 
 .opacity { opacity: 0.1; filter: alpha(opacity=10); background-color: #ffffff; }
 
-.btn-submit { width: 100%; background-color: rebeccapurple; height: 1.33333rem; font-size: 16px; }
+.btn-submit { width: 100%; background-color: rebeccapurple; height: 1.33333rem; font-size: 16px; outline: none; }
 [data-dpr="2"] .btn-submit { font-size: 32px; }
 [data-dpr="3"] .btn-submit { font-size: 48px; }
 
 .icon { display: inline-block; }
-.icon-profile { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 79.13414%; background-size: 0.69333rem 19.48rem; }
-.icon-password { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 65.93329%; background-size: 0.69333rem 19.48rem; }
-.icon-email { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 33.00213%; background-size: 0.69333rem 19.48rem; }
-.icon-birthday { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 3.3357%; background-size: 0.69333rem 19.48rem; }
-.icon-close { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 19.80128%; background-size: 0.69333rem 19.48rem; }
-.icon-camera { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 11.00071%; background-size: 0.69333rem 19.48rem; }
-.icon-add { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.49333rem; height: 0.49333rem; background-position: 0 0; background-size: 0.69333rem 19.48rem; }
-.icon-calendar { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.49333rem; height: 0.48rem; background-position: 0 7.64912%; background-size: 0.69333rem 19.48rem; }
-.icon-lists { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.48rem; height: 0.48rem; background-position: 0 41.33333%; background-size: 0.69333rem 19.48rem; }
-.icon-overview { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.49333rem; height: 0.48rem; background-position: 0 61.96491%; background-size: 0.69333rem 19.48rem; }
-.icon-timeline { background-repeat: no-repeat; background-image: url('../images/icon-sb421d91623.png'); width: 0.49333rem; height: 0.48rem; background-position: 0 91.29825%; background-size: 0.69333rem 19.48rem; }
+.icon-profile { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 78.94737%; background-size: 0.69333rem 16.4rem; }
+.icon-password { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 63.15789%; background-size: 0.69333rem 16.4rem; }
+.icon-email { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 31.57895%; background-size: 0.69333rem 16.4rem; }
+.icon-birthday { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 0; background-size: 0.69333rem 16.4rem; }
+.icon-close { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 15.78947%; background-size: 0.69333rem 16.4rem; }
+.icon-camera { background-repeat: no-repeat; background-image: url('../images/icon-s85c7b40b57.png'); width: 0.69333rem; height: 0.69333rem; background-position: 0 5.26316%; background-size: 0.69333rem 16.4rem; }

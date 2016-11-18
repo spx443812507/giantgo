@@ -207,6 +207,7 @@
   background-color: rebeccapurple;
   @include px2rem(height, 100px);
   @include font-dpr(16px);
+  outline: none;
 }
 
 @import "sprite";
