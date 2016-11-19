@@ -93,10 +93,6 @@
       doc.body.style.fontSize = 12 * dpr + 'px';
     }, false);
   }
-
-
-  refreshRem();
-
   flexible.dpr = win.dpr = dpr;
   flexible.refreshRem = refreshRem;
   flexible.rem2px = function (d) {
@@ -112,6 +108,11 @@
       val += 'rem';
     }
     return val;
-  }
-
+  };
+  refreshRem();
+  window.onload = function () {
+    var clientHeight = flexible.px2rem(docEl.getBoundingClientRect().height);
+    clientHeight = clientHeight < 17 ? 17 : clientHeight;
+    document.body.style.minHeight = clientHeight + "rem";
+  };
 })(window, window['lib'] || (window['lib'] = {}));
