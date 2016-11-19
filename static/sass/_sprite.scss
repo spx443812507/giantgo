@@ -1,6 +1,7 @@
 @charset "utf-8";
 .icon {
   display: inline-block;
+  vertical-align: middle;
   $sprites: creatSprite('icon/*.png'); // 将icons下所有png图片生成图片精灵。
   // 响应式图标
   &-add {
