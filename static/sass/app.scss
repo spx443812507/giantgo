@@ -31,6 +31,7 @@
   left: 0;
   z-index: 100;
   @include px2rem(max-width, 750px);
+  background: $background-mask;
 }
 
 .content {
@@ -90,6 +91,7 @@
   overflow: hidden;
   position: relative;
   @include px2rem(height, 540px);
+  background: $background-mask;
 }
 
 .content-footer {
@@ -109,7 +111,6 @@
   top: 0;
   border-top-width: 0;
   border-bottom-width: 1px;
-  padding: pxToRem(52px) pxToRem(30px) pxToRem(24px) pxToRem(30px);
   display: flex;
   justify-content: space-between;
   z-index: 2;
@@ -119,6 +120,7 @@
   vertical-align: middle;
   text-align: center;
   z-index: 2;
+  @include px2rem(padding, 34px);
   & > span {
     text-align: center;
     vertical-align: middle;
@@ -155,7 +157,7 @@
   text-align: center;
   vertical-align: middle;
   z-index: 2;
-  &.active{
+  &.active {
     background-color: #8c88ff;
     border-radius: 50%;
   }
@@ -167,7 +169,7 @@
 }
 
 .has-header {
-  @include px2rem(top, 135px);
+  @include px2rem(top, 120px);
 }
 
 .has-footer {
@@ -210,27 +212,41 @@
   }
 }
 
-.mask {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 1;
+.image-lists {
+  padding: pxToRem(30px);
 }
 
-.opacity {
-  opacity: 0.1;
-  filter: alpha(opacity=10);
-  background-color: #ffffff;
+.image-list {
+  width: 100%;
+  @include px2rem(margin-bottom, 20px);
+  display: flex;
+  flex: 1;
+  img {
+    width: 50%;
+  }
+  .description {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: $background-mask;
+  }
+  & > * {
+    flex: 1;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .btn-submit {
   width: 100%;
   background-color: #8c88ff;
   @include px2rem(height, 100px);
+  @include px2rem(line-height, 100px);
   @include font-dpr(16px);
   outline: none;
+  text-align: center;
 }
 
 @import "sprite";

@@ -51,3 +51,8 @@ p {
   @include font-dpr(16px);
   margin: pxToRem(2px) 0;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
