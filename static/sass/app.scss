@@ -15,12 +15,18 @@
 }
 
 .bar {
+  position: absolute;
+  right: 0;
+  left: 0;
+  @include px2rem(max-width, 750px);
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
   display: -moz-flex;
   display: -ms-flexbox;
   display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
@@ -28,12 +34,6 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  position: absolute;
-  right: 0;
-  left: 0;
-  z-index: 100;
-  @include px2rem(max-width, 750px);
-  background: $background-mask;
 }
 
 .content {
@@ -45,6 +45,7 @@
   overflow: auto;
   width: auto;
   height: auto;
+  @include px2rem(padding, 30px);
   display: flex;
   display: -webkit-flex;
   flex-flow: column nowrap;
@@ -53,18 +54,9 @@
   @include font-dpr(16px);
 }
 
-.content-center {
-  @include px2rem(min-height, 500px);
-  overflow: scroll;
-  display: flex;
-  display: -webkit-flex;
-  flex-flow: column nowrap;
-  @include px2rem(padding, 40px);
-}
-
 .form-group {
-  @include px2rem(height, 100px);
-  @include px2rem(line-height, 100px);
+  @include px2rem(height, 120px);
+  @include px2rem(line-height, 120px);
   border-bottom: solid 1px #645d5a;
 }
 
@@ -83,99 +75,73 @@
   }
 }
 
-.content-header {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-  position: relative;
-  @include px2rem(height, 540px);
-  @include px2rem(min-height, 540px);
-  background: $background-mask;
-}
-
-.content-footer {
-  @include px2rem(max-width, 750px);
-  display: flex;
-  display: -webkit-flex;
-  flex-direction: column;
-  justify-content: space-around;
-  -webkit-justify-content: space-around;
-  align-items: center;
-  @include px2rem(height, 216px);
-  @include px2rem(min-height, 216px);
-  @include px2rem(padding, 20px);
-  @include font-dpr(12px);
-}
-
 .bar-header {
   top: 0;
   border-top-width: 0;
   border-bottom-width: 1px;
-  display: flex;
-  justify-content: space-between;
-  z-index: 2;
 }
 
-.bar-header-item {
+.bar-header-tools {
+  width: 100%;
+  @include px2rem(min-height, 120px);
+  @include px2rem(padding, 34px);
+  display: flex;
+  flex-flow: row nowrap;
   vertical-align: middle;
   text-align: center;
-  z-index: 2;
-  @include px2rem(padding, 34px);
-  & > span {
-    text-align: center;
-    vertical-align: middle;
-    margin-left: pxToRem(20px);
-  }
-}
-
-.content-header-item {
-  width: 100%;
-  display: flex;
   justify-content: space-between;
-  @include px2rem(min-height, 190px);
-  padding: pxToRem(62px) pxToRem(30px) 0 pxToRem(30px);
-  z-index: 2;
+  align-items: center;
 }
 
 .bar-footer {
   bottom: 0;
   border-top-width: 1px;
   border-bottom-width: 0;
-  padding: pxToRem(10px) 0;
+  & > span {
+    padding: pxToRem(25px) 0;
+  }
 }
 
-.bar-footer-item {
-  @include px2rem(height, 100px);
-  @include px2rem(width, 100px);
+.bar-footer-tools {
+  width: 100%;
+  @include px2rem(height, 120px);
   margin: 0 pxToRem(25px);
   padding: 0 pxToRem(15px);
   flex: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-flow: row nowrap;
+  justify-content: space-around;
   align-items: center;
   text-align: center;
   vertical-align: middle;
-  z-index: 2;
-  &.active {
+  & > span {
+    @include px2rem(height, 100px);
+    @include px2rem(width, 100px);
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .active {
     background-color: #8c88ff;
     border-radius: 50%;
   }
-}
-
-.bar-footer-text {
-  display: block;
-  vertical-align: middle;
 }
 
 .has-header {
   @include px2rem(top, 120px);
 }
 
+.has-logo {
+  @include px2rem(top, 450px);
+}
+
 .has-footer {
-  @include px2rem(bottom, 120px);
+  @include px2rem(bottom, 150px);
+}
+
+.has-submit {
+  @include px2rem(bottom, 200px);
 }
 
 .correct {
@@ -186,7 +152,6 @@
   @include px2rem(height, 200px);
   border-radius: 50%;
   background-color: #ffffff;
-  z-index: 2;
   .correct-logo {
     @include px2rem(width, 145px);
     @include px2rem(height, 112px);
@@ -195,7 +160,6 @@
 
 .tab {
   display: flex;
-  z-index: 2;
   width: 100%;
   @include font-dpr(16px);
   @include px2rem(padding-top, 40px);
@@ -229,7 +193,6 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    background: $background-mask;
   }
   & > * {
     flex: 1;
@@ -247,6 +210,10 @@
   @include font-dpr(16px);
   outline: none;
   text-align: center;
+}
+
+.mask {
+  background: $background-mask;
 }
 
 @import "sprite";
