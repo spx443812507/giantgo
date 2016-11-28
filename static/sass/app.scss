@@ -55,14 +55,14 @@
 }
 
 .form-group {
-  @include px2rem(height, 120px);
-  @include px2rem(line-height, 120px);
+  @include px2rem(margin-bottom, 20px);
   border-bottom: solid 1px #645d5a;
 }
 
 .form-control {
-  height: 100%;
   width: 90%;
+  @include px2rem(height, 100px);
+  @include px2rem(line-height, 100px);
   float: right;
   @include font-dpr(16px);
   border-radius: 0;
@@ -75,10 +75,23 @@
   }
 }
 
+.control-icon {
+  @include px2rem(margin-top, 20px);
+}
+
 .bar-header {
   top: 0;
   border-top-width: 0;
   border-bottom-width: 1px;
+}
+
+.bar-footer {
+  bottom: 0;
+  border-top-width: 1px;
+  border-bottom-width: 0;
+  & > span {
+    padding: pxToRem(25px) 0;
+  }
 }
 
 .bar-header-tools {
@@ -91,15 +104,6 @@
   text-align: center;
   justify-content: space-between;
   align-items: center;
-}
-
-.bar-footer {
-  bottom: 0;
-  border-top-width: 1px;
-  border-bottom-width: 0;
-  & > span {
-    padding: pxToRem(25px) 0;
-  }
 }
 
 .bar-footer-tools {
@@ -126,22 +130,6 @@
     background-color: #8c88ff;
     border-radius: 50%;
   }
-}
-
-.has-header {
-  @include px2rem(top, 120px);
-}
-
-.has-logo {
-  @include px2rem(top, 450px);
-}
-
-.has-footer {
-  @include px2rem(bottom, 150px);
-}
-
-.has-submit {
-  @include px2rem(bottom, 200px);
 }
 
 .correct {
@@ -210,6 +198,22 @@
   @include font-dpr(16px);
   outline: none;
   text-align: center;
+}
+
+.has-header {
+  @include px2rem(top, 120px);
+}
+
+.has-logo {
+  @include px2rem(top, 450px);
+}
+
+.has-footer {
+  @include px2rem(bottom, 150px);
+}
+
+.has-submit {
+  @include px2rem(bottom, 200px);
 }
 
 .mask {
