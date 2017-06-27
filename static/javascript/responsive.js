@@ -76,6 +76,7 @@
   }
 
   win.addEventListener('resize', function () {
+    console.log(1)
     clearTimeout(tid);
     tid = setTimeout(refreshRem, 300);
   }, false);
@@ -93,6 +94,7 @@
       doc.body.style.fontSize = 12 * dpr + 'px';
     }, false);
   }
+
   flexible.dpr = win.dpr = dpr;
   flexible.refreshRem = refreshRem;
   flexible.rem2px = function (d) {
@@ -108,10 +110,11 @@
       val += 'rem';
     }
     return val;
-  };
-  refreshRem();
+  }
+
   window.onload = function () {
-    var clientHeight = flexible.px2rem(docEl.getBoundingClientRect().height);
-    document.body.style.minHeight = clientHeight + "rem";
+    refreshRem();
+    document.body.style.minHeight = flexible.px2rem(docEl.getBoundingClientRect().height) + "rem";
   };
+
 })(window, window['lib'] || (window['lib'] = {}));

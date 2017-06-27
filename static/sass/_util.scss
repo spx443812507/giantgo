@@ -1,5 +1,4 @@
 @charset "utf-8";
-@import "compass/utilities/sprites";
 
 @function px2em($px, $base-font-size: 75px) {
   @if (unitless($px)) {
@@ -21,10 +20,6 @@
   }
 }
 
-// 生成图片精灵
-@function creatSprite($globImgPath, $spacing: 10px) {
-  @return sprite-map($globImgPath, $spacing: $spacing, $layout: vertical);
-}
 
 @mixin px2rem($property,$px-values,$baseline-px:75px,$support-for-ie:false) {
   //Conver the baseline into rems
@@ -62,27 +57,3 @@
   }
 }
 
-@mixin icon($name, $sprites, $isRem: false) {
-  $iconPath: sprite-file($sprites, $name); // 图标文件的路径
-  $iconWidth: image-width($iconPath);
-  $iconHeight: image-height($iconPath);
-  $iconPosXInSprite: 0; // 垂直放的
-  $iconPosYInSprite: nth(sprite-position($sprites, $name), 2);
-  background-repeat: no-repeat;
-  background-image: sprite-url($sprites);
-  @if $isRem {
-    width: pxToRem($iconWidth);
-    height: pxToRem($iconHeight);
-    $spriteWidth: sprite-width($sprites);
-    $spriteHeight: sprite-height($sprites);
-    @if $iconPosYInSprite != 0 {
-      $iconPosYInSprite: $iconPosYInSprite / ($iconHeight - $spriteHeight) * 100%;
-    }
-    background-position: $iconPosXInSprite $iconPosYInSprite;
-    background-size: pxToRem($spriteWidth) pxToRem($spriteHeight);
-  } @else {
-    width: $iconWidth;
-    height: $iconWidth;
-    background-position: $iconPosXInSprite $iconPosYInSprite;
-  }
-}

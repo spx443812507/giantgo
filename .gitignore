@@ -1,14 +1,11 @@
-# Don't check auto-generated stuff into git
-coverage
-build
-node_modules
-stats.json
-
-# Cruft
 .DS_Store
+node_modules/
+dist/
 npm-debug.log
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
 .idea
-static/sass/app.css
-static/sass/app.css.map
-stylesheets/
 /static/.sass-cache/
+/src/assets/.sass-cache/
+/.sass-cache/
