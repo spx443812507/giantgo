@@ -1,6 +1,6 @@
 <template>
   <home-layout>
-    asd
+    asdasdsas
   </home-layout>
 </template>
 <style lang="scss" rel="stylesheet/scss">
