@@ -14,9 +14,7 @@
         </el-menu>
       </el-col>
     </el-row>
-    <el-row>
       <slot></slot>
-    </el-row>
   </div>
 </template>
 <style lang="scss" rel="stylesheet/scss">
