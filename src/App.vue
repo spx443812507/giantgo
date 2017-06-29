@@ -64,4 +64,12 @@
     text-decoration: none;
     color: inherit;
   }
+
+  .container, .wrapper {
+    height: 100%;
+  }
+
+  .menu {
+    height: 100%;
+  }
 </style>

@@ -1,11 +1,20 @@
 <template>
-  <home-layout>
-  </home-layout>
+  <div class="wrapper">
+    <el-row>
+      <nav-menu></nav-menu>
+    </el-row>
+    <el-row class="container">
+      <el-col class="menu" :span="4">
+        <entity-menu></entity-menu>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 <style lang="scss" rel="stylesheet/scss">
 </style>
 <script type="text/ecmascript-6">
-  import homeLayout from '../../layouts/Home.vue'
+  import navMenu from '../../components/NavMenu.vue'
+  import entityMenu from '../../components/EntityMenu.vue'
 
   export default{
     data () {
@@ -14,7 +23,7 @@
         messages: []
       }
     },
-    components: {homeLayout},
+    components: {navMenu, entityMenu},
     mounted () {
     }
   }
