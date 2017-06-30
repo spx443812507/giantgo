@@ -1,12 +1,10 @@
 <template>
-  <div class="wrapper">
+  <div>
     <el-row>
       <nav-menu></nav-menu>
     </el-row>
-    <el-row class="container">
-      <el-col class="menu" :span="4">
-        <entity-menu></entity-menu>
-      </el-col>
+    <el-row>
+
     </el-row>
   </div>
 </template>

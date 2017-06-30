@@ -15,9 +15,15 @@
     line-height: 1.2;
   }
 
-  html, body {
+  body {
+    margin: 0;
+    padding: 0;
     height: 100%;
     width: 100%;
+  }
+
+  article, aside, details, figcaption, figure, footer, header, main, menu, nav, section, summary {
+    display: block;
   }
 
   button, input, select, textarea {
@@ -63,13 +69,5 @@
   a {
     text-decoration: none;
     color: inherit;
-  }
-
-  .container, .wrapper {
-    height: 100%;
-  }
-
-  .menu {
-    height: 100%;
   }
 </style>

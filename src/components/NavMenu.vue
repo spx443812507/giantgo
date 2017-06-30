@@ -6,7 +6,10 @@
     <el-col :span="14">
       <el-menu mode="horizontal" :default-active="currentIndex" @select="handleSelect">
         <el-menu-item index="1">
-          <router-link :to="'/entity/user'">用户模型</router-link>
+          <router-link :to="'/home'">首页</router-link>
+        </el-menu-item>
+        <el-menu-item index="1">
+          <router-link :to="'/entity/user'">模型管理</router-link>
         </el-menu-item>
       </el-menu>
     </el-col>
@@ -24,6 +27,18 @@
 <style lang="scss" rel="stylesheet/scss">
   .header {
     background-color: #eef1f6;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 0 20px;
+    z-index: 1;
+    box-sizing: border-box;
+    .el-menu-item a {
+      text-decoration: none;
+      display: block;
+      opacity: .8;
+    }
   }
 
   .logo {

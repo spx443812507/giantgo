@@ -5,7 +5,7 @@
     </el-menu-item>
     <el-submenu index="2">
       <template slot="title"><i class="el-icon-message"></i>会议模型</template>
-      <el-menu-item index="2-1">会议信息模型</el-menu-item>
+      <el-menu-item index="2-1">简介模型</el-menu-item>
       <el-menu-item index="2-2">嘉宾模型</el-menu-item>
       <el-menu-item index="3-1">日程模型</el-menu-item>
     </el-submenu>
@@ -14,6 +14,10 @@
 <style lang="scss" rel="stylesheet/scss">
   .el-menu {
     height: 100%;
+    .el-menu-item a {
+      display: block;
+      color: #20a0ff;
+    }
   }
 </style>
 <script type="text/ecmascript-6">
