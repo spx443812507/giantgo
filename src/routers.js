@@ -1,4 +1,4 @@
-const home = r => require.ensure([], () => r(require('./views/Home/Index.vue')), 'home')
+const home = r => require.ensure([], () => r(require('./views/Index.vue')), 'home')
 const signIn = r => require.ensure([], () => r(require('./views/Passport/SignIn.vue')), 'signin')
 const entity = r => require.ensure([], () => r(require('./views/Entity.vue')), 'entity')
 const entityUser = r => require.ensure([], () => r(require('./views/Entity/User/Index.vue')), 'entityUser')

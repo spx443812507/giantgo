@@ -5,7 +5,13 @@
 <script type="text/ecmascript-6">
   export default {
     name: 'app',
-    components: {}
+    components: {},
+    mounted () {
+      this.$store.dispatch('getMyInfo', this.user).then((data) => {
+      }, (error) => {
+        console.log(error)
+      })
+    }
   }
 </script>
 
@@ -18,8 +24,10 @@
   body {
     margin: 0;
     padding: 0;
+  }
+
+  html, body {
     height: 100%;
-    width: 100%;
   }
 
   article, aside, details, figcaption, figure, footer, header, main, menu, nav, section, summary {
@@ -69,5 +77,48 @@
   a {
     text-decoration: none;
     color: inherit;
+  }
+
+  .container, .wrapper {
+    height: 100%;
+  }
+
+  .container {
+    padding-top: 60px;
+  }
+
+  .wrapper {
+    position: relative;
+  }
+
+  header {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    top: 0;
+    left: 0;
+    padding: 0 20px;
+    z-index: 1;
+    box-sizing: border-box;
+    background-color: rgb(32, 160, 255);
+  }
+
+  .menu {
+    height: 100%;
+  }
+
+  .content {
+    padding: 25px;
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all .2s ease;
+  }
+
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0;
   }
 </style>

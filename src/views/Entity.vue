@@ -16,41 +16,7 @@
   </div>
 </template>
 <style lang="scss" rel="stylesheet/scss">
-  .container, .wrapper {
-    height: 100%;
-  }
 
-  .container {
-    padding-top: 60px;
-  }
-
-  header {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    padding: 0 20px;
-    z-index: 1;
-    box-sizing: border-box;
-  }
-
-  .menu {
-    height: 100%;
-  }
-
-  .content {
-    padding: 25px;
-  }
-
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: all .2s ease;
-  }
-
-  .fade-enter,
-  .fade-leave-active {
-    opacity: 0;
-  }
 </style>
 <script type="text/ecmascript-6">
   import navMenu from '../components/NavMenu.vue'
@@ -64,11 +30,6 @@
     },
     components: {navMenu, entityMenu},
     mounted () {
-      this.$http.get('/api/entities/user').then(response => {
-        this.userEntityTypes = response['body']
-      }, response => {
-        // error callback
-      })
     }
   }
 </script>

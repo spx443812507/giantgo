@@ -35,6 +35,14 @@ router.beforeEach(function (to, from, next) {
   }
 })
 
+Vue.http.interceptors.push((request, next) => {
+  if (Vue.cookie.get('token')) {
+    request.headers.append('authorization', 'Bearer ' + Vue.cookie.get('token'))
+  }
+  // continue to next interceptor
+  next()
+})
+
 let app = new Vue(
   Vue.util.extend({
     router,
@@ -42,10 +50,6 @@ let app = new Vue(
   }, App)).$mount('#app')
 
 Vue.http.interceptors.push((request, next) => {
-  if (Vue.cookie.get('token')) {
-    request.headers.append('authorization', 'Bearer ' + Vue.cookie.get('token'))
-  }
-  // continue to next interceptor
   next(function (response) {
     if (response.status === 401) {
       app.$router.push({name: 'signin', query: {redirect: app.$route.fullPath}})
