@@ -16,8 +16,7 @@ const actions = {
       Vue.http.post('/api/passports', userInfo).then((result) => {
         let token = result['body']['token']
         commit('setUserInfo', {
-          email: userInfo['email'],
-          token: token
+          email: userInfo['email']
         })
         Vue.cookie.set('token', token)
         resolve(result)
@@ -31,8 +30,7 @@ const actions = {
       Vue.http.patch('/api/passports', userInfo).then((result) => {
         let token = result['body']['token']
         commit('setUserInfo', {
-          email: userInfo['email'],
-          token: token
+          email: userInfo['email']
         })
         Vue.cookie.set('token', token)
         resolve(result)
@@ -42,7 +40,15 @@ const actions = {
     })
   },
   getMyInfo ({commit, state}) {
-    return Vue.http.get('/api/users/me')
+    return new Promise((resolve, reject) => {
+      Vue.http.get('/api/users/me').then((result) => {
+        let userInfo = result['body']
+        commit('setUserInfo', {
+          email: userInfo['email']
+        })
+        resolve(result)
+      })
+    })
   },
   clearUserInfo ({commit, state}) {
     commit('clearUserInfo')
@@ -55,9 +61,8 @@ const mutations = {
     state.userInfo = {
       email: userInfo['email']
     }
-    state.token = userInfo['token']
   },
-  clearUserInfo () {
+  logout () {
     state.userInfo = null
     state.token = ''
   }

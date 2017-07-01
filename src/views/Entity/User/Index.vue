@@ -33,7 +33,6 @@
       this.$http.get('/api/entities/user').then(response => {
         this.userEntityTypes = response['body']
       }, response => {
-        // error callback
       })
     }
   }

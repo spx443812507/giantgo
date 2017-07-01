@@ -55,7 +55,7 @@
           this.redirectPage()
         }, (error) => {
           this.logining = false
-          console.log(error)
+          this.$message(error['body']['message'])
         })
       },
       redirectPage () {

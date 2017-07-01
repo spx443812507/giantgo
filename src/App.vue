@@ -7,9 +7,8 @@
     name: 'app',
     components: {},
     mounted () {
-      this.$store.dispatch('getMyInfo', this.user).then((data) => {
-      }, (error) => {
-        console.log(error)
+      this.$store.dispatch('getMyInfo', {}).then((data) => {
+      }, (response) => {
       })
     }
   }

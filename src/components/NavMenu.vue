@@ -34,7 +34,6 @@
         color: #fff
       }
     }
-
   }
 
   .logo {
@@ -54,11 +53,11 @@
     }
   }
 </style>
-<script>
+<script type="text/ecmascript-6">
   import { mapGetters } from 'vuex'
 
   export default{
-    name: 'page-layout',
+    name: 'nav-menu',
     data () {
       return {
         currentIndex: '1'
