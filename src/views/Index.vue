@@ -5,7 +5,7 @@
     </header>
     <el-row class="container">
       <el-col class="content" :span="20">
-
+        <a :href="oAuthUrl">登录</a>
       </el-col>
     </el-row>
   </div>
@@ -19,11 +19,17 @@
   export default{
     data () {
       return {
+        oAuthUrl: 'http://test-memberb.smarket.net.cn/oauth/qq/login?XDEBUG_SESSION_START=PHPSTORM&app_id=101405226',
         messages: []
       }
     },
     components: {navMenu, entityMenu},
     mounted () {
+      this.oAuthUrl = this.oAuthUrl + '&return_url=' + encodeURIComponent(window.location.href)
+
+//      if (this.$cookie.get('token')) {
+//        this.oAuthUrl = this.oAuthUrl + '&token=' + this.$cookie.get('token')
+//      }
     }
   }
 </script>

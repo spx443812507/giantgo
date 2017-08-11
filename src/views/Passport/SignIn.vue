@@ -60,6 +60,7 @@
       },
       redirectPage () {
         let redirectUrl = this.$route.query.redirect
+        console.log(redirectUrl)
         if (redirectUrl) {
           this.$router.push({path: redirectUrl})
         } else {

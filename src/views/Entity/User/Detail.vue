@@ -8,7 +8,7 @@
               创建属性<i class="el-icon-caret-bottom el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="(value, key) in attributeTypes" v-bind:command="key">{{value.label}}
+              <el-dropdown-item v-for="(value, key) in attributeTypes" :key="key" v-bind:command="key">{{value.label}}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -88,7 +88,7 @@
           <el-switch v-model="attributeForm.is_unique" on-text="开" off-text="关"></el-switch>
         </el-form-item>
         <el-form-item class="attribute_options" label="选项" v-if="attributeForm.has_options">
-          <div v-for="(option, index) in attributeForm.options">
+          <div v-for="(option, index) in attributeForm.options" :key="index">
             <el-input v-model="option.value"></el-input>
             <el-button type="primary" icon="plus" @click.native="addOption(index)"></el-button>
             <el-button type="danger" icon="delete" @click.native="deleteOption(index)"></el-button>

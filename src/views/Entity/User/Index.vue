@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card class="entity-card" v-for="entityType in userEntityTypes">
+    <el-card class="entity-card" v-for="entityType in userEntityTypes" :key="entityType.id">
       <div>
         <div>模型名称：{{entityType.entity_type_name}}</div>
         <div>用户数量：{{entityType.entity_instance_count}}</div>

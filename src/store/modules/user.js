@@ -13,7 +13,7 @@ const getters = {
 const actions = {
   signUp ({commit, state}, userInfo) {
     return new Promise((resolve, reject) => {
-      Vue.http.post('/api/passports', userInfo).then((result) => {
+      Vue.http.post('/api/user', userInfo).then((result) => {
         let token = result['body']['token']
         commit('setUserInfo', {
           email: userInfo['email']
@@ -27,7 +27,7 @@ const actions = {
   },
   signIn ({commit, state}, userInfo) {
     return new Promise((resolve, reject) => {
-      Vue.http.patch('/api/passports', userInfo).then((result) => {
+      Vue.http.patch('/api/user', userInfo).then((result) => {
         let token = result['body']['token']
         commit('setUserInfo', {
           email: userInfo['email']
@@ -41,7 +41,7 @@ const actions = {
   },
   getMyInfo ({commit, state}) {
     return new Promise((resolve, reject) => {
-      Vue.http.get('/api/users/me').then((result) => {
+      Vue.http.get('/api/user').then((result) => {
         let userInfo = result['body']
         commit('setUserInfo', {
           email: userInfo['email']
