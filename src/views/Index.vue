@@ -4,7 +4,7 @@
       <nav-menu></nav-menu>
     </header>
     <el-row class="container">
-      <el-col class="content" :span="20">
+      <el-col class="content" :span="24">
         <a :href="oAuthUrl">登录</a>
       </el-col>
     </el-row>
@@ -27,9 +27,9 @@
     mounted () {
       this.oAuthUrl = this.oAuthUrl + '&return_url=' + encodeURIComponent(window.location.href)
 
-//      if (this.$cookie.get('token')) {
-//        this.oAuthUrl = this.oAuthUrl + '&token=' + this.$cookie.get('token')
-//      }
+      if (this.$cookie.get('token')) {
+        this.oAuthUrl = this.oAuthUrl + '&token=' + this.$cookie.get('token')
+      }
     }
   }
 </script>

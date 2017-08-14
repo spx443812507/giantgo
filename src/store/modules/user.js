@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import axios from 'axios'
 
 const state = {
   userInfo: {},
@@ -13,40 +14,40 @@ const getters = {
 const actions = {
   signUp ({commit, state}, userInfo) {
     return new Promise((resolve, reject) => {
-      Vue.http.post('/api/user', userInfo).then((result) => {
-        let token = result['body']['token']
+      axios.post('/api/user', userInfo).then((response) => {
+        let token = response['data']['token']
         commit('setUserInfo', {
           email: userInfo['email']
         })
         Vue.cookie.set('token', token)
-        resolve(result)
-      }, (result) => {
-        reject(result)
+        resolve(response)
+      }, (response) => {
+        reject(response)
       })
     })
   },
   signIn ({commit, state}, userInfo) {
     return new Promise((resolve, reject) => {
-      Vue.http.patch('/api/user', userInfo).then((result) => {
-        let token = result['body']['token']
+      axios.patch('/api/user', userInfo).then((response) => {
+        let token = response['data']['token']
         commit('setUserInfo', {
           email: userInfo['email']
         })
         Vue.cookie.set('token', token)
-        resolve(result)
-      }, (result) => {
-        reject(result)
+        resolve(response)
+      }, (response) => {
+        reject(response)
       })
     })
   },
   getMyInfo ({commit, state}) {
     return new Promise((resolve, reject) => {
-      Vue.http.get('/api/user').then((result) => {
-        let userInfo = result['body']
+      axios.get('/api/user').then((response) => {
+        let userInfo = response['data']
         commit('setUserInfo', {
           email: userInfo['email']
         })
-        resolve(result)
+        resolve(response)
       })
     })
   },

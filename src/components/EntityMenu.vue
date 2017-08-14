@@ -1,7 +1,7 @@
 <template>
   <el-menu default-active="1" @open="handleOpen" @close="handleClose">
     <el-menu-item index="1">
-      <router-link :to="'/entity/user'"><i class="el-icon-message"></i>联系人模型</router-link>
+      <router-link :to="'/entities/user'"><i class="el-icon-message"></i>联系人模型</router-link>
     </el-menu-item>
     <el-submenu index="2">
       <template slot="title"><i class="el-icon-message"></i>会议模型</template>

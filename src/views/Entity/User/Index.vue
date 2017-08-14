@@ -5,7 +5,7 @@
         <div>模型名称：{{entityType.entity_type_name}}</div>
         <div>用户数量：{{entityType.entity_instance_count}}</div>
       </div>
-      <router-link :to="{path: '/entity/user/detail', query: {entity_type_id: entityType.id}}">
+      <router-link :to="{name: 'entityUserDetail', params: {entityTypeId: entityType.id}}">
         查看
       </router-link>
     </el-card>
@@ -22,6 +22,8 @@
   }
 </style>
 <script type="text/ecmascript-6">
+  import axios from 'axios'
+
   export default{
     data () {
       return {
@@ -30,8 +32,8 @@
     },
     components: {},
     mounted () {
-      this.$http.get('/api/entities/user').then(response => {
-        this.userEntityTypes = response['body']
+      axios.get('/api/entities/contact').then(response => {
+        this.userEntityTypes = response['data']['data']
       }, response => {
       })
     }

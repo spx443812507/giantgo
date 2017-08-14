@@ -117,6 +117,7 @@
 </style>
 <script type="text/ecmascript-6">
   import moment from 'moment'
+  import axios from 'axios'
 
   export default{
     data () {
@@ -199,24 +200,28 @@
       },
       createOrEditAttribute () {
         if (this.attributeForm.id) {
-          this.$http.put('/api/attributes', {
-            ...this.attributeForm,
+          axios.put('/api/attributes/' + this.attributeForm.id, {
+            attribute: {
+              ...this.attributeForm
+            },
             entity_type_id: this.entityTypeId
           }).then(response => {
             this.hideAttributeEditor()
             this.loadAttributes()
           }, response => {
-            this.$message(response['body']['message'])
+            this.$message(response['data']['message'])
           })
         } else {
-          this.$http.post('/api/attributes', {
-            ...this.attributeForm,
+          axios.post('/api/attributes', {
+            attribute: {
+              ...this.attributeForm
+            },
             entity_type_id: this.entityTypeId
           }).then(response => {
             this.hideAttributeEditor()
             this.loadAttributes()
           }, response => {
-            this.$message(response['body']['message'])
+            this.$message(response['data']['message'])
           })
         }
       },
@@ -238,17 +243,17 @@
         })
       },
       loadAttributes () {
-        this.$http.get('/api/attributes?entity_type_id=' + this.entityTypeId).then(response => {
-          this.attributes = response['body']
+        axios.get('/api/attributes?entity_type_id=' + this.entityTypeId).then(response => {
+          this.attributes = response['data']
         }, response => {
-          this.$message(response['body']['message'])
+          this.$message(response['data']['message'])
         })
       },
       loadUsers () {
-        this.$http.get('/api/users?entity_type_id=' + this.entityTypeId).then(response => {
-          this.users = response['body']
+        axios.get('/api/users?entity_type_id=' + this.entityTypeId).then(response => {
+          this.users = response['data']
         }, response => {
-          this.$message(response['body']['message'])
+          this.$message(response['data']['message'])
         })
       }
     },

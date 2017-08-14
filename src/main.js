@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routers'
-import VueResource from 'vue-resource'
 import VueCookie from 'vue-cookie'
+import axios from 'axios'
 import store from './store'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
@@ -10,7 +10,6 @@ import App from './App.vue'
 
 Vue.use(Element)
 Vue.use(VueRouter)
-Vue.use(VueResource)
 Vue.use(VueCookie)
 
 /* eslint-disable no-new */
@@ -35,16 +34,28 @@ router.beforeEach(function (to, from, next) {
   }
 })
 
-Vue.http.interceptors.push((request, next) => {
+axios.interceptors.request.use(function (config) {
   if (Vue.cookie.get('token')) {
-    request.headers.append('authorization', 'Bearer ' + Vue.cookie.get('token'))
+    config.headers['authorization'] = 'Bearer ' + Vue.cookie.get('token')
   }
-  // continue to next interceptor
-  next(function (response) {
-    if (response.status === 401) {
-      router.app.$router.push({name: 'signin', query: {redirect: router.app.$route.fullPath}})
-    }
-  })
+
+  return config
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error)
+})
+
+axios.interceptors.response.use(function (response) {
+  // Do something with response data
+
+  return response
+}, function (error) {
+  // Do something with response error
+  if (error.response.status === 401) {
+    router.app.$router.push({name: 'signin', query: {redirect: router.app.$route.fullPath}})
+  }
+
+  return Promise.reject(error)
 })
 
 new Vue(

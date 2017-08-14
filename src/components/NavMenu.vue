@@ -5,11 +5,14 @@
     </el-col>
     <el-col :span="14">
       <el-menu mode="horizontal" :default-active="currentIndex" @select="handleSelect">
-        <el-menu-item index="1">
+        <el-menu-item index="0">
           <router-link :to="'/home'">首页</router-link>
         </el-menu-item>
         <el-menu-item index="1">
-          <router-link :to="'/entity/user'">模型管理</router-link>
+          <router-link :to="'/entities/user'">模型管理</router-link>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <router-link :to="'/seminars'">会议管理</router-link>
         </el-menu-item>
       </el-menu>
     </el-col>
