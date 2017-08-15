@@ -12,12 +12,12 @@
     </el-menu-item>
     <el-menu-item index="3">
       <router-link :to="{name: 'seminarAgenda', params: {seminarId: seminarId}}">
-        <i class="el-icon-message"></i>日程管理
+        <i class="el-icon-message"></i>会议日程
       </router-link>
     </el-menu-item>
     <el-menu-item index="4">
       <router-link :to="{name: 'seminarSpeaker', params: {seminarId: seminarId}}">
-        <i class="el-icon-message"></i>嘉宾管理
+        <i class="el-icon-message"></i>演讲嘉宾
       </router-link>
     </el-menu-item>
   </el-menu>

@@ -9,7 +9,7 @@
           <router-link :to="'/home'">首页</router-link>
         </el-menu-item>
         <el-menu-item index="1">
-          <router-link :to="'/entities/user'">模型管理</router-link>
+          <router-link :to="'/entities/contact'">模型管理</router-link>
         </el-menu-item>
         <el-menu-item index="2">
           <router-link :to="'/seminars'">会议管理</router-link>

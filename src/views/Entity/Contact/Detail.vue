@@ -35,8 +35,8 @@
           </el-table>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="用户" name="users">
-        <el-table :data="users" stripe border style="width: 100%">
+      <el-tab-pane label="用户" name="contacts">
+        <el-table :data="contacts.items" stripe border style="width: 100%">
           <el-table-column prop="email" label="邮箱" width="200"></el-table-column>
           <el-table-column prop="mobile" label="手机" width="180"></el-table-column>
           <el-table-column prop="name" label="姓名" width="180"></el-table-column>
@@ -56,6 +56,16 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="pager">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="contacts.pager.currentPage"
+            :page-size="contacts.pager.pageSize"
+            layout="total, prev, pager, next"
+            :total="contacts.pager.total">
+          </el-pagination>
+        </div>
       </el-tab-pane>
     </el-tabs>
     <el-dialog :title="attributeForm.title" size="small" v-model="attributeEditorVisible">
@@ -114,6 +124,11 @@
       margin: 0 10px 10px 0;
     }
   }
+
+  .pager {
+    float: right;
+    margin-top: 10px;
+  }
 </style>
 <script type="text/ecmascript-6">
   import moment from 'moment'
@@ -134,8 +149,15 @@
         },
         activeName: 'attributes',
         attributes: [],
-        entityTypeId: this.$route.query.entity_type_id,
-        users: [],
+        entityTypeId: this.$route.params.entityTypeId,
+        contacts: {
+          items: [],
+          pager: {
+            currentPage: 1,
+            pageSize: 15,
+            total: 0
+          }
+        },
         attributeForm: {
           id: '',
           title: '',
@@ -242,16 +264,35 @@
           })
         })
       },
+      handleSizeChange (val) {
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange (val) {
+        this.loadSeminars()
+      },
       loadAttributes () {
-        axios.get('/api/attributes?entity_type_id=' + this.entityTypeId).then(response => {
+        axios.get('/api/attributes', {
+          params: {
+            entity_type_id: this.entityTypeId
+          }
+        }).then(response => {
           this.attributes = response['data']
         }, response => {
           this.$message(response['data']['message'])
         })
       },
-      loadUsers () {
-        axios.get('/api/users?entity_type_id=' + this.entityTypeId).then(response => {
-          this.users = response['data']
+      loadContacts () {
+        axios.get('/api/contacts', {
+          params: {
+            entity_type_id: this.entityTypeId,
+            page: this.contacts.pager.currentPage,
+            per_page: this.contacts.pager.pageSize
+          }
+        }).then(response => {
+          let data = response['data']
+          this.contacts.items = data['data']
+          this.contacts.pager.currentPage = data['current_page']
+          this.contacts.pager.total = data['total']
         }, response => {
           this.$message(response['data']['message'])
         })
@@ -260,7 +301,7 @@
     mounted () {
       if (this.entityTypeId) {
         this.loadAttributes()
-        this.loadUsers()
+        this.loadContacts()
       } else {
         this.$message({
           message: '无效的模型',

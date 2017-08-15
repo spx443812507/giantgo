@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-card class="entity-card" v-for="entityType in userEntityTypes" :key="entityType.id">
+    <el-card class="entity-card" v-for="entityType in contactEntityTypes" :key="entityType.id">
       <div>
         <div>模型名称：{{entityType.entity_type_name}}</div>
         <div>用户数量：{{entityType.entity_instance_count}}</div>
       </div>
-      <router-link :to="{name: 'entityUserDetail', params: {entityTypeId: entityType.id}}">
+      <router-link :to="{name: 'entityContactDetail', params: {entityTypeId: entityType.id}}">
         查看
       </router-link>
     </el-card>
@@ -27,13 +27,13 @@
   export default{
     data () {
       return {
-        userEntityTypes: []
+        contactEntityTypes: []
       }
     },
     components: {},
     mounted () {
       axios.get('/api/entities/contact').then(response => {
-        this.userEntityTypes = response['data']['data']
+        this.contactEntityTypes = response['data']['data']
       }, response => {
       })
     }

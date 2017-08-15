@@ -1,8 +1,8 @@
 const home = r => require.ensure([], () => r(require('./views/Index.vue')), 'home')
 const signIn = r => require.ensure([], () => r(require('./views/Passport/SignIn.vue')), 'passport')
 const entity = r => require.ensure([], () => r(require('./views/Entity.vue')), 'entities')
-const entityUser = r => require.ensure([], () => r(require('./views/Entity/User/Index.vue')), 'entities')
-const entityUserDetail = r => require.ensure([], () => r(require('./views/Entity/User/Detail.vue')), 'entities')
+const entityContact = r => require.ensure([], () => r(require('./views/Entity/Contact/Index.vue')), 'entities')
+const entityContactDetail = r => require.ensure([], () => r(require('./views/Entity/Contact/Detail.vue')), 'entities')
 const seminarList = r => require.ensure([], () => r(require('./views/Seminar/List.vue')), 'seminars')
 const seminar = r => require.ensure([], () => r(require('./views/Seminar.vue')), 'seminars')
 const seminarDetail = r => require.ensure([], () => r(require('./views/Seminar/Detail.vue')), 'seminars')
@@ -22,13 +22,13 @@ const routers = [
     component: entity,
     children: [
       {
-        path: 'user',
-        name: 'entityUser',
-        component: entityUser
+        path: 'contact',
+        name: 'entityContact',
+        component: entityContact
       }, {
-        path: 'user/:entityTypeId',
-        name: 'entityUserDetail',
-        component: entityUserDetail
+        path: 'contact/:entityTypeId',
+        name: 'entityContactDetail',
+        component: entityContactDetail
       }
     ]
   }, {
