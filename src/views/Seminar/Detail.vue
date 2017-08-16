@@ -4,7 +4,7 @@
       <el-form-item label="会议名称" prop="title">
         <el-input v-model="seminar.title"></el-input>
       </el-form-item>
-      <el-form-item label="会议时间">
+      <el-form-item label="会议时间" required>
         <el-col :span="11">
           <el-form-item prop="start_at">
             <el-date-picker type="datetime" placeholder="开始时间" v-model="seminar.start_at"></el-date-picker>

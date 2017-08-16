@@ -33,7 +33,7 @@
     components: {},
     mounted () {
       axios.get('/api/entities/contact').then(response => {
-        this.contactEntityTypes = response['data']['data']
+        this.contactEntityTypes = response['data']
       }, response => {
       })
     }

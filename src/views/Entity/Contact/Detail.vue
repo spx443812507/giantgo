@@ -68,19 +68,19 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :title="attributeForm.title" size="small" v-model="attributeEditorVisible">
-      <el-form :model="attributeForm" label-width="80px">
+    <el-dialog :title="attribute.title" size="small" v-model="attributeEditor.visible">
+      <el-form :model="attribute" label-width="80px">
         <el-form-item label="属性代码">
-          <el-input v-model="attributeForm.attribute_code" auto-complete="off"></el-input>
+          <el-input v-model="attribute.attribute_code" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="属性名称">
-          <el-input v-model="attributeForm.frontend_label" auto-complete="off"></el-input>
+          <el-input v-model="attribute.frontend_label" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="描述">
-          <el-input v-model="attributeForm.description" auto-complete="off"></el-input>
+          <el-input v-model="attribute.description" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="属性类型">
-          <el-select v-model="attributeForm.frontend_input" disabled placeholder="请选择属性类型">
+          <el-select v-model="attribute.frontend_input" disabled placeholder="请选择属性类型">
             <el-option label="单行文本" value="text"></el-option>
             <el-option label="多行文本" value="textarea"></el-option>
             <el-option label="数字" value="number"></el-option>
@@ -92,13 +92,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="是否必填">
-          <el-switch v-model="attributeForm.is_required" on-text="开" off-text="关"></el-switch>
+          <el-switch v-model="attribute.is_required" on-text="开" off-text="关"></el-switch>
         </el-form-item>
-        <el-form-item label="是否唯一" v-if="attributeForm.has_unique">
-          <el-switch v-model="attributeForm.is_unique" on-text="开" off-text="关"></el-switch>
+        <el-form-item label="是否唯一" v-if="attribute.has_unique">
+          <el-switch v-model="attribute.is_unique" on-text="开" off-text="关"></el-switch>
         </el-form-item>
-        <el-form-item class="attribute_options" label="选项" v-if="attributeForm.has_options">
-          <div v-for="(option, index) in attributeForm.options" :key="index">
+        <el-form-item class="attribute_options" label="选项" v-if="attribute.has_options">
+          <div v-for="(option, index) in attribute.options" :key="index">
             <el-input v-model="option.value"></el-input>
             <el-button type="primary" icon="plus" @click.native="addOption(index)"></el-button>
             <el-button type="danger" icon="delete" @click.native="deleteOption(index)"></el-button>
@@ -107,7 +107,9 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="hideAttributeEditor">取消</el-button>
-        <el-button type="primary" @click.native="createOrEditAttribute" :loading="attributeFormLoading">提交</el-button>
+        <el-button type="primary" @click.native="createOrEditAttribute" :loading="attributeEditor.isSubmitting">
+          保存
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -158,7 +160,7 @@
             total: 0
           }
         },
-        attributeForm: {
+        attribute: {
           id: '',
           title: '',
           attribute_code: '',
@@ -171,8 +173,10 @@
           has_options: false,
           options: []
         },
-        attributeFormLoading: false,
-        attributeEditorVisible: false
+        attributeEditor: {
+          visible: false,
+          isSubmitting: false
+        }
       }
     },
     components: {},
@@ -185,47 +189,45 @@
       },
       showAttributeEditor (index, row) {
         if (row && row.id) {
-          this.attributeForm.id = row.id
-          this.attributeForm.title = '编辑'
-          this.attributeForm.attribute_code = row.attribute_code
-          this.attributeForm.frontend_label = row.frontend_label
-          this.attributeForm.frontend_input = row.frontend_input
-          this.attributeForm.description = row.description
-          this.attributeForm.is_required = row.is_required
-          this.attributeForm.has_unique = this.attributeTypes[row.frontend_input]['hasUnique']
-          this.attributeForm.is_unique = this.attributeForm.has_unique ? row.is_unique : false
-          this.attributeForm.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
-          this.attributeForm.options = this.attributeForm.has_options ? row.options : []
+          this.attribute.id = row.id
+          this.attribute.title = '编辑'
+          this.attribute.attribute_code = row.attribute_code
+          this.attribute.frontend_label = row.frontend_label
+          this.attribute.frontend_input = row.frontend_input
+          this.attribute.description = row.description
+          this.attribute.is_required = row.is_required
+          this.attribute.has_unique = this.attributeTypes[row.frontend_input]['hasUnique']
+          this.attribute.is_unique = this.attribute.has_unique ? row.is_unique : false
+          this.attribute.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
+          this.attribute.options = this.attribute.has_options ? row.options : []
         } else {
-          this.attributeForm.id = ''
-          this.attributeForm.title = '创建'
-          this.attributeForm.attribute_code = ''
-          this.attributeForm.frontend_label = ''
-          this.attributeForm.frontend_input = row.frontend_input
-          this.attributeForm.description = ''
-          this.attributeForm.is_required = false
-          this.attributeForm.is_unique = false
-          this.attributeForm.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
-          this.attributeForm.has_unique = this.attributeTypes[row.frontend_input]['hasUnique']
-          this.attributeForm.options = []
+          this.attribute.id = ''
+          this.attribute.title = '创建'
+          this.attribute.attribute_code = ''
+          this.attribute.frontend_label = ''
+          this.attribute.frontend_input = row.frontend_input
+          this.attribute.description = ''
+          this.attribute.is_required = false
+          this.attribute.is_unique = false
+          this.attribute.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
+          this.attribute.has_unique = this.attributeTypes[row.frontend_input]['hasUnique']
+          this.attribute.options = []
         }
-        this.attributeEditorVisible = true
+        this.attributeEditor.visible = true
       },
       hideAttributeEditor () {
-        this.attributeEditorVisible = false
+        this.attributeEditor.visible = false
       },
       addOption (index) {
-        this.attributeForm.options.splice(index + 1, 0, {attribute_id: this.attributeForm.id, value: ''})
+        this.attribute.options.splice(index + 1, 0, {attribute_id: this.attribute.id, value: ''})
       },
       deleteOption (index) {
-        this.attributeForm.options.splice(index, 1)
+        this.attribute.options.splice(index, 1)
       },
       createOrEditAttribute () {
-        if (this.attributeForm.id) {
-          axios.put('/api/attributes/' + this.attributeForm.id, {
-            attribute: {
-              ...this.attributeForm
-            },
+        if (this.attribute.id) {
+          axios.put('/api/attributes/' + this.attribute.id, {
+            attribute: this.attribute,
             entity_type_id: this.entityTypeId
           }).then(response => {
             this.hideAttributeEditor()
@@ -235,9 +237,7 @@
           })
         } else {
           axios.post('/api/attributes', {
-            attribute: {
-              ...this.attributeForm
-            },
+            attribute: this.attribute,
             entity_type_id: this.entityTypeId
           }).then(response => {
             this.hideAttributeEditor()
