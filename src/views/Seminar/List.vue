@@ -51,10 +51,10 @@
         <el-form-item label="会议类型" prop="entity_type_id">
           <el-select v-model="seminar.entity_type_id" placeholder="请选择">
             <el-option
-              v-for="item in seminarEntities"
-              :key="item.id"
-              :label="item.entity_type_name"
-              :value="item.id">
+              v-for="entity in entities"
+              :key="entity.id"
+              :label="entity.entity_type_name"
+              :value="entity.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -136,12 +136,9 @@
           ],
           end_at: [
             {type: 'date', required: true, message: '请输入结束时间', trigger: 'change'}
-          ],
-          entity_type_id: [
-            {type: 'number', required: true, message: '请选择会议类型', trigger: 'change'}
           ]
         },
-        seminarEntities: []
+        entities: []
       }
     },
     components: {navMenu},
@@ -160,7 +157,7 @@
       showSeminarEditor () {
         this.seminarEditor.visible = true
         this.resetSeminarEditor()
-        this.loadSeminarEntities()
+        this.loadEntities()
       },
       hideSeminarEditor () {
         this.seminarEditor.visible = false
@@ -180,9 +177,9 @@
           this.$message(response['data']['message'])
         })
       },
-      loadSeminarEntities () {
+      loadEntities () {
         axios.get('/api/entities/seminar').then(response => {
-          this.seminarEntities = response['data']
+          this.entities = response['data']
         }, response => {
           this.$message(response['data']['message'])
         })
