@@ -3,14 +3,22 @@ import VueRouter from 'vue-router'
 import routes from './routers'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
-import store from './store'
+import VueAxios from 'vue-axios'
+import moment from 'vue-moment'
+import lodash from 'lodash'
+import VueLodash from 'vue-lodash/dist/vue-lodash.min'
+
 import Element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import store from './store'
 import App from './App.vue'
 
 Vue.use(Element)
 Vue.use(VueRouter)
 Vue.use(VueCookie)
+Vue.use(moment)
+Vue.use(VueLodash, lodash)
+Vue.use(VueAxios, axios)
 
 /* eslint-disable no-new */
 const router = new VueRouter({

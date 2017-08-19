@@ -22,8 +22,6 @@
   }
 </style>
 <script type="text/ecmascript-6">
-  import axios from 'axios'
-
   export default{
     data () {
       return {
@@ -32,7 +30,7 @@
     },
     components: {},
     mounted () {
-      axios.get('/api/entities/contact').then(response => {
+      this.axios.get('/api/entities/contact').then(response => {
         this.contactEntityTypes = response['data']
       }, response => {
       })

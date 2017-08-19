@@ -103,8 +103,6 @@
   }
 </style>
 <script type="text/ecmascript-6">
-  import axios from 'axios'
-  import moment from 'moment'
   import navMenu from '../../components/NavMenu.vue'
 
   export default{
@@ -163,7 +161,7 @@
         this.seminarEditor.visible = false
       },
       loadSeminars () {
-        axios.get('/api/seminars', {
+        this.axios.get('/api/seminars', {
           params: {
             page: this.pager.currentPage,
             per_page: this.pager.pageSize
@@ -178,7 +176,7 @@
         })
       },
       loadEntities () {
-        axios.get('/api/entities/seminar').then(response => {
+        this.axios.get('/api/entities/seminar').then(response => {
           this.entities = response['data']
         }, response => {
           this.$message(response['data']['message'])
@@ -187,12 +185,12 @@
       createSeminar () {
         this.$refs['seminar'].validate((valid) => {
           if (valid) {
-            axios.post('/api/seminars', {
+            this.axios.post('/api/seminars', {
               entity_type_id: this.seminar.entity_type_id,
               seminar: {
                 title: this.seminar.title,
-                start_at: moment.utc(this.seminar.start_at).format('YYYY-MM-DDTHH:mm:ssZ'),
-                end_at: moment.utc(this.seminar.end_at).format('YYYY-MM-DDTHH:mm:ssZ')
+                start_at: this.$moment(this.seminar.start_at).format(),
+                end_at: this.$moment(this.seminar.end_at).format()
               }
             }).then(response => {
               this.loadSeminars()

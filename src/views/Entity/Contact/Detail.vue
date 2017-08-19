@@ -42,12 +42,12 @@
           <el-table-column prop="name" label="姓名" width="180"></el-table-column>
           <el-table-column label="注册时间" width="180">
             <template scope="scope">
-              {{formatDate(scope.row.created_at)}}
+              {{scope.row.created_at | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
           <el-table-column label="最后登录时间" width="180">
             <template scope="scope">
-              {{formatDate(scope.row.last_login)}}
+              {{scope.row.last_login | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
           <el-table-column label="操作">
@@ -133,12 +133,11 @@
   }
 </style>
 <script type="text/ecmascript-6">
-  import moment from 'moment'
-  import axios from 'axios'
-
   export default{
     data () {
       return {
+        entityTypeId: this.$route.params.entityTypeId,
+        resourceUrl: '/api/entities/' + this.$route.params.entityTypeId + '/attributes',
         attributeTypes: {
           'text': {label: '单行文本', hasOptions: false, hasUnique: true},
           'textarea': {label: '多行文本', hasOptions: false, hasUnique: true},
@@ -151,7 +150,6 @@
         },
         activeName: 'attributes',
         attributes: [],
-        entityTypeId: this.$route.params.entityTypeId,
         contacts: {
           items: [],
           pager: {
@@ -181,9 +179,6 @@
     },
     components: {},
     methods: {
-      formatDate (date) {
-        return date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : ''
-      },
       createAttribute (command) {
         this.showAttributeEditor(null, {frontend_input: command})
       },
@@ -226,20 +221,14 @@
       },
       createOrEditAttribute () {
         if (this.attribute.id) {
-          axios.put('/api/attributes/' + this.attribute.id, {
-            attribute: this.attribute,
-            entity_type_id: this.entityTypeId
-          }).then(response => {
+          this.axios.put(this.resourceUrl + '/' + this.attribute.id, this.attribute).then(response => {
             this.hideAttributeEditor()
             this.loadAttributes()
           }, response => {
             this.$message(response['data']['message'])
           })
         } else {
-          axios.post('/api/attributes', {
-            attribute: this.attribute,
-            entity_type_id: this.entityTypeId
-          }).then(response => {
+          this.axios.post(this.resourceUrl, this.attribute).then(response => {
             this.hideAttributeEditor()
             this.loadAttributes()
           }, response => {
@@ -271,18 +260,14 @@
         this.loadSeminars()
       },
       loadAttributes () {
-        axios.get('/api/attributes', {
-          params: {
-            entity_type_id: this.entityTypeId
-          }
-        }).then(response => {
+        this.axios.get(this.resourceUrl).then(response => {
           this.attributes = response['data']
         }, response => {
           this.$message(response['data']['message'])
         })
       },
       loadContacts () {
-        axios.get('/api/contacts', {
+        this.axios.get('/api/contacts', {
           params: {
             entity_type_id: this.entityTypeId,
             page: this.contacts.pager.currentPage,

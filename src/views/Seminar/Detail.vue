@@ -29,7 +29,11 @@
       </el-form-item>
       <el-form-item v-for="attribute in attributes" :label="attribute.frontend_label"
                     :prop="attribute.attribute_code" :key="attribute.id">
-        <el-input v-model="seminar[attribute.attribute_code]"></el-input>
+        <el-input v-model="seminar[attribute.attribute_code]" v-if="attribute.frontend_input === 'text'"></el-input>
+        <el-input v-model="seminar[attribute.attribute_code]" v-if="attribute.frontend_input === 'number'"
+                  type="number"></el-input>
+        <el-date-picker type="datetime" v-model="seminar[attribute.attribute_code]"
+                        v-if="attribute.frontend_input === 'datetime'"></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">保存</el-button>
@@ -45,8 +49,6 @@
 <script type="text/ecmascript-6">
   /* eslint-disable one-var */
 
-  import moment from 'moment'
-  import axios from 'axios'
   import entityAttributeValue from '../../components/EntityAttributeValue.vue'
 
   export default{
@@ -77,7 +79,7 @@
     components: {entityAttributeValue},
     methods: {
       loadSeminar () {
-        axios.get('/api/seminars/' + this.seminar.id).then(response => {
+        this.axios.get('/api/seminars/' + this.seminar.id).then(response => {
           let data = response['data']
 
           this.seminar.title = data['title']
@@ -85,32 +87,36 @@
           this.seminar.end_at = new Date(data['end_at'])
           this.seminar.entity_type_id = data['entity_type_id']
           if (data['attributes'] && data['attributes'].length) {
-            this.initAttributes(data['attributes'])
+            this.initAttributes(data['attributes'], data)
           }
         }, response => {
           this.$message(response['data']['message'])
         })
       },
       loadEntities () {
-        axios.get('/api/entities/seminar').then(response => {
+        this.axios.get('/api/entities/seminar').then(response => {
           this.entities = response['data']
         }, response => {
           this.$message(response['data']['message'])
         })
       },
       loadAttributes (entityTypeId) {
-        axios.get('/api/attributes?entity_type_id' + entityTypeId).then(response => {
+        this.axios.get('/api/attributes?entity_type_id' + entityTypeId).then(response => {
           this.initAttributes(response['data'])
         }, response => {
           this.$message(response['data']['message'])
         })
       },
-      initAttributes (attributes) {
+      initAttributes (attributes, values) {
         this.attributes = attributes
 
         for (let i = 0; i < this.attributes.length; i++) {
           let attribute = this.attributes[i], attributeCode = attribute['attribute_code']
-          this.seminar[attributeCode] = ''
+          this.seminar[attributeCode] = values[attributeCode] || ''
+
+          if (attribute['frontend_input'] === 'datetime' && values[attributeCode]) {
+            this.seminar[attributeCode] = new Date(values[attributeCode])
+          }
 
           if (attribute['is_required']) {
             this.rules[attributeCode] = [
@@ -122,22 +128,16 @@
       submit () {
         this.$refs['seminar'].validate((valid) => {
           if (valid) {
-//            let data = this.seminar
-//            for (let item in this.seminar) {
-//              if (this.seminar.hasOwnProperty(item)) {
-//                if (Object.prototype.toString.call(this.seminar[item]) === '[object Date]') {
-//                  data[item] = moment.utc(this.seminar[item]).format('YYYY-MM-DDTHH:mm:ssZ')
-//                }
-//              }
-//            }
-            axios.put('/api/seminars/' + this.seminar.id, {
-              entity_type_id: this.seminar.entity_type_id,
-              seminar: {
-                title: this.seminar.title,
-                start_at: moment.utc(this.seminar.start_at).format('YYYY-MM-DDTHH:mm:ssZ'),
-                end_at: moment.utc(this.seminar.end_at).format('YYYY-MM-DDTHH:mm:ssZ')
+            let data = {}
+            for (let item in this.seminar) {
+              if (this.seminar.hasOwnProperty(item)) {
+                data[item] = this.seminar[item]
+                if (this._.isDate(this.seminar[item])) {
+                  data[item] = this.$moment(this.seminar[item]).format()
+                }
               }
-            }).then(response => {
+            }
+            this.axios.put('/api/seminars/' + this.seminar.id, data).then(response => {
               this.$message({
                 message: '保存成功',
                 type: 'success'
