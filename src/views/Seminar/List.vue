@@ -187,11 +187,9 @@
           if (valid) {
             this.axios.post('/api/seminars', {
               entity_type_id: this.seminar.entity_type_id,
-              seminar: {
-                title: this.seminar.title,
-                start_at: this.$moment(this.seminar.start_at).format(),
-                end_at: this.$moment(this.seminar.end_at).format()
-              }
+              title: this.seminar.title,
+              start_at: this.$moment(this.seminar.start_at).format(),
+              end_at: this.$moment(this.seminar.end_at).format()
             }).then(response => {
               this.loadSeminars()
               this.hideSeminarEditor()

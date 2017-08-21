@@ -1,24 +1,24 @@
 <template>
   <el-col :span="12">
-    <el-form ref="seminar" :model="seminar" :rules="rules" label-width="80px">
+    <el-form ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
       <el-form-item label="会议名称" prop="title">
-        <el-input v-model="seminar.title"></el-input>
+        <el-input v-model="seminarForm.title"></el-input>
       </el-form-item>
       <el-form-item label="会议时间" required>
         <el-col :span="11">
           <el-form-item prop="start_at">
-            <el-date-picker type="datetime" placeholder="开始时间" v-model="seminar.start_at"></el-date-picker>
+            <el-date-picker type="datetime" placeholder="开始时间" v-model="seminarForm.start_at"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
           <el-form-item prop="end_at">
-            <el-date-picker type="datetime" placeholder="结束时间" v-model="seminar.end_at"></el-date-picker>
+            <el-date-picker type="datetime" placeholder="结束时间" v-model="seminarForm.end_at"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-form-item>
       <el-form-item label="会议类型" prop="entity_type_id">
-        <el-select v-model="seminar.entity_type_id" placeholder="请选择">
+        <el-select v-model="seminarForm.entity_type_id" placeholder="请选择" @change="entityChange">
           <el-option
             v-for="entity in entities"
             :key="entity.id"
@@ -27,13 +27,48 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-for="attribute in attributes" :label="attribute.frontend_label"
-                    :prop="attribute.attribute_code" :key="attribute.id">
-        <el-input v-model="seminar[attribute.attribute_code]" v-if="attribute.frontend_input === 'text'"></el-input>
-        <el-input v-model="seminar[attribute.attribute_code]" v-if="attribute.frontend_input === 'number'"
-                  type="number"></el-input>
-        <el-date-picker type="datetime" v-model="seminar[attribute.attribute_code]"
+      <el-form-item
+        v-for="(attribute, index) in seminarForm.attributes"
+        :label="attribute.frontend_label"
+        :prop="'attributes.' + index + '.value'"
+        :key="attribute.id"
+        :rules="attribute.rules">
+        <el-input v-model="attribute.value" v-if="attribute.frontend_input === 'text'"></el-input>
+        <el-input-number v-model="attribute.value" v-if="attribute.frontend_input === 'number'" :min="0"
+                         :max="9999"></el-input-number>
+        <el-date-picker type="datetime" v-model="attribute.value"
                         v-if="attribute.frontend_input === 'datetime'"></el-date-picker>
+        <el-select v-model="attribute.value" placeholder="请选择"
+                   v-if="attribute.frontend_input === 'select'">
+          <el-option
+            v-for="item in attribute.options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.id">
+          </el-option>
+        </el-select>
+        <el-checkbox-group v-model="attribute.value" v-if="attribute.frontend_input === 'checkbox'">
+          <el-checkbox
+            v-for="item in attribute.options"
+            :label="item.id"
+            :key="item.id">
+            {{item.label}}
+          </el-checkbox>
+        </el-checkbox-group>
+        <el-radio-group v-model="attribute.value" v-if="attribute.frontend_input === 'radio'">
+          <el-radio
+            v-for="item in attribute.options"
+            :label="item.id"
+            :key="item.id">
+            {{item.label}}
+          </el-radio>
+        </el-radio-group>
+        <el-switch
+          v-model="attribute.value"
+          v-if="attribute.frontend_input === 'switch'"
+          on-text=""
+          off-text="">
+        </el-switch>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">保存</el-button>
@@ -54,11 +89,15 @@
   export default{
     data () {
       return {
-        seminar: {
-          id: this.$route.params.seminarId,
+        seminarInfo: {
+          id: this.$route.params.seminarId
+        },
+        seminarForm: {
           title: '',
           start_at: '',
-          end_at: ''
+          end_at: '',
+          entity_type_id: '',
+          attributes: []
         },
         rules: {
           title: [
@@ -72,23 +111,26 @@
             {type: 'date', required: true, message: '请输入结束时间', trigger: 'change'}
           ]
         },
-        entities: [],
-        attributes: []
+        entities: []
       }
     },
     components: {entityAttributeValue},
     methods: {
-      loadSeminar () {
-        this.axios.get('/api/seminars/' + this.seminar.id).then(response => {
-          let data = response['data']
-
-          this.seminar.title = data['title']
-          this.seminar.start_at = new Date(data['start_at'])
-          this.seminar.end_at = new Date(data['end_at'])
-          this.seminar.entity_type_id = data['entity_type_id']
-          if (data['attributes'] && data['attributes'].length) {
-            this.initAttributes(data['attributes'], data)
+      entityChange (entityTypeId) {
+        for (let i = 0; i < this.entities.length; i++) {
+          if (entityTypeId === this.entities[i].id) {
+            this.loadAttributes(entityTypeId, this.entities[i].attributes)
           }
+        }
+      },
+      loadSeminar () {
+        this.axios.get('/api/seminars/' + this.seminarInfo.id).then(response => {
+          this.seminarInfo = response['data']
+
+          this.seminarForm.title = this.seminarInfo['title']
+          this.seminarForm.start_at = new Date(this.seminarInfo['start_at'])
+          this.seminarForm.end_at = new Date(this.seminarInfo['end_at'])
+          this.seminarForm.entity_type_id = this.seminarInfo['entity_type_id']
         }, response => {
           this.$message(response['data']['message'])
         })
@@ -100,44 +142,50 @@
           this.$message(response['data']['message'])
         })
       },
-      loadAttributes (entityTypeId) {
-        this.axios.get('/api/attributes?entity_type_id' + entityTypeId).then(response => {
-          this.initAttributes(response['data'])
-        }, response => {
-          this.$message(response['data']['message'])
-        })
-      },
-      initAttributes (attributes, values) {
-        this.attributes = attributes
-
-        for (let i = 0; i < this.attributes.length; i++) {
-          let attribute = this.attributes[i], attributeCode = attribute['attribute_code']
-          this.seminar[attributeCode] = values[attributeCode] || ''
-
-          if (attribute['frontend_input'] === 'datetime' && values[attributeCode]) {
-            this.seminar[attributeCode] = new Date(values[attributeCode])
-          }
+      loadAttributes (entityTypeId, attributes) {
+        for (let i = 0; i < attributes.length; i++) {
+          let attribute = attributes[i],
+            attributeCode = attribute['attribute_code'],
+            value = this.seminarInfo[attributeCode]
+          attribute['value'] = entityTypeId === this.seminarInfo.entity_type_id ? value : ''
+          attribute['rules'] = []
 
           if (attribute['is_required']) {
-            this.rules[attributeCode] = [
-              {required: true, message: '请输入' + attribute['frontend_label'], trigger: 'change'}
-            ]
+            let requireRule = {required: true, message: '请输入' + attribute['frontend_label'], trigger: 'change'}
+            if (attribute['frontend_input'] === 'number') {
+              requireRule['type'] = 'number'
+            }
+            attribute.rules.push(requireRule)
+          }
+
+          if (value) {
+            if (attribute['frontend_input'] === 'datetime') {
+              attribute['value'] = new Date(value)
+            }
           }
         }
+
+        this.seminarForm.attributes = attributes
       },
       submit () {
-        this.$refs['seminar'].validate((valid) => {
+        this.$refs['seminarForm'].validate((valid) => {
           if (valid) {
-            let data = {}
-            for (let item in this.seminar) {
-              if (this.seminar.hasOwnProperty(item)) {
-                data[item] = this.seminar[item]
-                if (this._.isDate(this.seminar[item])) {
-                  data[item] = this.$moment(this.seminar[item]).format()
-                }
+            let data = {
+              title: this.seminarForm.title,
+              start_at: this.$moment(this.seminarForm.start_at).format(),
+              end_at: this.$moment(this.seminarForm.end_at).format(),
+              entity_type_id: this.seminarForm.entity_type_id
+            }
+
+            for (let i = 0; i < this.seminarForm.attributes.length; i++) {
+              let attribute = this.seminarForm.attributes[i], attributeCode = attribute['attribute_code']
+              data[attributeCode] = attribute['value']
+
+              if (attribute['frontend_input'] === 'datetime') {
+                data[attributeCode] = this.$moment(attribute['value']).format()
               }
             }
-            this.axios.put('/api/seminars/' + this.seminar.id, data).then(response => {
+            this.axios.put('/api/seminars/' + this.seminarInfo.id, data).then(response => {
               this.$message({
                 message: '保存成功',
                 type: 'success'
