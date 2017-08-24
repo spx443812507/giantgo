@@ -32,10 +32,10 @@
     </el-row>
     <el-dialog title="创建会议" size="small" v-model="seminarEditor.visible">
       <el-form class="seminar-editor" ref="seminar" :model="seminar" :rules="rules" label-width="80px">
-        <el-form-item label="会议名称" prop="title">
+        <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
           <el-input v-model="seminar.title"></el-input>
         </el-form-item>
-        <el-form-item label="会议时间" required>
+        <el-form-item label="会议时间" :error="seminarErrors.start_at" required>
           <el-col :span="11">
             <el-form-item prop="start_at">
               <el-date-picker type="datetime" placeholder="开始时间" v-model="seminar.start_at"></el-date-picker>
@@ -43,13 +43,13 @@
           </el-col>
           <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
-            <el-form-item prop="end_at">
+            <el-form-item prop="end_at" :error="seminarErrors.end_at">
               <el-date-picker type="datetime" placeholder="结束时间" v-model="seminar.end_at"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-form-item>
-        <el-form-item label="会议类型" prop="entity_type_id">
-          <el-select v-model="seminar.entity_type_id" placeholder="请选择">
+        <el-form-item label="会议类型" prop="entity_type_id" :error="seminarErrors.entity_type_id">
+          <el-select v-model="seminar.entity_type_id" clearable>
             <el-option
               v-for="entity in entities"
               :key="entity.id"
@@ -115,6 +115,12 @@
           total: 0
         },
         seminar: {
+          title: '',
+          start_at: '',
+          end_at: '',
+          entity_type_id: ''
+        },
+        seminarErrors: {
           title: '',
           start_at: '',
           end_at: '',
@@ -193,11 +199,15 @@
             }).then(response => {
               this.loadSeminars()
               this.hideSeminarEditor()
-            }, response => {
-              this.$message(response['data']['message'])
+            }).catch(response => {
+              if (response['response']['status'] === 422) {
+                this._.forIn(response['response']['data']['error'], (value, key) => {
+                  this.seminarErrors[key] = value[0]['message']
+                })
+              } else {
+                this.$message(response['response']['data']['message'])
+              }
             })
-          } else {
-            return false
           }
         })
       }
