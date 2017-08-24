@@ -23,10 +23,24 @@
 
   export default{
     data () {
-      return {}
+      return {
+        seminar: {
+          id: this.$route.params.seminarId
+        }
+      }
     },
     components: {navMenu, seminarMenu},
+    methods: {
+      loadSeminars () {
+        this.$store.dispatch('getSeminar', this.seminar.id).then((data) => {
+          this.seminar = data
+        }, (response) => {
+          this.$message(response['response']['data']['message'])
+        })
+      }
+    },
     mounted () {
+      this.loadSeminars()
     }
   }
 </script>

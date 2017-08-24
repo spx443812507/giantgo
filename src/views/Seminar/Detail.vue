@@ -18,7 +18,7 @@
         </el-col>
       </el-form-item>
       <el-form-item label="会议类型" prop="entity_type_id">
-        <el-select v-model="seminarForm.entity_type_id"  @change="entityChange" no-match-text="asd" no-data-text="asd">
+        <el-select v-model="seminarForm.entity_type_id" @change="entityChange" no-match-text="asd" no-data-text="asd">
           <el-option
             v-for="entity in entities"
             :key="entity.id"
@@ -135,14 +135,14 @@
           this.seminarForm.entity_type_id = this.seminarInfo['entity_type_id'] || ''
           this.loadAttributes(this.seminarInfo['entity_type_id'], this.seminarInfo['attributes'])
         }, response => {
-          this.$message(response['data']['message'])
+          this.$message(response['response']['data']['message'])
         })
       },
       loadEntities () {
         this.axios.get('/api/entities/seminar').then(response => {
           this.entities = response['data']
         }, response => {
-          this.$message(response['data']['message'])
+          this.$message(response['response']['data']['message'])
         })
       },
       loadAttributes (entityTypeId, attributes) {
