@@ -37,8 +37,8 @@
       </el-tab-pane>
       <el-tab-pane label="用户" name="contacts">
         <el-table :data="contacts.items" stripe border style="width: 100%">
-          <el-table-column prop="email" label="邮箱" width="200"></el-table-column>
-          <el-table-column prop="mobile" label="手机" width="180"></el-table-column>
+          <el-table-column prop="email" label="邮箱" width="230"></el-table-column>
+          <el-table-column prop="mobile" label="手机" width="150"></el-table-column>
           <el-table-column prop="name" label="姓名" width="180"></el-table-column>
           <el-table-column label="注册时间" width="180">
             <template scope="scope">

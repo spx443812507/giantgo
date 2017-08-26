@@ -12,6 +12,8 @@
           <el-card class="seminar-card" v-for="seminar in seminars" :key="seminar.id">
             <div>
               <div>会议名称：{{seminar.title}}</div>
+              <div>开始时间：{{seminar.start_at | moment('YYYY-MM-DD HH:mm:ss')}}</div>
+              <div>结束时间：{{seminar.end_at | moment('YYYY-MM-DD HH:mm:ss')}}</div>
             </div>
             <router-link :to="{name: 'seminarDetail', params: {seminarId: seminar.id}}">
               查看
@@ -135,10 +137,10 @@
             {max: 255, message: '长度不超过255个字符', trigger: 'change'}
           ],
           start_at: [
-            {type: 'date', required: true, message: '请输入开始时间', trigger: 'change'}
+            {type: 'date', required: true, message: '请输入开始时间'}
           ],
           end_at: [
-            {type: 'date', required: true, message: '请输入结束时间', trigger: 'change'}
+            {type: 'date', required: true, message: '请输入结束时间'}
           ]
         },
         entities: []

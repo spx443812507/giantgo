@@ -104,14 +104,14 @@
         },
         rules: {
           title: [
-            {required: true, message: '请输入会议名称', trigger: 'change'},
-            {max: 255, message: '长度不超过255个字符', trigger: 'change'}
+            {required: true, message: '请输入会议名称'},
+            {max: 255, message: '长度不超过255个字符'}
           ],
           start_at: [
-            {type: 'date', required: true, message: '请输入开始时间', trigger: 'change'}
+            {type: 'date', required: true, message: '请输入开始时间'}
           ],
           end_at: [
-            {type: 'date', required: true, message: '请输入结束时间', trigger: 'change'}
+            {type: 'date', required: true, message: '请输入结束时间'}
           ]
         },
         entities: []
@@ -177,6 +177,7 @@
         this.$refs['seminarForm'].validate((valid) => {
           if (valid) {
             let data = {
+              id: this.seminarInfo.id,
               title: this.seminarForm.title,
               start_at: this.$moment(this.seminarForm.start_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
               end_at: this.$moment(this.seminarForm.end_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
@@ -194,18 +195,18 @@
                 }
               }
             }
-            this.axios.put('/api/seminars/' + this.seminarInfo.id, data).then(response => {
+            this.$store.dispatch('updateSeminar', data).then(response => {
               this.$message({
                 message: '保存成功',
                 type: 'success'
               })
-            }).catch(response => {
+            }, response => {
               if (response['response']['status'] === 422) {
                 this._.forIn(response['response']['data']['error'], (value, key) => {
                   if (this._.has(this.seminarErrors, key) && value.length) {
                     this.seminarErrors[key] = value[0]['message']
                   } else {
-                    this._.map(this.seminarInfo.attributes, attribute => {
+                    this._.map(this.seminarForm.attributes, attribute => {
                       if (attribute['attribute_code'] === key && value.length) {
                         attribute['error'] = value[0]['message']
                       }

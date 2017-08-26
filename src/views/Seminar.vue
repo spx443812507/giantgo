@@ -31,7 +31,7 @@
     },
     components: {navMenu, seminarMenu},
     methods: {
-      loadSeminars () {
+      loadSeminar () {
         this.$store.dispatch('getSeminar', this.seminar.id).then((data) => {
           this.seminar = data
         }, (response) => {
@@ -40,7 +40,7 @@
       }
     },
     mounted () {
-      this.loadSeminars()
+      this.loadSeminar()
     }
   }
 </script>

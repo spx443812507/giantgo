@@ -5,29 +5,31 @@ const state = {
 }
 
 const getters = {
-  seminar: state => state.seminar
+  seminar: state => {
+    return {
+      title: state.seminar['title'],
+      start_at: new Date(state.seminar['start_at']),
+      end_at: new Date(state.seminar['end_at']),
+      entity_type_id: state.seminar['entity_type_id'] || '',
+      attributes: state.seminar['attributes'] || []
+    }
+  }
 }
 
 const actions = {
   getSeminar ({commit, state}, seminarId) {
     return new Promise((resolve, reject) => {
-      if (state.seminar.hasOwnProperty('id') && state.seminar.id === seminarId) {
-        resolve(state.seminar)
-      } else {
-        Vue.axios.get('/api/seminars/' + seminarId).then((response) => {
-          commit('setSeminar', response['data'])
-          resolve(response['data'])
-        }, (response) => {
-          reject(response)
-        })
-      }
+      Vue.axios.get('/api/seminars/' + seminarId).then((response) => {
+        commit('setSeminar', response['data'])
+        resolve(response['data'])
+      }, (response) => {
+        reject(response)
+      })
     })
   },
-  updateSeminar ({commit, state}, seminarId, seminarInfo) {
+  updateSeminar ({commit, state}, seminarInfo) {
     return new Promise((resolve, reject) => {
-      Vue.axios.put('/api/seminars/' + seminarId, {
-        data: seminarInfo
-      }).then((response) => {
+      Vue.axios.put('/api/seminars/' + seminarInfo.id, seminarInfo).then((response) => {
         commit('setSeminar', response['data'])
         resolve(response['data'])
       }, (response) => {
