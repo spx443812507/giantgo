@@ -1,23 +1,23 @@
 <template>
   <el-col :span="12">
-    <el-form ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
-      <el-form-item label="会议名称" prop="title">
+    <el-form class="seminar-form" ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
+      <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
         <el-input v-model="seminarForm.title"></el-input>
       </el-form-item>
       <el-form-item label="会议时间" required>
         <el-col :span="11">
-          <el-form-item prop="start_at">
+          <el-form-item prop="start_at" :error="seminarErrors.start_at">
             <el-date-picker type="datetime" placeholder="开始时间" v-model="seminarForm.start_at"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-form-item prop="end_at">
+          <el-form-item prop="end_at" :error="seminarErrors.end_at">
             <el-date-picker type="datetime" placeholder="结束时间" v-model="seminarForm.end_at"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-form-item>
-      <el-form-item label="会议类型" prop="entity_type_id">
+      <el-form-item label="会议类型" prop="entity_type_id" :error="seminarErrors.entity_type_id">
         <el-select v-model="seminarForm.entity_type_id" @change="entityChange" no-match-text="asd" no-data-text="asd">
           <el-option
             v-for="entity in entities"
@@ -77,8 +77,11 @@
   </el-col>
 </template>
 <style lang="scss" rel="stylesheet/scss">
-  .line {
-    text-align: center;
+  .seminar-form {
+    width: 100%;
+    .line {
+      text-align: center;
+    }
   }
 </style>
 <script type="text/ecmascript-6">

@@ -108,7 +108,9 @@
   }
 
   .content {
+    height: 100%;
     padding: 25px;
+    overflow: auto;
   }
 
   .fade-enter-active,

@@ -32,25 +32,25 @@
       </div>
     </el-row>
     <el-dialog title="创建会议" size="small" v-model="seminarEditor.visible">
-      <el-form class="seminar-editor" ref="seminar" :model="seminar" :rules="rules" label-width="80px">
+      <el-form class="seminar-dialog-form" ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
         <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
-          <el-input v-model="seminar.title"></el-input>
+          <el-input v-model="seminarForm.title"></el-input>
         </el-form-item>
         <el-form-item label="会议时间" :error="seminarErrors.start_at" required>
           <el-col :span="11">
             <el-form-item prop="start_at">
-              <el-date-picker type="datetime" placeholder="开始时间" v-model="seminar.start_at"></el-date-picker>
+              <el-date-picker type="datetime" placeholder="开始时间" v-model="seminarForm.start_at"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
             <el-form-item prop="end_at" :error="seminarErrors.end_at">
-              <el-date-picker type="datetime" placeholder="结束时间" v-model="seminar.end_at"></el-date-picker>
+              <el-date-picker type="datetime" placeholder="结束时间" v-model="seminarForm.end_at"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-form-item>
         <el-form-item label="会议类型" prop="entity_type_id" :error="seminarErrors.entity_type_id">
-          <el-select v-model="seminar.entity_type_id" clearable>
+          <el-select v-model="seminarForm.entity_type_id" clearable>
             <el-option
               v-for="entity in entities"
               :key="entity.id"
@@ -92,7 +92,7 @@
     }
   }
 
-  .seminar-editor {
+  .seminar-dialog-form {
     width: 85%;
     .line {
       text-align: center;
@@ -115,7 +115,7 @@
           pageSize: 10,
           total: 0
         },
-        seminar: {
+        seminarForm: {
           title: '',
           start_at: '',
           end_at: '',
@@ -152,9 +152,9 @@
         this.loadSeminars()
       },
       resetSeminarEditor () {
-        this.seminar.title = ''
-        this.seminar.start_at = ''
-        this.seminar.end_at = ''
+        this.seminarForm.title = ''
+        this.seminarForm.start_at = ''
+        this.seminarForm.end_at = ''
       },
       showSeminarEditor () {
         this.seminarEditor.visible = true
@@ -187,13 +187,13 @@
         })
       },
       createSeminar () {
-        this.$refs['seminar'].validate((valid) => {
+        this.$refs['seminarForm'].validate((valid) => {
           if (valid) {
             this.axios.post('/api/seminars', {
-              entity_type_id: this.seminar.entity_type_id,
-              title: this.seminar.title,
-              start_at: this.$moment(this.seminar.start_at).format(),
-              end_at: this.$moment(this.seminar.end_at).format()
+              entity_type_id: this.seminarForm.entity_type_id,
+              title: this.seminarForm.title,
+              start_at: this.$moment(this.seminarForm.start_at).format(),
+              end_at: this.$moment(this.seminarForm.end_at).format()
             }).then(response => {
               this.loadSeminars()
               this.hideSeminarEditor()
