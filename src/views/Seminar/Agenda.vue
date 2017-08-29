@@ -66,7 +66,7 @@
     </el-dialog>
   </el-col>
 </template>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   .agenda-card {
     margin-top: 20px;
     .btn-create-agenda {
@@ -197,7 +197,7 @@
               url += '/' + this.agendaForm.id
             }
             this.axios[method](url, data).then(response => {
-              this.loadAgendaDays()
+              this.loadAgendas()
               this.hideAgendaEditor()
             }, response => {
               if (response['response']['status'] === 422) {
@@ -211,7 +211,7 @@
           }
         })
       },
-      loadAgendaDays () {
+      loadAgendas () {
         this.axios.get('/api/seminars/' + this.seminarId + '/agendas').then((response) => {
           this.agendas = response['data']
         }, (response) => {
@@ -220,7 +220,7 @@
       }
     },
     mounted () {
-      this.loadAgendaDays()
+      this.loadAgendas()
     }
   }
 </script>

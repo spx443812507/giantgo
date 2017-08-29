@@ -11,7 +11,7 @@
     </el-card>
   </div>
 </template>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   .entity-card {
     width: 480px;
     display: inline-block;

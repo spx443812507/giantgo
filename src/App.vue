@@ -109,7 +109,7 @@
 
   .content {
     height: 100%;
-    padding: 25px;
+    padding: 20px;
     overflow: auto;
   }
 

@@ -7,9 +7,9 @@ import VueAxios from 'vue-axios'
 import moment from 'vue-moment'
 import lodash from 'lodash'
 import VueLodash from 'vue-lodash/dist/vue-lodash.min'
-
 import Element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import './style.less'
 import store from './store'
 import App from './App.vue'
 

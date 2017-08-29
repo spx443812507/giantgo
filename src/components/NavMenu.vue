@@ -29,7 +29,7 @@
     </el-col>
   </el-row>
 </template>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   .header {
     .el-menu {
       background-color: rgb(32, 160, 255);

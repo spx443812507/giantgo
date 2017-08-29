@@ -76,7 +76,7 @@
     </el-form>
   </el-col>
 </template>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   .seminar-form {
     width: 100%;
     .line {

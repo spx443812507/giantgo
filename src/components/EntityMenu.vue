@@ -11,7 +11,7 @@
     </el-submenu>
   </el-menu>
 </template>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   .el-menu {
     height: 100%;
     .el-menu-item a {

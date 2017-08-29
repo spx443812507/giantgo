@@ -67,13 +67,12 @@
     </el-dialog>
   </div>
 </template>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   .seminars {
     position: relative;
-    margin-top: 10px;
+    padding: 20px;
     .el-button {
       float: right;
-      margin-right: 20px;
       display: block;
     }
   }
