@@ -34,6 +34,7 @@
     .el-menu {
       background-color: rgb(32, 160, 255);
       li a {
+        display: block;
         color: #fff
       }
     }

@@ -1,204 +1,147 @@
 <template>
-  <div class="wrapper">
-    <header>
-      <nav-menu></nav-menu>
-    </header>
-    <el-row class="container">
-      <div class="seminars">
-        <el-button type="primary" @click="showSeminarEditor">
-          创建会议
-        </el-button>
-        <div class="seminar-card-container">
-          <el-card class="seminar-card" v-for="seminar in seminars" :key="seminar.id">
-            <div>
-              <div>会议名称：{{seminar.title}}</div>
-            </div>
-            <router-link :to="{name: 'seminarDetail', params: {seminarId: seminar.id}}">
-              查看
-            </router-link>
-          </el-card>
-        </div>
+  <el-col :span="24">
+    <div class="checkins">
+      <el-button class="btn-create" type="primary" @click="showCheckinEditor">
+        创建签到点
+      </el-button>
+      <div>
+        <el-table
+          class="checkin-table"
+          :data="checkins"
+          v-loading.body="checkinForm.loading"
+          stripe border style="width: 100%">
+          <el-table-column prop="title" label="标题" width="200"></el-table-column>
+          <el-table-column prop="staff_name" label="工作人员姓名" width="300"></el-table-column>
+          <el-table-column prop="staff_mobile" label="工作人员电话" width="200"></el-table-column>
+          <el-table-column label="操作">
+            <template scope="scope">
+              <el-button size="small" @click="showCheckinEditor(scope.$index, scope.row)">
+                编辑
+              </el-button>
+              <el-button size="small" type="danger" @click="deleteCheckin(scope.$index, scope.row)">
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-      <div class="pager">
-        <el-pagination
-          @current-change="pagerCurrentChange"
-          :current-page.sync="pager.currentPage"
-          :page-size="pager.pageSize"
-          layout="total, prev, pager, next"
-          :total="pager.total">
-        </el-pagination>
-      </div>
-    </el-row>
-    <el-dialog title="创建会议" size="small" v-model="seminarEditor.visible">
-      <el-form class="seminar-editor" ref="seminar" :model="seminar" :rules="rules" label-width="80px">
-        <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
-          <el-input v-model="seminar.title"></el-input>
+    </div>
+    <el-dialog :title="checkinEditor.title" size="small" v-model="checkinEditor.visible">
+      <el-form class="checkin-dialog-form" ref="checkinForm" :model="checkinForm" :rules="rules" label-width="100px">
+        <el-form-item label="签到点名称" prop="title" :error="checkinErrors.title">
+          <el-input v-model="checkinForm.title"></el-input>
         </el-form-item>
-        <el-form-item label="会议时间" :error="seminarErrors.start_at" required>
-          <el-col :span="11">
-            <el-form-item prop="start_at">
-              <el-date-picker type="datetime" placeholder="开始时间" v-model="seminar.start_at"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-form-item prop="end_at" :error="seminarErrors.end_at">
-              <el-date-picker type="datetime" placeholder="结束时间" v-model="seminar.end_at"></el-date-picker>
-            </el-form-item>
-          </el-col>
+        <el-form-item label="工作人员姓名" prop="staff_name" :error="checkinErrors.staff_name">
+          <el-input v-model="checkinForm.staff_name"></el-input>
         </el-form-item>
-        <el-form-item label="会议类型" prop="entity_type_id" :error="seminarErrors.entity_type_id">
-          <el-select v-model="seminar.entity_type_id" clearable>
-            <el-option
-              v-for="entity in entities"
-              :key="entity.id"
-              :label="entity.entity_type_name"
-              :value="entity.id">
-            </el-option>
-          </el-select>
+        <el-form-item label="工作人员手机" prop="staff_mobile" :error="checkinErrors.staff_mobile">
+          <el-input v-model="checkinForm.staff_mobile"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click.native="hideSeminarEditor">取消</el-button>
-        <el-button type="primary" @click.native="createSeminar" :loading="seminarEditor.isSubmitting">保存</el-button>
+        <el-button @click.native="hideCheckinEditor">取消</el-button>
+        <el-button type="primary" @click.native="saveCheckin" :loading="checkinEditor.isSubmitting">保存</el-button>
       </div>
     </el-dialog>
-  </div>
+  </el-col>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .seminars {
-    position: relative;
-    margin-top: 10px;
-    .el-button {
+  .checkins {
+    .btn-create {
       float: right;
-      margin-right: 20px;
-      display: block;
+      margin-bottom: 10px;
     }
   }
 
-  .seminar-card-container {
-    text-align: center;
-    padding-top: 50px;
-  }
-
-  .seminar-card {
-    width: 480px;
-    display: inline-block;
-    margin: 0 15px 15px 0;
-    a {
-      color: #20a0ff;
-    }
-  }
-
-  .seminar-editor {
+  .checkin-dialog-form {
     width: 85%;
-    .line {
-      text-align: center;
-    }
-  }
-
-  .pager {
-    text-align: center;
   }
 </style>
 <script type="text/ecmascript-6">
-  import navMenu from '../../components/NavMenu.vue'
+  /* eslint-disable one-var */
 
   export default{
     data () {
       return {
-        seminars: [],
-        pager: {
-          currentPage: 1,
-          pageSize: 10,
-          total: 0
-        },
-        seminar: {
+        seminarId: this.$route.params.seminarId,
+        checkins: [],
+        checkinForm: {
+          id: '',
           title: '',
-          start_at: '',
-          end_at: '',
-          entity_type_id: ''
+          staff_name: '',
+          staff_mobile: ''
         },
-        seminarErrors: {
+        checkinErrors: {
           title: '',
-          start_at: '',
-          end_at: '',
-          entity_type_id: ''
+          staff_name: '',
+          staff_mobile: ''
         },
-        seminarEditor: {
+        checkinEditor: {
+          title: '',
           visible: false,
           isSubmitting: false
         },
         rules: {
           title: [
-            {required: true, message: '请输入会议名称', trigger: 'change'},
-            {max: 255, message: '长度不超过255个字符', trigger: 'change'}
-          ],
-          start_at: [
-            {type: 'date', required: true, message: '请输入开始时间', trigger: 'change'}
-          ],
-          end_at: [
-            {type: 'date', required: true, message: '请输入结束时间', trigger: 'change'}
+            {required: true, message: '请输入签到点名称'},
+            {max: 255, message: '长度不超过255个字符'}
           ]
-        },
-        entities: []
+        }
       }
     },
-    components: {navMenu},
+    components: {},
     methods: {
-      pagerCurrentChange (val) {
-        this.loadSeminars()
-      },
-      resetSeminarEditor () {
-        this.seminar.title = ''
-        this.seminar.start_at = ''
-        this.seminar.end_at = ''
-      },
-      showSeminarEditor () {
-        this.seminarEditor.visible = true
-        this.resetSeminarEditor()
-        this.loadEntities()
-      },
-      hideSeminarEditor () {
-        this.seminarEditor.visible = false
-      },
-      loadSeminars () {
-        this.axios.get('/api/seminars', {
-          params: {
-            page: this.pager.currentPage,
-            per_page: this.pager.pageSize
+      showCheckinEditor (index, row) {
+        this.checkinEditor.visible = true
+
+        this.$nextTick(() => {
+          this.$refs['checkinForm'].resetFields()
+          if (row && row.id) {
+            this.checkinForm.id = row.id
+            this.checkinForm.title = row.title
+            this.checkinForm.staff_name = row.staff_name
+            this.checkinForm.staff_mobile = row.staff_mobile
+            this.checkinEditor.title = '编辑'
+          } else {
+            this.checkinForm.id = ''
+            this.checkinForm.title = ''
+            this.checkinForm.staff_name = ''
+            this.checkinForm.staff_mobile = ''
+            this.checkinEditor.title = '创建'
           }
-        }).then(response => {
-          let data = response['data']
-          this.seminars = data['data']
-          this.pager.currentPage = data['current_page']
-          this.pager.total = data['total']
+        })
+      },
+      hideCheckinEditor () {
+        this.checkinEditor.visible = false
+      },
+      loadCheckins () {
+        this.axios.get('/api/seminars/' + this.seminarId + '/checkins').then(response => {
+          this.checkins = response['data']
         }, response => {
           this.$message(response['response']['data']['message'])
         })
       },
-      loadEntities () {
-        this.axios.get('/api/entities/seminar').then(response => {
-          this.entities = response['data']
-        }, response => {
-          this.$message(response['response']['data']['message'])
-        })
-      },
-      createSeminar () {
-        this.$refs['seminar'].validate((valid) => {
+      saveCheckin () {
+        this.$refs['checkinForm'].validate((valid) => {
           if (valid) {
-            this.axios.post('/api/seminars', {
-              entity_type_id: this.seminar.entity_type_id,
-              title: this.seminar.title,
-              start_at: this.$moment(this.seminar.start_at).format(),
-              end_at: this.$moment(this.seminar.end_at).format()
-            }).then(response => {
-              this.loadSeminars()
-              this.hideSeminarEditor()
+            let url = '/api/seminars/' + this.seminarId + '/checkins',
+              method = 'post',
+              data = {
+                title: this.checkinForm.title,
+                staff_name: this.checkinForm.staff_name,
+                staff_mobile: this.checkinForm.staff_mobile
+              }
+            if (this.checkinForm.id) {
+              method = 'put'
+              url += '/' + this.checkinForm.id
+            }
+            this.axios[method](url, data).then(response => {
+              this.loadCheckins()
+              this.hideCheckinEditor()
             }).catch(response => {
               if (response['response']['status'] === 422) {
                 this._.forIn(response['response']['data']['error'], (value, key) => {
-                  this.seminarErrors[key] = value[0]['message']
+                  this.checkinErrors[key] = value[0]['message']
                 })
               } else {
                 this.$message(response['response']['data']['message'])
@@ -206,10 +149,32 @@
             })
           }
         })
+      },
+      deleteCheckin (index, row) {
+        this.$confirm('此操作将删除此签到点：' + row.title + ', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios.delete('/api/seminars/' + this.seminarId + '/checkins/' + row.id).then(response => {
+            this.loadCheckins()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }, response => {
+            this.$message(response['response']['data']['message'])
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       }
     },
     mounted () {
-      this.loadSeminars()
+      this.loadCheckins()
     }
   }
 </script>

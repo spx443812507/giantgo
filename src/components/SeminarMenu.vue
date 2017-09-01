@@ -20,7 +20,7 @@
         <i class="el-icon-fa-user-circle-o"></i>演讲嘉宾
       </router-link>
     </el-menu-item>
-    <el-menu-item index="4">
+    <el-menu-item index="5">
       <router-link :to="{name: 'seminarCheckin', params: {seminarId: seminarId}}">
         <i class="el-icon-fa-check-square-o"></i>签到点
       </router-link>

@@ -4,20 +4,21 @@
       <el-button class="btn-create" type="primary" @click="showSpeakerEditor">
         创建嘉宾
       </el-button>
-      <div class="seminar-card-container">
-        <el-table class="agenda-table" :data="speakers" stripe border style="width: 100%">
-          <el-table-column prop="name" label="姓名" width="300"></el-table-column>
+      <div>
+        <el-table class="agenda-table"
+                  :data="speakers"
+                  v-loading.body="pager.loading"
+                  stripe border style="width: 100%">
+          <el-table-column prop="name" label="姓名" width="200"></el-table-column>
           <el-table-column prop="company" label="公司" width="300"></el-table-column>
-          <el-table-column prop="position" label="职位" width="300"></el-table-column>
+          <el-table-column prop="position" label="职位" width="200"></el-table-column>
           <el-table-column label="操作">
             <template scope="scope">
-              <el-button type="text" size="small" @click="showSpeakerEditor(scope.$index, scope.row)">
+              <el-button size="small" @click="showSpeakerEditor(scope.$index, scope.row)">
                 编辑
               </el-button>
-              <el-button
-                size="small"
-                type="danger"
-                @click="deleteSpeaker(scope.$index, scope.row)">删除
+              <el-button size="small" type="danger" @click="deleteSpeaker(scope.$index, scope.row)">
+                删除
               </el-button>
             </template>
           </el-table-column>
@@ -35,6 +36,18 @@
     </div>
     <el-dialog :title="speakerEditor.title" size="small" v-model="speakerEditor.visible">
       <el-form class="speaker-dialog-form" ref="speakerForm" :model="speakerForm" :rules="rules" label-width="80px">
+        <el-form-item label="头像">
+          <el-upload
+            class="avatar-uploader"
+            list-type="picture-card"
+            action="/api/files/avatar"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload">
+            <img v-if="speakerForm.avatar" :src="speakerForm.avatar" class="avatar">
+            <i class="el-icon-plus avatar-uploader-icon" v-else></i>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="姓名" prop="name" :error="speakerErrors.name">
           <el-input v-model="speakerForm.name"></el-input>
         </el-form-item>
@@ -45,7 +58,7 @@
           <el-input v-model="speakerForm.position"></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="title" :error="speakerErrors.profile">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="speakerForm.profile"></el-input>
+          <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 6}" v-model="speakerForm.profile"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -69,7 +82,15 @@
   }
 
   .speaker-dialog-form {
-    width: 80%;
+    width: 85%;
+  }
+
+  .avatar-uploader {
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+    }
   }
 </style>
 <script type="text/ecmascript-6">
@@ -83,7 +104,8 @@
         pager: {
           currentPage: 1,
           pageSize: 10,
-          total: 0
+          total: 0,
+          loading: false
         },
         seminar: {
           title: '',
@@ -92,6 +114,7 @@
           entity_type_id: ''
         },
         speakerForm: {
+          id: '',
           name: '',
           avatar: '',
           company: '',
@@ -134,6 +157,21 @@
       pagerCurrentChange (val) {
         this.loadSpeakers()
       },
+      handleAvatarSuccess (res, file) {
+        this.speakerForm.avatar = file.response
+      },
+      beforeAvatarUpload (file) {
+        const isJPG = file.type === 'image/jpeg'
+        const isLt2M = file.size / 1024 / 1024 < 2
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!')
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!')
+        }
+        return isJPG && isLt2M
+      },
       showSpeakerEditor (index, row) {
         this.speakerEditor.visible = true
         this.$nextTick(() => {
@@ -141,6 +179,7 @@
           if (row && row.id) {
             this.speakerForm.id = row.id
             this.speakerForm.name = row.name
+            this.speakerForm.avatar = row.avatar
             this.speakerForm.company = row.company
             this.speakerForm.position = row.position
             this.speakerForm.profile = row.profile
@@ -148,6 +187,7 @@
           } else {
             this.speakerForm.id = ''
             this.speakerForm.name = ''
+            this.speakerForm.avatar = ''
             this.speakerForm.company = ''
             this.speakerForm.position = ''
             this.speakerForm.profile = ''
@@ -160,6 +200,7 @@
         this.speakerEditor.visible = false
       },
       loadSpeakers () {
+        this.pager.loading = true
         this.axios.get('/api/seminars/' + this.seminarId + '/speakers', {
           params: {
             page: this.pager.currentPage,
@@ -170,6 +211,7 @@
           this.speakers = data['data']
           this.pager.currentPage = data['current_page']
           this.pager.total = data['total']
+          this.pager.loading = false
         }, response => {
           this.$message(response['response']['data']['message'])
         })
@@ -188,6 +230,7 @@
               method = 'post',
               data = {
                 entity_type_id: this.speakerForm.entity_type_id,
+                avatar: this.speakerForm.avatar,
                 name: this.speakerForm.name,
                 company: this.speakerForm.company,
                 position: this.speakerForm.position,
@@ -212,7 +255,27 @@
           }
         })
       },
-      deleteSpeaker () {
+      deleteSpeaker (index, row) {
+        this.$confirm('此操作将删除此嘉宾以及会议日程中已设置的嘉宾：' + row.name + ', 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios.delete('/api/seminars/' + this.seminarId + '/speakers/' + row.id).then(response => {
+            this.loadSpeakers()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }, response => {
+            this.$message(response['response']['data']['message'])
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       }
     },
     mounted () {
