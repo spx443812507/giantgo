@@ -78,7 +78,6 @@
   }
 
   .seminar-card-container {
-    text-align: center;
     padding-top: 50px;
   }
 

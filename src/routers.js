@@ -2,7 +2,13 @@ const home = r => require.ensure([], () => r(require('./views/Index.vue')), 'hom
 const signIn = r => require.ensure([], () => r(require('./views/Passport/SignIn.vue')), 'passport')
 const entity = r => require.ensure([], () => r(require('./views/Entity.vue')), 'entities')
 const entityContact = r => require.ensure([], () => r(require('./views/Entity/Contact/Index.vue')), 'entities')
+const entitySeminar = r => require.ensure([], () => r(require('./views/Entity/Seminar/Index.vue')), 'entities')
+const entityAgenda = r => require.ensure([], () => r(require('./views/Entity/Agenda/Index.vue')), 'entities')
+const entitySpeaker = r => require.ensure([], () => r(require('./views/Entity/Speaker/Index.vue')), 'entities')
 const entityContactDetail = r => require.ensure([], () => r(require('./views/Entity/Contact/Detail.vue')), 'entities')
+const entitySeminarDetail = r => require.ensure([], () => r(require('./views/Entity/Seminar/Detail.vue')), 'entities')
+const entityAgendaDetail = r => require.ensure([], () => r(require('./views/Entity/Agenda/Detail.vue')), 'entities')
+const entitySpeakerDetail = r => require.ensure([], () => r(require('./views/Entity/Speaker/Detail.vue')), 'entities')
 const seminarList = r => require.ensure([], () => r(require('./views/Seminar/List.vue')), 'seminars')
 const seminar = r => require.ensure([], () => r(require('./views/Seminar.vue')), 'seminars')
 const seminarDetail = r => require.ensure([], () => r(require('./views/Seminar/Detail.vue')), 'seminars')
@@ -33,6 +39,30 @@ const routers = [
         path: 'contact/:entityTypeId',
         name: 'entityContactDetail',
         component: entityContactDetail
+      }, {
+        path: 'seminar',
+        name: 'entitySeminar',
+        component: entitySeminar
+      }, {
+        path: 'seminar/:entityTypeId',
+        name: 'entitySeminarDetail',
+        component: entitySeminarDetail
+      }, {
+        path: 'speaker',
+        name: 'entitySpeaker',
+        component: entitySpeaker
+      }, {
+        path: 'speaker/:entityTypeId',
+        name: 'entitySpeakerDetail',
+        component: entitySpeakerDetail
+      }, {
+        path: 'agenda',
+        name: 'entityAgenda',
+        component: entityAgenda
+      }, {
+        path: 'agenda/:entityTypeId',
+        name: 'entityAgendaDetail',
+        component: entityAgendaDetail
       }
     ]
   }, {

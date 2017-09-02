@@ -4,12 +4,12 @@
       创建模型
     </el-button>
     <div class="entity-card-container">
-      <el-card class="entity-card" v-for="entityType in contactEntityTypes" :key="entityType.id">
+      <el-card class="entity-card" v-for="entityType in agendaEntityTypes" :key="entityType.id">
         <div>
           <div>模型名称：{{entityType.entity_type_name}}</div>
-          <div>用户数量：{{entityType.entity_instance_count}}</div>
+          <div>会议数量：{{entityType.entity_instance_count}}</div>
         </div>
-        <router-link :to="{name: 'entityContactDetail', params: {entityTypeId: entityType.id}}">
+        <router-link :to="{name: 'entityAgendaDetail', params: {entityTypeId: entityType.id}}">
           查看
         </router-link>
       </el-card>
@@ -55,7 +55,7 @@
   export default{
     data () {
       return {
-        contactEntityTypes: [],
+        agendaEntityTypes: [],
         entityForm: {
           entity_type_name: '',
           description: ''
@@ -89,11 +89,11 @@
           if (valid) {
             this.axios.post('api/entities', {
               entity_type_name: this.entityForm.entity_type_name,
-              entity_type_code: 'contact',
+              entity_type_code: 'agenda',
               description: this.entityForm.description
             }).then(response => {
               this.hideEntityEditor()
-              this.loadContactEntity()
+              this.loadAgendaEntity()
             }, response => {
               if (response['response']['status'] === 422) {
                 this._.forIn(response['response']['data']['error'], (value, key) => {
@@ -106,16 +106,16 @@
           }
         })
       },
-      loadContactEntity () {
-        this.axios.get('/api/entities/contact').then(response => {
-          this.contactEntityTypes = response['data']
+      loadAgendaEntity () {
+        this.axios.get('/api/entities/agenda').then(response => {
+          this.agendaEntityTypes = response['data']
         }, response => {
           this.$message(response['response']['data']['message'])
         })
       }
     },
     mounted () {
-      this.loadContactEntity()
+      this.loadAgendaEntity()
     }
   }
 </script>
