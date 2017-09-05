@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="20">
+  <el-col :span="24">
     会议时间：
     {{seminar.start_at | moment('YYYY-MM-DD HH:mm:ss')}} - {{seminar.end_at | moment('YYYY-MM-DD HH:mm:ss')}}
     <el-card class="agenda-card" v-for="(day, index) in days" :key="day.date">
@@ -19,6 +19,26 @@
         <el-table-column label="结束时间" width="180">
           <template scope="scope">
             {{scope.row.end_at | moment('YYYY-MM-DD HH:mm:ss')}}
+          </template>
+        </el-table-column>
+        <el-table-column label="演讲嘉宾" width="200">
+          <template scope="scope">
+            <el-popover
+              :ref="'popover' + scope.row.id"
+              placement="right"
+              width="400"
+              trigger="hover">
+              <div slot="reference">
+                <el-button type="text" size="small" @click="showSpeakerTransfer(scope.$index, scope.row)">
+                  演讲嘉宾
+                </el-button>
+              </div>
+              <el-table :data="scope.row.speakers">
+                <el-table-column width="100" property="name" label="姓名"></el-table-column>
+                <el-table-column width="200" property="company" label="公司"></el-table-column>
+                <el-table-column width="100" property="position" label="职位"></el-table-column>
+              </el-table>
+            </el-popover>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -64,10 +84,29 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="演讲嘉宾" size="small" v-model="speakerTransfer.visible">
+      <el-transfer
+        filterable
+        :filter-method="filterMethod"
+        filter-placeholder="请输入嘉宾姓名"
+        :titles="['嘉宾列表', '已选嘉宾']"
+        :props="{key: 'id', label: 'name'}"
+        v-model="speakerTransfer.speakers"
+        :data="speakers">
+      </el-transfer>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="hideSpeakerTransfer">取消</el-button>
+        <el-button type="primary" @click.native="attachAgendaSpeakers" :loading="speakerTransfer.isSubmitting">
+          保存
+        </el-button>
+      </div>
+    </el-dialog>
   </el-col>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
   .agenda-card {
+    width: 100%;
     margin-top: 20px;
     .btn-create-agenda {
       float: right;
@@ -130,6 +169,16 @@
           end_at: [
             {required: true, message: '请输入结束时间'}
           ]
+        },
+        speakers: [],
+        speakerTransfer: {
+          agendaId: '',
+          speakers: [],
+          visible: false,
+          isSubmitting: false
+        },
+        filterMethod (query, item) {
+          return item.name.indexOf(query) > -1
         }
       }
     },
@@ -179,6 +228,14 @@
       hideAgendaEditor () {
         this.agendaEditor.visible = false
       },
+      showSpeakerTransfer (index, row) {
+        this.speakerTransfer.agendaId = row.id
+        this.speakerTransfer.visible = true
+        this.searchSpeakers()
+      },
+      hideSpeakerTransfer () {
+        this.speakerTransfer.visible = false
+      },
       saveAgenda () {
         this.$refs['agendaForm'].validate((valid) => {
           if (valid) {
@@ -211,9 +268,30 @@
           }
         })
       },
+      attachAgendaSpeakers () {
+        this.axios.put('/api/seminars/' + this.seminarId + '/agendas/' + this.speakerTransfer.agendaId + '/speakers', {
+          speakers: this.speakerTransfer.speakers
+        }).then((response) => {
+          this.loadAgendas()
+          this.hideSpeakerTransfer()
+        }, (response) => {
+          this.$message(response['response']['data']['message'])
+        })
+      },
       loadAgendas () {
         this.axios.get('/api/seminars/' + this.seminarId + '/agendas').then((response) => {
           this.agendas = response['data']
+        }, (response) => {
+          this.$message(response['response']['data']['message'])
+        })
+      },
+      searchSpeakers () {
+        this.axios.get('/api/search/speakers', {
+          params: {
+            seminar_id: this.seminarId
+          }
+        }).then((response) => {
+          this.speakers = response['data']['data']
         }, (response) => {
           this.$message(response['response']['data']['message'])
         })

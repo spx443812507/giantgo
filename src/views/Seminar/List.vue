@@ -82,7 +82,7 @@
   }
 
   .seminar-card {
-    width: 480px;
+    width: 395px;
     display: inline-block;
     margin: 0 15px 15px 0;
     a {

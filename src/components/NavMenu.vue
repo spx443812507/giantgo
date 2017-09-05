@@ -49,7 +49,6 @@
 
   .user-info {
     text-align: right;
-    padding-right: 35px;
     float: right;
     span {
       cursor: pointer;
