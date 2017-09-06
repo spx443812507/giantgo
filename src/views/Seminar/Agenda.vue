@@ -21,7 +21,7 @@
             {{scope.row.end_at | moment('YYYY-MM-DD HH:mm:ss')}}
           </template>
         </el-table-column>
-        <el-table-column label="演讲嘉宾" width="200">
+        <el-table-column label="演讲嘉宾" width="100">
           <template scope="scope">
             <el-popover
               :ref="'popover' + scope.row.id"
@@ -33,7 +33,7 @@
                   演讲嘉宾
                 </el-button>
               </div>
-              <el-table :data="scope.row.speakers">
+              <el-table :data="scope.row.speakers" stripe border style="width: 100%">
                 <el-table-column width="100" property="name" label="姓名"></el-table-column>
                 <el-table-column width="200" property="company" label="公司"></el-table-column>
                 <el-table-column width="100" property="position" label="职位"></el-table-column>
@@ -43,8 +43,11 @@
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button type="text" size="small" @click="showAgendaEditor(scope.$index, day.date, scope.row)">
+            <el-button size="small" @click="showAgendaEditor(scope.$index, day.date, scope.row)">
               编辑
+            </el-button>
+            <el-button size="small" type="danger" @click="deleteAgenda(scope.$index, scope.row)">
+              删除
             </el-button>
           </template>
         </el-table-column>
@@ -84,7 +87,6 @@
         </el-button>
       </div>
     </el-dialog>
-
     <el-dialog title="演讲嘉宾" size="small" v-model="speakerTransfer.visible">
       <el-transfer
         filterable
@@ -119,6 +121,10 @@
     .line {
       text-align: center;
     }
+  }
+
+  .el-table--hidden {
+    visibility: visible;
   }
 </style>
 <script type="text/ecmascript-6">
@@ -231,7 +237,8 @@
       showSpeakerTransfer (index, row) {
         this.speakerTransfer.agendaId = row.id
         this.speakerTransfer.visible = true
-        this.searchSpeakers()
+        this.speakerTransfer.speakers = row.speakerIds
+        this.loadSpeakers()
       },
       hideSpeakerTransfer () {
         this.speakerTransfer.visible = false
@@ -268,6 +275,28 @@
           }
         })
       },
+      deleteAgenda (index, row) {
+        this.$confirm('此操作将删除日程：' + row.title + '，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios.delete('/api/seminars/' + this.seminarId + '/agendas/' + row.id).then(response => {
+            this.loadAgendas()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }, response => {
+            this.$message(response['response']['data']['message'])
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      },
       attachAgendaSpeakers () {
         this.axios.put('/api/seminars/' + this.seminarId + '/agendas/' + this.speakerTransfer.agendaId + '/speakers', {
           speakers: this.speakerTransfer.speakers
@@ -285,13 +314,9 @@
           this.$message(response['response']['data']['message'])
         })
       },
-      searchSpeakers () {
-        this.axios.get('/api/search/speakers', {
-          params: {
-            seminar_id: this.seminarId
-          }
-        }).then((response) => {
-          this.speakers = response['data']['data']
+      loadSpeakers () {
+        this.axios.get('/api/seminars/' + this.seminarId + '/speakers').then((response) => {
+          this.speakers = response['data']
         }, (response) => {
           this.$message(response['response']['data']['message'])
         })

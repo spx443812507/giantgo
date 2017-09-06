@@ -1,39 +1,31 @@
 <template>
   <el-col :span="24">
-    <div class="speakers">
-      <el-button class="btn-create" type="primary" @click="showSpeakerEditor">
-        创建嘉宾
-      </el-button>
-      <div>
-        <el-table class="agenda-table"
-                  :data="speakers"
-                  v-loading.body="pager.loading"
-                  stripe border style="width: 100%">
-          <el-table-column prop="name" label="姓名" width="200"></el-table-column>
-          <el-table-column prop="company" label="公司" width="300"></el-table-column>
-          <el-table-column prop="position" label="职位" width="200"></el-table-column>
-          <el-table-column label="操作">
-            <template scope="scope">
-              <el-button size="small" @click="showSpeakerEditor(scope.$index, scope.row)">
-                编辑
-              </el-button>
-              <el-button size="small" type="danger" @click="deleteSpeaker(scope.$index, scope.row)">
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+    <el-card class="speaker-card" v-for="entity in entitySpeakers" :key="entity.id">
+      <div slot="header" class="clearfix">
+        <span style="line-height: 36px;">嘉宾分类：{{entity.entity_type_name}}</span>
+        <el-button class="btn-create-speaker" type="primary" @click="showSpeakerEditor(null, null, entity.id)">
+          创建嘉宾
+        </el-button>
       </div>
-    </div>
-    <div class="pager">
-      <el-pagination
-        @current-change="pagerCurrentChange"
-        :current-page.sync="pager.currentPage"
-        :page-size="pager.pageSize"
-        layout="total, prev, pager, next"
-        :total="pager.total">
-      </el-pagination>
-    </div>
+      <el-table
+        class="agenda-table"
+        :data="entity.speakers"
+        stripe border style="width: 100%">
+        <el-table-column prop="name" label="姓名" width="200"></el-table-column>
+        <el-table-column prop="company" label="公司" width="300"></el-table-column>
+        <el-table-column prop="position" label="职位" width="200"></el-table-column>
+        <el-table-column label="操作">
+          <template scope="scope">
+            <el-button size="small" @click="showSpeakerEditor(scope.$index, scope.row)">
+              编辑
+            </el-button>
+            <el-button size="small" type="danger" @click="deleteSpeaker(scope.$index, scope.row)">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
     <el-dialog :title="speakerEditor.title" size="small" v-model="speakerEditor.visible">
       <el-form class="speaker-dialog-form" ref="speakerForm" :model="speakerForm" :rules="rules" label-width="80px">
         <el-form-item label="头像">
@@ -58,7 +50,7 @@
           <el-input v-model="speakerForm.position"></el-input>
         </el-form-item>
         <el-form-item label="简介" prop="title" :error="speakerErrors.profile">
-          <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 6}" v-model="speakerForm.profile"></el-input>
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="speakerForm.profile"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -69,16 +61,13 @@
   </el-col>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .speakers {
-    .btn-create {
+  .speaker-card {
+    width: 100%;
+    margin-top: 20px;
+    .btn-create-speaker {
       float: right;
-      margin-bottom: 10px;
+      display: block;
     }
-  }
-
-  .pager {
-    float: right;
-    margin-top: 10px;
   }
 
   .speaker-dialog-form {
@@ -101,12 +90,6 @@
       return {
         seminarId: this.$route.params.seminarId,
         speakers: [],
-        pager: {
-          currentPage: 1,
-          pageSize: 10,
-          total: 0,
-          loading: false
-        },
         seminar: {
           title: '',
           start_at: '',
@@ -153,10 +136,19 @@
       }
     },
     components: {},
+    computed: {
+      entitySpeakers () {
+        let entitySpeakers = []
+        entitySpeakers = this._.map(this.entities, entity => {
+          entity.speakers = this._.filter(this.speakers, speaker => {
+            return entity.id === speaker.entity_type_id
+          })
+          return entity
+        })
+        return entitySpeakers
+      }
+    },
     methods: {
-      pagerCurrentChange (val) {
-        this.loadSpeakers()
-      },
       handleAvatarSuccess (res, file) {
         this.speakerForm.avatar = file.response
       },
@@ -172,7 +164,7 @@
         }
         return isJPG && isLt2M
       },
-      showSpeakerEditor (index, row) {
+      showSpeakerEditor (index, row, entityTypeId) {
         this.speakerEditor.visible = true
         this.$nextTick(() => {
           this.$refs['speakerForm'].resetFields()
@@ -183,6 +175,7 @@
             this.speakerForm.company = row.company
             this.speakerForm.position = row.position
             this.speakerForm.profile = row.profile
+            this.speakerForm.entity_type_id = row.entity_type_id
             this.speakerEditor.title = '编辑'
           } else {
             this.speakerForm.id = ''
@@ -191,27 +184,17 @@
             this.speakerForm.company = ''
             this.speakerForm.position = ''
             this.speakerForm.profile = ''
+            this.speakerForm.entity_type_id = entityTypeId
             this.speakerEditor.title = '创建'
           }
         })
-        this.loadEntities()
       },
       hideSpeakerEditor () {
         this.speakerEditor.visible = false
       },
       loadSpeakers () {
-        this.pager.loading = true
-        this.axios.get('/api/seminars/' + this.seminarId + '/speakers', {
-          params: {
-            page: this.pager.currentPage,
-            per_page: this.pager.pageSize
-          }
-        }).then(response => {
-          let data = response['data']
-          this.speakers = data['data']
-          this.pager.currentPage = data['current_page']
-          this.pager.total = data['total']
-          this.pager.loading = false
+        this.axios.get('/api/seminars/' + this.seminarId + '/speakers').then(response => {
+          this.speakers = response['data']
         }, response => {
           this.$message(response['response']['data']['message'])
         })
@@ -229,12 +212,12 @@
             let url = '/api/seminars/' + this.seminarId + '/speakers',
               method = 'post',
               data = {
-                entity_type_id: this.speakerForm.entity_type_id,
                 avatar: this.speakerForm.avatar,
                 name: this.speakerForm.name,
                 company: this.speakerForm.company,
                 position: this.speakerForm.position,
-                profile: this.speakerForm.profile
+                profile: this.speakerForm.profile,
+                entity_type_id: this.speakerForm.entity_type_id
               }
             if (this.speakerForm.id) {
               method = 'put'
@@ -280,6 +263,7 @@
     },
     mounted () {
       this.loadSpeakers()
+      this.loadEntities()
     }
   }
 </script>
