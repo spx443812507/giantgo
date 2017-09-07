@@ -138,14 +138,12 @@
     components: {},
     computed: {
       entitySpeakers () {
-        let entitySpeakers = []
-        entitySpeakers = this._.map(this.entities, entity => {
+        return this._.map(this.entities, entity => {
           entity.speakers = this._.filter(this.speakers, speaker => {
             return entity.id === speaker.entity_type_id
           })
           return entity
         })
-        return entitySpeakers
       }
     },
     methods: {
@@ -153,16 +151,15 @@
         this.speakerForm.avatar = file.response
       },
       beforeAvatarUpload (file) {
-        const isJPG = file.type === 'image/jpeg'
+        const isImage = /(.jpg|.png|.gif|.jpeg)$/.test(file.name.toLowerCase())
         const isLt2M = file.size / 1024 / 1024 < 2
 
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
-        }
-        if (!isLt2M) {
+        if (!isImage) {
+          this.$message.error('上传头像图片只能是 JPG,PNG,GIF,JPEG 格式!')
+        } else if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
+        return isImage && isLt2M
       },
       showSpeakerEditor (index, row, entityTypeId) {
         this.speakerEditor.visible = true

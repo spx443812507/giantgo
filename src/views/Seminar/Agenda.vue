@@ -26,7 +26,7 @@
             <el-popover
               :ref="'popover' + scope.row.id"
               placement="right"
-              width="400"
+              width="600"
               trigger="hover">
               <div slot="reference">
                 <el-button type="text" size="small" @click="showSpeakerTransfer(scope.$index, scope.row)">
@@ -34,9 +34,9 @@
                 </el-button>
               </div>
               <el-table :data="scope.row.speakers" stripe border style="width: 100%">
-                <el-table-column width="100" property="name" label="姓名"></el-table-column>
-                <el-table-column width="200" property="company" label="公司"></el-table-column>
-                <el-table-column width="100" property="position" label="职位"></el-table-column>
+                <el-table-column width="180" property="name" label="姓名"></el-table-column>
+                <el-table-column width="270" property="company" label="公司"></el-table-column>
+                <el-table-column width="150" property="position" label="职位"></el-table-column>
               </el-table>
             </el-popover>
           </template>

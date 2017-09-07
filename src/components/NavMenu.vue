@@ -4,15 +4,9 @@
       <img src="../assets/images/logo.png" class="logo">
     </el-col>
     <el-col :span="14">
-      <el-menu mode="horizontal" :default-active="currentIndex" @select="handleSelect">
-        <el-menu-item index="0">
-          <router-link :to="'/home'">首页</router-link>
-        </el-menu-item>
-        <el-menu-item index="1">
-          <router-link :to="'/entities/contact'">模型管理</router-link>
-        </el-menu-item>
-        <el-menu-item index="2">
-          <router-link :to="'/seminars'">会议管理</router-link>
+      <el-menu mode="horizontal" :default-active="currentIndex">
+        <el-menu-item v-for="(navigator, index) in navigators" :index="index + ''">
+          <router-link :to="navigator.url">{{navigator.title}}</router-link>
         </el-menu-item>
       </el-menu>
     </el-col>
@@ -33,9 +27,24 @@
   .header {
     .el-menu {
       background-color: rgb(32, 160, 255);
-      li a {
-        display: block;
-        color: #fff
+      li {
+        a {
+          opacity: .8;
+          display: block;
+          color: #fff
+        }
+        &:hover {
+          background-color: inherit;
+          a {
+            opacity: .9;
+          }
+        }
+        &.is-active {
+          a {
+            opacity: 1;
+            font-weight: 700;
+          }
+        }
       }
     }
   }
@@ -63,19 +72,42 @@
     name: 'nav-menu',
     data () {
       return {
-        currentIndex: '1'
+        currentIndex: '1',
+        navigators: [
+          {
+            title: '首页',
+            url: '/home',
+            key: 'home'
+          }, {
+            title: '模型管理',
+            url: '/entities/contact',
+            key: 'entities'
+          }, {
+            title: '会议管理',
+            url: '/seminars',
+            key: 'seminars'
+          }
+        ]
       }
     },
     props: {},
     components: {},
+    created () {
+      this.routeChange()
+    },
     computed: {
       ...mapGetters([
         'userInfo'
       ])
     },
+    watch: {
+      '$route': 'routeChange'
+    },
     methods: {
-      handleSelect (key, keyPath) {
-        console.log(key, keyPath)
+      routeChange () {
+        this.currentIndex = this._.findIndex(this.navigators, navigator => {
+          return this.$route.fullPath.indexOf(navigator.key) > -1
+        }).toString()
       }
     },
     mounted () {
