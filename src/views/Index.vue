@@ -10,7 +10,12 @@
     </el-row>
   </div>
 </template>
-<style lang="scss" rel="stylesheet/scss" scoped>
+<style lang="scss" rel="stylesheet/scss">
+  .el-dialog {
+    .el-form {
+      width: 85%;
+    }
+  }
 </style>
 <script type="text/ecmascript-6">
   import navMenu from '../components/NavMenu.vue'

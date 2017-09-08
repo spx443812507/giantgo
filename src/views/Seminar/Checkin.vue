@@ -27,7 +27,7 @@
       </div>
     </div>
     <el-dialog :title="checkinEditor.title" size="small" v-model="checkinEditor.visible">
-      <el-form class="checkin-dialog-form" ref="checkinForm" :model="checkinForm" :rules="rules" label-width="100px">
+      <el-form ref="checkinForm" :model="checkinForm" :rules="rules" label-width="100px">
         <el-form-item label="签到点名称" prop="title" :error="checkinErrors.title">
           <el-input v-model="checkinForm.title"></el-input>
         </el-form-item>
@@ -51,10 +51,6 @@
       float: right;
       margin-bottom: 10px;
     }
-  }
-
-  .checkin-dialog-form {
-    width: 85%;
   }
 </style>
 <script type="text/ecmascript-6">

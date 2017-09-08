@@ -36,7 +36,7 @@ const routers = [
         name: 'entityContact',
         component: entityContact
       }, {
-        path: 'contact/:entityTypeId',
+        path: ':entityTypeId/contact',
         name: 'entityContactDetail',
         component: entityContactDetail
       }, {
@@ -44,7 +44,7 @@ const routers = [
         name: 'entitySeminar',
         component: entitySeminar
       }, {
-        path: 'seminar/:entityTypeId',
+        path: ':entityTypeId/seminar',
         name: 'entitySeminarDetail',
         component: entitySeminarDetail
       }, {
@@ -52,7 +52,7 @@ const routers = [
         name: 'entitySpeaker',
         component: entitySpeaker
       }, {
-        path: 'speaker/:entityTypeId',
+        path: ':entityTypeId/speaker',
         name: 'entitySpeakerDetail',
         component: entitySpeakerDetail
       }, {
@@ -60,7 +60,7 @@ const routers = [
         name: 'entityAgenda',
         component: entityAgenda
       }, {
-        path: 'agenda/:entityTypeId',
+        path: ':entityTypeId/agenda',
         name: 'entityAgendaDetail',
         component: entityAgendaDetail
       }

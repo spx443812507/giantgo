@@ -72,7 +72,7 @@
     name: 'nav-menu',
     data () {
       return {
-        currentIndex: '1',
+        currentIndex: '0',
         navigators: [
           {
             title: '首页',

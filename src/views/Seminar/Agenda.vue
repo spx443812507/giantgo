@@ -33,7 +33,7 @@
                   演讲嘉宾
                 </el-button>
               </div>
-              <el-table :data="scope.row.speakers" stripe border style="width: 100%">
+              <el-table :data="scope.row.speakers" :key="Math.random()" stripe border style="width: 100%">
                 <el-table-column width="180" property="name" label="姓名"></el-table-column>
                 <el-table-column width="270" property="company" label="公司"></el-table-column>
                 <el-table-column width="150" property="position" label="职位"></el-table-column>
@@ -54,7 +54,7 @@
       </el-table>
     </el-card>
     <el-dialog :title="agendaEditor.title" size="small" v-model="agendaEditor.visible">
-      <el-form class="agenda-dialog-form" ref="agendaForm" :model="agendaForm" :rules="rules" label-width="80px">
+      <el-form ref="agendaForm" :model="agendaForm" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title" :error="agendaErrors.title">
           <el-input v-model="agendaForm.title" auto-complete="off"></el-input>
         </el-form-item>
@@ -114,17 +114,6 @@
       float: right;
       display: block;
     }
-  }
-
-  .agenda-dialog-form {
-    width: 85%;
-    .line {
-      text-align: center;
-    }
-  }
-
-  .el-table--hidden {
-    visibility: visible;
   }
 </style>
 <script type="text/ecmascript-6">

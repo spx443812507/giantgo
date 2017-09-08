@@ -193,7 +193,7 @@
           frontend_label: '',
           frontend_input: '',
           description: '',
-          options: []
+          options: ''
         },
         attributeEditor: {
           title: '',

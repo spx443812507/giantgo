@@ -1,20 +1,10 @@
 <template>
-  <el-menu default-active="1" @open="handleOpen" @close="handleClose">
-    <el-menu-item index="1">
-      <router-link :to="'/entities/contact'"><i class="el-icon-fa-users"></i>联系人模型</router-link>
-    </el-menu-item>
-    <el-submenu index="2">
-      <template slot="title">会议模型</template>
-      <el-menu-item index="2-1">
-        <router-link :to="'/entities/seminar'"><i class="el-icon-fa-newspaper-o"></i>简介模型</router-link>
+  <el-menu mode="vertical" :default-active="currentIndex">
+    <el-menu-item-group v-for="(menu, menuIndex) in menus" :key="menu.title" :title="menu.title">
+      <el-menu-item v-for="(item, itemIndex) in menu.children" :key="item.title" :index="menuIndex + '-' + itemIndex">
+        <router-link :to="item.url"><i :class="item.icon"></i>{{item.title}}</router-link>
       </el-menu-item>
-      <el-menu-item index="2-2">
-        <router-link :to="'/entities/speaker'"><i class="el-icon-fa-user-circle-o"></i>嘉宾模型</router-link>
-      </el-menu-item>
-      <el-menu-item index="3-1">
-        <router-link :to="'/entities/agenda'"><i class="el-icon-fa-calendar"></i>日程模型</router-link>
-      </el-menu-item>
-    </el-submenu>
+    </el-menu-item-group>
   </el-menu>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
@@ -32,15 +22,62 @@
   export default{
     name: 'entity-menu',
     data () {
-      return {}
+      return {
+        currentIndex: '1',
+        menus: [
+          {
+            title: '人物模型',
+            children: [
+              {
+                title: '联系人模型',
+                url: '/entities/contact',
+                icon: 'el-icon-fa-users'
+              }
+            ]
+          }, {
+            title: '会议模型',
+            children: [
+              {
+                title: '简介模型',
+                url: '/entities/seminar',
+                icon: 'el-icon-fa-newspaper-o'
+              }, {
+                title: '嘉宾模型',
+                url: '/entities/speaker',
+                icon: 'el-icon-fa-user-circle-o'
+              }, {
+                title: '日程模型',
+                url: '/entities/agenda',
+                icon: 'el-icon-fa-calendar'
+              }
+            ]
+          }
+        ]
+      }
     },
     components: {},
+    created () {
+      this.routeChange()
+    },
+    watch: {
+      '$route': 'routeChange'
+    },
     methods: {
-      handleOpen (key, keyPath) {
-        console.log(key, keyPath)
-      },
-      handleClose (key, keyPath) {
-        console.log(key, keyPath)
+      routeChange () {
+        // flat the menus, append index to every children
+        let menus = this._.flatMap(this.menus, (menu, menuIndex) => {
+          return this._.map(menu.children, (item, itemIndex) => {
+            item['index'] = menuIndex + '-' + itemIndex
+            return item
+          })
+        })
+        // find matched menu
+        let menu = this._.find(menus, menu => {
+          return this.$route.path === menu.url
+        })
+        if (menu) {
+          this.currentIndex = menu['index']
+        }
       }
     },
     mounted () {

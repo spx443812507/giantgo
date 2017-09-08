@@ -105,8 +105,9 @@
           label="选项"
           v-if="attributeForm.has_options"
           :error="attributeErrors.options">
+          <el-button type="primary" icon="plus" @click.native="addOption(attributeForm.options.length - 1)"></el-button>
           <div v-for="(option, index) in attributeForm.options" :key="index">
-            <el-input v-model="option.value"></el-input>
+            <el-input v-model="option.label"></el-input>
             <el-button type="primary" icon="plus" @click.native="addOption(index)"></el-button>
             <el-button type="danger" icon="delete" @click.native="deleteOption(index)"></el-button>
           </div>
@@ -193,7 +194,7 @@
           frontend_label: '',
           frontend_input: '',
           description: '',
-          options: []
+          options: ''
         },
         attributeEditor: {
           title: '',
@@ -219,7 +220,7 @@
             this.attributeForm.frontend_input = row.frontend_input
             this.attributeForm.description = row.description
             this.attributeForm.is_required = row.is_required
-            this.attributeForm.has_unique = this.attributeTypes[row.frontend_input]['canUnique']
+            this.attributeForm.can_unique = this.attributeTypes[row.frontend_input]['canUnique']
             this.attributeForm.is_unique = this.attributeTypes[row.frontend_input]['canUnique'] ? row.is_unique : false
             this.attributeForm.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
             this.attributeForm.options = this.attributeTypes[row.frontend_input]['hasOptions'] ? row.options : []
@@ -233,7 +234,7 @@
             this.attributeForm.is_required = false
             this.attributeForm.is_unique = false
             this.attributeForm.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
-            this.attributeForm.has_unique = this.attributeTypes[row.frontend_input]['hasUnique']
+            this.attributeForm.can_unique = this.attributeTypes[row.frontend_input]['hasUnique']
             this.attributeForm.options = []
           }
         })

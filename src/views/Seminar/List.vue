@@ -32,7 +32,7 @@
       </div>
     </el-row>
     <el-dialog title="创建会议" size="small" v-model="seminarEditor.visible">
-      <el-form class="seminar-dialog-form" ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
+      <el-form ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
         <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
           <el-input v-model="seminarForm.title"></el-input>
         </el-form-item>
@@ -87,13 +87,6 @@
     margin: 0 15px 15px 0;
     a {
       color: #20a0ff;
-    }
-  }
-
-  .seminar-dialog-form {
-    width: 85%;
-    .line {
-      text-align: center;
     }
   }
 

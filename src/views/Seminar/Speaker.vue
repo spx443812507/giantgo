@@ -3,7 +3,7 @@
     <el-card class="speaker-card" v-for="entity in entitySpeakers" :key="entity.id">
       <div slot="header" class="clearfix">
         <span style="line-height: 36px;">嘉宾分类：{{entity.entity_type_name}}</span>
-        <el-button class="btn-create-speaker" type="primary" @click="showSpeakerEditor(null, null, entity.id)">
+        <el-button class="btn-create-speaker" type="primary" @click="showSpeakerEditor(null, null, entity)">
           创建嘉宾
         </el-button>
       </div>
@@ -16,7 +16,7 @@
         <el-table-column prop="position" label="职位" width="200"></el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small" @click="showSpeakerEditor(scope.$index, scope.row)">
+            <el-button size="small" @click="showSpeakerEditor(scope.$index, scope.row, entity)">
               编辑
             </el-button>
             <el-button size="small" type="danger" @click="deleteSpeaker(scope.$index, scope.row)">
@@ -27,7 +27,7 @@
       </el-table>
     </el-card>
     <el-dialog :title="speakerEditor.title" size="small" v-model="speakerEditor.visible">
-      <el-form class="speaker-dialog-form" ref="speakerForm" :model="speakerForm" :rules="rules" label-width="80px">
+      <el-form ref="speakerForm" :model="speakerForm" :rules="rules" label-width="80px">
         <el-form-item label="头像">
           <el-upload
             class="avatar-uploader"
@@ -52,6 +52,19 @@
         <el-form-item label="简介" prop="title" :error="speakerErrors.profile">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="speakerForm.profile"></el-input>
         </el-form-item>
+        <el-form-item
+          v-for="(attribute, index) in speakerForm.attributes"
+          :label="attribute.frontend_label"
+          :prop="'attributes.' + index + '.value'"
+          :key="attribute.id"
+          :rules="attribute.rules"
+          :error="attribute.error">
+          <entity-attribute
+            v-model="attribute.value"
+            :frontend-input="attribute.frontend_input"
+            :options="attribute.options">
+          </entity-attribute>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="hideSpeakerEditor">取消</el-button>
@@ -70,10 +83,6 @@
     }
   }
 
-  .speaker-dialog-form {
-    width: 85%;
-  }
-
   .avatar-uploader {
     img {
       width: 100%;
@@ -84,6 +93,9 @@
 </style>
 <script type="text/ecmascript-6">
   /* eslint-disable one-var */
+
+  import entityAttribute from '../../components/EntityAttribute.vue'
+  import attribute from '../../mixins/attribute'
 
   export default{
     data () {
@@ -103,7 +115,8 @@
           company: '',
           position: '',
           profile: '',
-          entity_type_id: ''
+          entity_type_id: '',
+          attributes: []
         },
         speakerErrors: {
           name: '',
@@ -135,7 +148,8 @@
         entities: []
       }
     },
-    components: {},
+    components: {entityAttribute},
+    mixins: [attribute],
     computed: {
       entitySpeakers () {
         return this._.map(this.entities, entity => {
@@ -161,10 +175,11 @@
         }
         return isImage && isLt2M
       },
-      showSpeakerEditor (index, row, entityTypeId) {
+      showSpeakerEditor (index, row, entity) {
         this.speakerEditor.visible = true
         this.$nextTick(() => {
           this.$refs['speakerForm'].resetFields()
+          this.speakerForm.attributes = this.formatAttribute(entity.attributes, row)
           if (row && row.id) {
             this.speakerForm.id = row.id
             this.speakerForm.name = row.name
@@ -181,7 +196,7 @@
             this.speakerForm.company = ''
             this.speakerForm.position = ''
             this.speakerForm.profile = ''
-            this.speakerForm.entity_type_id = entityTypeId
+            this.speakerForm.entity_type_id = entity.id
             this.speakerEditor.title = '创建'
           }
         })
@@ -214,7 +229,8 @@
                 company: this.speakerForm.company,
                 position: this.speakerForm.position,
                 profile: this.speakerForm.profile,
-                entity_type_id: this.speakerForm.entity_type_id
+                entity_type_id: this.speakerForm.entity_type_id,
+                ...this.getAttributeValue(this.speakerForm.attributes)
               }
             if (this.speakerForm.id) {
               method = 'put'
