@@ -39,21 +39,11 @@
           </el-table>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="用户" name="contacts">
-        <el-table :data="contacts.items" stripe border style="width: 100%">
-          <el-table-column prop="email" label="邮箱" width="230"></el-table-column>
-          <el-table-column prop="mobile" label="手机" width="150"></el-table-column>
+      <el-tab-pane label="演讲嘉宾" name="speakers">
+        <el-table :data="speakers.items" stripe border style="width: 100%">
           <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-          <el-table-column label="注册时间" width="180">
-            <template scope="scope">
-              {{scope.row.created_at | moment('YYYY-MM-DD HH:mm:ss')}}
-            </template>
-          </el-table-column>
-          <el-table-column label="最后登录时间" width="180">
-            <template scope="scope">
-              {{scope.row.last_login | moment('YYYY-MM-DD HH:mm:ss')}}
-            </template>
-          </el-table-column>
+          <el-table-column prop="company" label="公司" width="240"></el-table-column>
+          <el-table-column prop="position" label="职位" width="180"></el-table-column>
           <el-table-column label="操作">
             <template scope="scope">
               <el-button type="text" size="small">查看</el-button>
@@ -63,18 +53,19 @@
         <div class="pager">
           <el-pagination
             @current-change="handleCurrentChange"
-            :current-page.sync="contacts.pager.currentPage"
-            :page-size="contacts.pager.pageSize"
+            :current-page.sync="speakers.pager.currentPage"
+            :page-size="speakers.pager.pageSize"
             layout="total, prev, pager, next"
-            :total="contacts.pager.total">
+            :total="speakers.pager.total">
           </el-pagination>
         </div>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :title="attributeEditor.title" size="small" v-model="attributeEditor.visible">
+    <el-dialog :title="attributeEditor.title" size="small" :visible.sync="attributeEditor.visible">
       <el-form :model="attributeForm" ref="attributeForm" :rules="attributeRules" label-width="80px">
         <el-form-item label="属性代码" prop="attribute_code">
-          <el-input v-model="attributeForm.attribute_code" :error="attributeErrors.attribute_code"></el-input>
+          <el-input v-model="attributeForm.attribute_code" :error="attributeErrors.attribute_code"
+                    validate-status="error"></el-input>
         </el-form-item>
         <el-form-item label="显示名称" prop="frontend_label">
           <el-input v-model="attributeForm.frontend_label" :error="attributeErrors.frontend_label"></el-input>
@@ -142,6 +133,7 @@
 </style>
 <script type="text/ecmascript-6">
   /* eslint-disable one-var */
+  import error from '../../../mixins/error'
 
   export default{
     data () {
@@ -159,7 +151,7 @@
         },
         activeName: 'attributes',
         attributes: [],
-        contacts: {
+        speakers: {
           items: [],
           pager: {
             currentPage: 1,
@@ -203,6 +195,7 @@
         }
       }
     },
+    mixins: [error],
     components: {},
     methods: {
       createAttribute (command) {
@@ -275,7 +268,7 @@
               this.hideAttributeEditor()
               this.loadAttributes()
             }, response => {
-              this.$message(response['response']['data']['message'])
+              this.showErrorMessage(response)
             })
           }
         })
@@ -307,18 +300,18 @@
           this.$message(response['response']['data']['message'])
         })
       },
-      loadContacts () {
-        this.axios.get('/api/contacts', {
+      loadSpeakers () {
+        this.axios.get('/api/search/speakers', {
           params: {
             entity_type_id: this.entityTypeId,
-            page: this.contacts.pager.currentPage,
-            per_page: this.contacts.pager.pageSize
+            page: this.speakers.pager.currentPage,
+            per_page: this.speakers.pager.pageSize
           }
         }).then(response => {
           let data = response['data']
-          this.contacts.items = data['data']
-          this.contacts.pager.currentPage = data['current_page']
-          this.contacts.pager.total = data['total']
+          this.speakers.items = data['data']
+          this.speakers.pager.currentPage = data['current_page']
+          this.speakers.pager.total = data['total']
         }, response => {
           this.$message(response['response']['data']['message'])
         })
@@ -327,7 +320,7 @@
     mounted () {
       if (this.entityTypeId) {
         this.loadAttributes()
-        this.loadContacts()
+        this.loadSpeakers()
       } else {
         this.$message({
           message: '无效的模型',

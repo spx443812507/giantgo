@@ -31,7 +31,7 @@
         </el-pagination>
       </div>
     </el-row>
-    <el-dialog title="创建会议" size="small" v-model="seminarEditor.visible">
+    <el-dialog title="创建会议" size="small" :visible.sync="seminarEditor.visible">
       <el-form ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
         <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
           <el-input v-model="seminarForm.title"></el-input>
@@ -90,6 +90,15 @@
     }
   }
 
+  .el-dialog {
+    .el-form {
+      width: 85%;
+      .line {
+        text-align: center;
+      }
+    }
+  }
+
   .pager {
     text-align: center;
   }
@@ -142,15 +151,12 @@
       pagerCurrentChange (val) {
         this.loadSeminars()
       },
-      resetSeminarEditor () {
-        this.seminarForm.title = ''
-        this.seminarForm.start_at = ''
-        this.seminarForm.end_at = ''
-      },
       showSeminarEditor () {
         this.seminarEditor.visible = true
-        this.resetSeminarEditor()
-        this.loadEntities()
+        this.$nextTick(() => {
+          this.$refs['seminarForm'].resetFields()
+          this.loadEntities()
+        })
       },
       hideSeminarEditor () {
         this.seminarEditor.visible = false

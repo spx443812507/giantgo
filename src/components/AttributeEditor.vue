@@ -73,10 +73,28 @@
           can_unique: false,
           has_options: false,
           options: []
+        },
+        attributeRules: {
+          attribute_code: [
+            {required: true, message: '请输入属性码'},
+            {max: 255, message: '长度不超过255个字符'}
+          ],
+          frontend_label: [
+            {required: true, message: '请输入显示名称'},
+            {max: 255, message: '长度不超过255个字符'}
+          ]
+        },
+        attributeErrors: {
+          attribute_code: 'asd',
+          frontend_label: '',
+          frontend_input: '',
+          description: '',
+          options: ''
         }
       }
     },
     props: {
+      entityTypeId: [Number],
       attribute: {
         type: Object,
         default () {
@@ -90,11 +108,7 @@
     },
     computed: {},
     methods: {},
-    watch: {
-      attribute () {
-
-      }
-    },
+    watch: {},
     mounted () {
     }
   }

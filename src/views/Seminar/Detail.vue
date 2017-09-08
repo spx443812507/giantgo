@@ -1,7 +1,7 @@
 <template>
   <el-col :span="12">
     <el-form class="seminar-form" ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
-      <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
+      <el-form-item label="会议名称" prop="title" :error="seminarErrors.title" :show-message="!!seminarErrors.title">
         <el-input v-model="seminarForm.title"></el-input>
       </el-form-item>
       <el-form-item label="会议时间" required>
@@ -137,18 +137,20 @@
                 message: '保存成功',
                 type: 'success'
               })
+              this.$nextTick(() => {
+                this.seminarErrors['title'] = 'asd'
+              })
             }, response => {
               if (response['response']['status'] === 422) {
+                let message = []
                 this._.forIn(response['response']['data']['error'], (value, key) => {
-                  if (this._.has(this.seminarErrors, key) && value.length) {
-                    this.seminarErrors[key] = value[0]['message']
-                  } else {
-                    this._.map(this.seminarForm.attributes, attribute => {
-                      if (attribute['attribute_code'] === key && value.length) {
-                        attribute['error'] = value[0]['message']
-                      }
-                    })
-                  }
+                  this._.forEach(value, item => {
+                    message.push(item['message'])
+                  })
+                })
+                this.$message({
+                  message: message,
+                  type: 'warning'
                 })
               } else {
                 this.$message({

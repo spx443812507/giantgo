@@ -80,6 +80,9 @@
     methods: {
       showEntityEditor () {
         this.entityEditor.visible = true
+        this.$nextTick(() => {
+          this.$refs['entityForm'].resetFields()
+        })
       },
       hideEntityEditor () {
         this.entityEditor.visible = false

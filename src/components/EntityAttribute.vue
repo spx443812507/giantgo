@@ -1,6 +1,12 @@
 <template>
   <div>
     <el-input v-model="currentValue" v-if="frontendInput === 'text'"></el-input>
+    <el-input
+      type="textarea"
+      :autosize="{ minRows: 2, maxRows: 4}"
+      v-model="currentValue"
+      v-if="frontendInput === 'textarea'">
+    </el-input>
     <el-input-number v-model="currentValue" v-if="frontendInput === 'number'" auto-complete="off">
     </el-input-number>
     <el-date-picker type="datetime" v-model="currentValue" v-if="frontendInput === 'datetime'">
@@ -32,8 +38,8 @@
     <el-switch
       v-model="currentValue"
       v-if="frontendInput === 'switch'"
-      on-text=""
-      off-text="">
+      on-text="开"
+      off-text="关">
     </el-switch>
   </div>
 </template>

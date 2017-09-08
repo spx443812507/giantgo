@@ -236,6 +236,7 @@
             this.attributeForm.has_unique = this.attributeTypes[row.frontend_input]['hasUnique']
             this.attributeForm.options = []
           }
+          this.attributeErrors.attribute_code = 'asd'
         })
       },
       hideAttributeEditor () {

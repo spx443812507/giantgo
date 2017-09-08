@@ -19,6 +19,9 @@
   .el-dialog {
     .el-form {
       width: 85%;
+      .line {
+        text-align: center;
+      }
     }
   }
 </style>

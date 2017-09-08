@@ -26,7 +26,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <el-dialog :title="speakerEditor.title" size="small" v-model="speakerEditor.visible">
+    <el-dialog :title="speakerEditor.title" size="small" :visible.sync="speakerEditor.visible">
       <el-form ref="speakerForm" :model="speakerForm" :rules="rules" label-width="80px">
         <el-form-item label="头像">
           <el-upload
@@ -59,11 +59,47 @@
           :key="attribute.id"
           :rules="attribute.rules"
           :error="attribute.error">
-          <entity-attribute
+          <el-input v-model="attribute.value" v-if="attribute.frontend_input === 'text'"></el-input>
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
             v-model="attribute.value"
-            :frontend-input="attribute.frontend_input"
-            :options="attribute.options">
-          </entity-attribute>
+            v-if="attribute.frontend_input === 'textarea'">
+          </el-input>
+          <el-input-number v-model="attribute.value" v-if="attribute.frontend_input === 'number'" auto-complete="off">
+          </el-input-number>
+          <el-date-picker type="datetime" v-model="attribute.value" v-if="attribute.frontend_input === 'datetime'">
+          </el-date-picker>
+          <el-select v-model="attribute.value" placeholder="请选择" v-if="attribute.frontend_input === 'select'">
+            <el-option
+              v-for="item in attribute.options"
+              :key="item.id"
+              :label="item.label"
+              :value="item.id">
+            </el-option>
+          </el-select>
+          <el-checkbox-group v-model="attribute.value" v-if="attribute.frontend_input === 'checkbox'">
+            <el-checkbox
+              v-for="item in attribute.options"
+              :label="item.id"
+              :key="item.id">
+              {{item.label}}
+            </el-checkbox>
+          </el-checkbox-group>
+          <el-radio-group v-model="attribute.value" v-if="attribute.frontend_input === 'radio'">
+            <el-radio
+              v-for="item in attribute.options"
+              :label="item.id"
+              :key="item.id">
+              {{item.label}}
+            </el-radio>
+          </el-radio-group>
+          <el-switch
+            v-model="attribute.value"
+            v-if="attribute.frontend_input === 'switch'"
+            on-text=""
+            off-text="">
+          </el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
