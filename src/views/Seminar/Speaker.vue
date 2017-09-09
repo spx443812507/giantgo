@@ -244,14 +244,14 @@
         this.axios.get('/api/seminars/' + this.seminarId + '/speakers').then(response => {
           this.speakers = response['data']
         }, response => {
-          this.$message(response['response']['data']['message'])
+          this.$message.warning(response['response']['data']['message'])
         })
       },
       loadEntities () {
         this.axios.get('/api/entities/speaker').then(response => {
           this.entities = response['data']
         }, response => {
-          this.$message(response['response']['data']['message'])
+          this.$message.warning(response['response']['data']['message'])
         })
       },
       saveSpeaker () {
@@ -276,13 +276,7 @@
               this.loadSpeakers()
               this.hideSpeakerEditor()
             }, response => {
-              if (response['response']['status'] === 422) {
-                this._.forIn(response['response']['data']['error'], (value, key) => {
-                  this.speakerErrors[key] = value[0]['message']
-                })
-              } else {
-                this.$message(response['response']['data']['message'])
-              }
+              this.$message.warning(response['response']['data']['message'])
             })
           }
         })
@@ -295,18 +289,12 @@
         }).then(() => {
           this.axios.delete('/api/seminars/' + this.seminarId + '/speakers/' + row.id).then(response => {
             this.loadSpeakers()
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
+            this.$message.success('删除成功!')
           }, response => {
-            this.$message(response['response']['data']['message'])
+            this.$message.warning(response['response']['data']['message'])
           })
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+          this.$message('已取消删除')
         })
       }
     },

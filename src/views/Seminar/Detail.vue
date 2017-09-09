@@ -1,7 +1,7 @@
 <template>
   <el-col :span="12">
     <el-form class="seminar-form" ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
-      <el-form-item label="会议名称" prop="title" :error="seminarErrors.title" :show-message="!!seminarErrors.title">
+      <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
         <el-input v-model="seminarForm.title"></el-input>
       </el-form-item>
       <el-form-item label="会议时间" required>
@@ -34,11 +34,47 @@
         :key="attribute.id"
         :rules="attribute.rules"
         :error="attribute.error">
-        <entity-attribute
+        <el-input v-model="attribute.value" v-if="attribute.frontend_input === 'text'"></el-input>
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
           v-model="attribute.value"
-          :frontend-input="attribute.frontend_input"
-          :options="attribute.options">
-        </entity-attribute>
+          v-if="attribute.frontend_input === 'textarea'">
+        </el-input>
+        <el-input-number v-model="attribute.value" v-if="attribute.frontend_input === 'number'" auto-complete="off">
+        </el-input-number>
+        <el-date-picker type="datetime" v-model="attribute.value" v-if="attribute.frontend_input === 'datetime'">
+        </el-date-picker>
+        <el-select v-model="attribute.value" placeholder="请选择" v-if="attribute.frontend_input === 'select'">
+          <el-option
+            v-for="item in attribute.options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.id">
+          </el-option>
+        </el-select>
+        <el-checkbox-group v-model="attribute.value" v-if="attribute.frontend_input === 'checkbox'">
+          <el-checkbox
+            v-for="item in attribute.options"
+            :label="item.id"
+            :key="item.id">
+            {{item.label}}
+          </el-checkbox>
+        </el-checkbox-group>
+        <el-radio-group v-model="attribute.value" v-if="attribute.frontend_input === 'radio'">
+          <el-radio
+            v-for="item in attribute.options"
+            :label="item.id"
+            :key="item.id">
+            {{item.label}}
+          </el-radio>
+        </el-radio-group>
+        <el-switch
+          v-model="attribute.value"
+          v-if="attribute.frontend_input === 'switch'"
+          on-text=""
+          off-text="">
+        </el-switch>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">保存</el-button>
@@ -111,14 +147,14 @@
           this.seminarForm.entity_type_id = this.seminarInfo['entity_type_id'] || ''
           this.seminarForm.attributes = this.formatAttribute(this.seminarInfo['attributes'], this.seminarInfo)
         }, response => {
-          this.$message(response['response']['data']['message'])
+          this.$message.warning(response['response']['data']['message'])
         })
       },
       loadEntities () {
         this.axios.get('/api/entities/seminar').then(response => {
           this.entities = response['data']
         }, response => {
-          this.$message(response['response']['data']['message'])
+          this.$message.warning(response['response']['data']['message'])
         })
       },
       submit () {
@@ -133,31 +169,9 @@
               ...this.getAttributeValue(this.seminarForm.attributes)
             }
             this.$store.dispatch('updateSeminar', data).then(response => {
-              this.$message({
-                message: '保存成功',
-                type: 'success'
-              })
-              this.$nextTick(() => {
-                this.seminarErrors['title'] = 'asd'
-              })
+              this.$message.success('保存成功')
             }, response => {
-              if (response['response']['status'] === 422) {
-                let message = []
-                this._.forIn(response['response']['data']['error'], (value, key) => {
-                  this._.forEach(value, item => {
-                    message.push(item['message'])
-                  })
-                })
-                this.$message({
-                  message: message,
-                  type: 'warning'
-                })
-              } else {
-                this.$message({
-                  message: response['response']['data']['message'],
-                  type: 'warning'
-                })
-              }
+              this.$message.warning(response['response']['data']['message'])
             })
           }
         })

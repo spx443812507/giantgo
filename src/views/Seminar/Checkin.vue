@@ -114,7 +114,7 @@
         this.axios.get('/api/seminars/' + this.seminarId + '/checkins').then(response => {
           this.checkins = response['data']
         }, response => {
-          this.$message(response['response']['data']['message'])
+          this.$message.warning(response['response']['data']['message'])
         })
       },
       saveCheckin () {
@@ -135,13 +135,7 @@
               this.loadCheckins()
               this.hideCheckinEditor()
             }).catch(response => {
-              if (response['response']['status'] === 422) {
-                this._.forIn(response['response']['data']['error'], (value, key) => {
-                  this.checkinErrors[key] = value[0]['message']
-                })
-              } else {
-                this.$message(response['response']['data']['message'])
-              }
+              this.$message.warning(response['response']['data']['message'])
             })
           }
         })
@@ -154,18 +148,12 @@
         }).then(() => {
           this.axios.delete('/api/seminars/' + this.seminarId + '/checkins/' + row.id).then(response => {
             this.loadCheckins()
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
+            this.$message.success('删除成功!')
           }, response => {
-            this.$message(response['response']['data']['message'])
+            this.$message.warning(response['response']['data']['message'])
           })
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+          this.$message('已取消删除')
         })
       }
     },

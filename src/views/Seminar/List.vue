@@ -173,14 +173,14 @@
           this.pager.currentPage = data['current_page']
           this.pager.total = data['total']
         }, response => {
-          this.$message(response['response']['data']['message'])
+          this.$message.warning(response['response']['data']['message'])
         })
       },
       loadEntities () {
         this.axios.get('/api/entities/seminar').then(response => {
           this.entities = response['data']
         }, response => {
-          this.$message(response['response']['data']['message'])
+          this.$message.warning(response['response']['data']['message'])
         })
       },
       createSeminar () {
@@ -194,14 +194,8 @@
             }).then(response => {
               this.loadSeminars()
               this.hideSeminarEditor()
-            }).catch(response => {
-              if (response['response']['status'] === 422) {
-                this._.forIn(response['response']['data']['error'], (value, key) => {
-                  this.seminarErrors[key] = value[0]['message']
-                })
-              } else {
-                this.$message(response['response']['data']['message'])
-              }
+            }, response => {
+              this.$message.warning(response['response']['data']['message'])
             })
           }
         })
