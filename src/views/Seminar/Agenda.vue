@@ -152,9 +152,9 @@
               validator: (rule, value, callback) => {
                 let agendaStartAt = this.$moment(this.agendaForm.date + ' ' + value)
                 if (agendaStartAt.isBefore(this.seminar.start_at)) {
-                  return callback(new Error('日程开始时间要晚于会议开始时间'))
+                  callback(new Error('日程开始时间要晚于会议开始时间'))
                 } else if (agendaStartAt.isAfter(this.seminar.end_at)) {
-                  return callback(new Error('日程开始时间要不晚于会议结束时间'))
+                  callback(new Error('日程开始时间要不晚于会议结束时间'))
                 } else {
                   callback()
                 }

@@ -40,7 +40,7 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <el-dialog :title="attributeEditor.title" size="small" :visible.sync="attributeEditor.visible">
+    <el-dialog :title="attributeEditor.title" :lock-scroll="true" size="small" v-model="attributeEditor.visible">
       <el-form :model="attributeForm" ref="attributeForm" :rules="attributeRules" label-width="80px">
         <el-form-item label="属性代码" prop="attribute_code">
           <el-input v-model="attributeForm.attribute_code"></el-input>
@@ -74,14 +74,12 @@
           <el-switch v-model="attributeForm.is_unique" on-text="" off-text=""></el-switch>
         </el-form-item>
         <div v-if="attributeForm.has_options">
-          <el-form-item
-            class="attribute_options"
-            prop="options"
-            label="选项">
-            <el-button type="primary" icon="plus"
-                       @click.native="addOption(attributeForm.options.length - 1)"></el-button>
+          <el-form-item label="选项">
+            <el-button type="primary" icon="plus" @click.native="addOption(attributeForm.options.length - 1)">
+            </el-button>
           </el-form-item>
           <el-form-item
+            class="attribute_options"
             v-for="(option, index) in attributeForm.options"
             :key="index"
             :prop="'options.' + index + '.label'"
@@ -111,6 +109,9 @@
     .el-input {
       width: 200px;
       margin: 0 10px 10px 0;
+    }
+    &.el-form-item {
+      margin-bottom: 0px;
     }
   }
 </style>
@@ -146,30 +147,43 @@
         },
         attributeRules: {
           attribute_code: [
-            {required: true, message: '请输入属性码'},
-            {max: 255, message: '长度不超过255个字符'}
+            {required: true, message: '请输入属性代码'},
+            {max: 255, message: '长度不超过255个字符'},
+            {
+              validator: (rule, value, callback) => {
+                if (!/^[a-zA-Z_]{1,}$/.test(value)) {
+                  callback(new Error('属性代码由字母或下划线组成'))
+                } else {
+                  this.checkAttributeCode(value, callback)
+                }
+              }
+            }
           ],
           frontend_label: [
             {required: true, message: '请输入显示名称'},
             {max: 255, message: '长度不超过255个字符'}
-          ],
-          options: [
-            {
-              validator: (rule, value, callback) => {
-                if (this.attributeForm.has_options && this.attributeForm.options.length <= 0) {
-                  return callback(new Error('至少要有一个选项'))
-                } else {
-                  callback()
-                }
-              }
-            }
           ]
         },
         attributeEditor: {
           title: '',
           visible: false,
           isSubmitting: false
-        }
+        },
+        checkAttributeCode: this._.debounce((value, callback) => {
+          this.axios.get('/api/entities/' + this.entityTypeId + '/attribute_codes/' + value, {
+            params: {
+              attribute_id: this.attributeForm.id
+            }
+          }).then(response => {
+            if (response['data']) {
+              callback()
+            } else {
+              callback(new Error('属性代码已存在'))
+            }
+          }, response => {
+            this.$message.warning(response['response']['data']['message'])
+          })
+        }, 500)
       }
     },
     props: {
@@ -198,9 +212,7 @@
             this.attributeForm.frontend_input = row.frontend_input
             this.attributeForm.description = row.description
             this.attributeForm.is_required = row.is_required
-            this.attributeForm.can_unique = this.attributeTypes[row.frontend_input]['canUnique']
             this.attributeForm.is_unique = this.attributeTypes[row.frontend_input]['canUnique'] ? row.is_unique : false
-            this.attributeForm.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
             this.attributeForm.options = this.attributeTypes[row.frontend_input]['hasOptions'] ? row.options : []
           } else {
             this.attributeForm.id = ''
@@ -211,10 +223,10 @@
             this.attributeForm.description = ''
             this.attributeForm.is_required = false
             this.attributeForm.is_unique = false
-            this.attributeForm.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
-            this.attributeForm.can_unique = this.attributeTypes[row.frontend_input]['canUnique']
             this.attributeForm.options = []
           }
+          this.attributeForm.has_options = this.attributeTypes[row.frontend_input]['hasOptions']
+          this.attributeForm.can_unique = this.attributeTypes[row.frontend_input]['canUnique']
         })
       },
       hideAttributeEditor () {
@@ -245,9 +257,15 @@
               method = 'put'
               url += '/' + this.attributeForm.id
             }
+
+            if (this.attributeForm.has_options && this.attributeForm.options.length <= 0) {
+              this.$message.warning('至少要有一个选项')
+              return
+            }
             this.axios[method](url, data).then(response => {
               this.hideAttributeEditor()
               this.loadAttributes()
+              this.$message.success('保存成功')
             }, response => {
               this.$message.warning(response['response']['data']['message'])
             })
