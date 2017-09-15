@@ -5,7 +5,7 @@
     </el-col>
     <el-col :span="14">
       <el-menu mode="horizontal" :default-active="currentIndex">
-        <el-menu-item v-for="(navigator, index) in navigators" :index="index + ''">
+        <el-menu-item v-for="(navigator, index) in navigators" :key="navigator.key" :index="index + ''">
           <router-link :to="navigator.url">{{navigator.title}}</router-link>
         </el-menu-item>
       </el-menu>
