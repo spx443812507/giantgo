@@ -5,25 +5,19 @@
         <attribute-editor :entity-type-id="entityTypeId"></attribute-editor>
       </el-tab-pane>
       <el-tab-pane label="会议" name="seminars">
-        <el-table :data="seminars.items" stripe border style="width: 100%">
-          <el-table-column prop="email" label="邮箱" width="230"></el-table-column>
-          <el-table-column prop="mobile" label="手机" width="150"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-          <el-table-column label="注册时间" width="180">
+        <el-table :data="seminars.items" :key="Math.random()" stripe border style="width: 100%">
+          <el-table-column prop="title" label="会议名称"></el-table-column>
+          <el-table-column label="开始时间" width="180">
             <template scope="scope">
-              {{scope.row.created_at | moment('YYYY-MM-DD HH:mm:ss')}}
+              {{scope.row.start_at | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
-          <el-table-column label="最后登录时间" width="180">
+          <el-table-column label="结束时间" width="180">
             <template scope="scope">
-              {{scope.row.last_login | moment('YYYY-MM-DD HH:mm:ss')}}
+              {{scope.row.end_at | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
-          <el-table-column label="操作">
-            <template scope="scope">
-              <el-button type="text" size="small">查看</el-button>
-            </template>
-          </el-table-column>
+          <el-table-column prop="contacts_count" label="报名人数" width="100" align="center"></el-table-column>
         </el-table>
         <div class="pager">
           <el-pagination
@@ -76,7 +70,7 @@
         this.loadSeminars()
       },
       loadSeminars () {
-        this.axios.get('/api/search/seminars', {
+        this.axios.get('/api/seminars', {
           params: {
             entity_type_id: this.entityTypeId,
             page: this.seminars.pager.currentPage,
