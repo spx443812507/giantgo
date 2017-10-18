@@ -1,6 +1,7 @@
 /* eslint-disable one-var */
 export default {
   methods: {
+    // 格式化EAV属性为可用的表单字段
     formatAttribute (attributes, values) {
       let result = []
       values = values || {}
@@ -28,6 +29,7 @@ export default {
       })
       return result
     },
+    // 获取EAV属性的值
     getAttributeValue (attributes) {
       let result = {}
 
