@@ -52,7 +52,7 @@
         <el-form-item label="简介" prop="title" :error="speakerErrors.profile">
           <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="speakerForm.profile"></el-input>
         </el-form-item>
-        <entity-attribute :attributes="speakerForm.attributes"></entity-attribute>
+        <entity-attribute ref="attributes" :attributes="speakerForm.attributes"></entity-attribute>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="hideSpeakerEditor">取消</el-button>
@@ -83,7 +83,6 @@
   /* eslint-disable one-var */
 
   import entityAttribute from '../../components/EntityAttribute.vue'
-  import attribute from '../../mixins/attribute'
 
   export default{
     data () {
@@ -137,7 +136,6 @@
       }
     },
     components: {entityAttribute},
-    mixins: [attribute],
     computed: {
       entitySpeakers () {
         return this._.map(this.entities, entity => {
@@ -167,7 +165,7 @@
         this.speakerEditor.visible = true
         this.$nextTick(() => {
           this.$refs['speakerForm'].resetFields()
-          this.speakerForm.attributes = this.formatAttribute(entity.attributes, row)
+          this.speakerForm.attributes = this.$refs['attributes'].format(entity.attributes, row)
           if (row && row.id) {
             this.speakerForm.id = row.id
             this.speakerForm.name = row.name
@@ -218,7 +216,7 @@
                 position: this.speakerForm.position,
                 profile: this.speakerForm.profile,
                 entity_type_id: this.speakerForm.entity_type_id,
-                ...this.getAttributeValue(this.speakerForm.attributes)
+                ...this.$refs['attributes'].values()
               }
             if (this.speakerForm.id) {
               method = 'put'

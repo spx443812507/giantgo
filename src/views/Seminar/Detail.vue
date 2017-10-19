@@ -27,7 +27,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <entity-attribute :attributes="seminarForm.attributes"></entity-attribute>
+      <entity-attribute ref="attributes" :attributes="seminarForm.attributes"></entity-attribute>
       <el-form-item>
         <el-button type="primary" @click="submit">保存</el-button>
       </el-form-item>
@@ -45,7 +45,6 @@
 <script type="text/ecmascript-6">
   /* eslint-disable one-var */
   import entityAttribute from '../../components/EntityAttribute.vue'
-  import attribute from '../../mixins/attribute'
 
   export default{
     data () {
@@ -80,13 +79,12 @@
         entities: []
       }
     },
-    mixins: [attribute],
     components: {entityAttribute},
     methods: {
       entityChange (entityTypeId) {
         for (let i = 0; i < this.entities.length; i++) {
           if (entityTypeId === this.entities[i].id) {
-            this.seminarForm.attributes = this.formatAttribute(this.entities[i].attributes, this.seminarInfo)
+            this.seminarForm.attributes = this.entities[i].attributes
           }
         }
       },
@@ -97,7 +95,7 @@
           this.seminarForm.start_at = new Date(this.seminarInfo['start_at'])
           this.seminarForm.end_at = new Date(this.seminarInfo['end_at'])
           this.seminarForm.entity_type_id = this.seminarInfo['entity_type_id'] || ''
-          this.seminarForm.attributes = this.formatAttribute(this.seminarInfo['attributes'], this.seminarInfo)
+          this.seminarForm.attributes = this.$refs['attributes'].format(this.seminarInfo.attributes, this.seminarInfo)
         }, response => {
           this.$message.warning(response['response']['data']['message'])
         })
@@ -118,7 +116,7 @@
               start_at: this.$moment(this.seminarForm.start_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
               end_at: this.$moment(this.seminarForm.end_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
               entity_type_id: this.seminarForm.entity_type_id,
-              ...this.getAttributeValue(this.seminarForm.attributes)
+              ...this.$refs['attributes'].values()
             }
             this.$store.dispatch('updateSeminar', data).then(response => {
               this.$message.success('保存成功')
