@@ -121,7 +121,7 @@
 
   import { mapGetters } from 'vuex'
 
-  export default{
+  export default {
     data () {
       return {
         seminarId: this.$route.params.seminarId,
