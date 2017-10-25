@@ -1,18 +1,24 @@
 import Vue from 'vue'
 
 const state = {
-  seminar: {}
+  seminar: {},
+  attributes: []
 }
 
 const getters = {
   seminar: state => {
-    return {
-      title: state.seminar['title'],
-      start_at: new Date(state.seminar['start_at']),
-      end_at: new Date(state.seminar['end_at']),
-      entity_type_id: state.seminar['entity_type_id'] || '',
-      attributes: state.seminar['attributes'] || []
+    let seminarInfo = {}
+    if (!Vue._.isEmpty(state.seminar)) {
+      seminarInfo.title = state.seminar.title
+      seminarInfo.start_at = new Date(state.seminar.start_at)
+      seminarInfo.end_at = new Date(state.seminar.end_at)
+      seminarInfo.entity_type_id = state.seminar.entity_type_id || ''
+      seminarInfo.attributes = state.attributes
+      Vue._.forEach(seminarInfo.attributes || [], attribute => {
+        seminarInfo[attribute.attribute_code] = state.seminar[attribute.attribute_code] || ''
+      })
     }
+    return seminarInfo
   }
 }
 
@@ -20,7 +26,8 @@ const actions = {
   getSeminar ({commit, state}, seminarId) {
     return new Promise((resolve, reject) => {
       Vue.axios.get('/api/seminars/' + seminarId).then((response) => {
-        commit('setSeminar', response['data'])
+        commit('setSeminar', response.data)
+        commit('setAttributes', response.data.attributes)
         resolve(response['data'])
       }, (response) => {
         reject(response)
@@ -55,6 +62,9 @@ const mutations = {
   },
   deleteSeminar (state) {
     state.seminar = {}
+  },
+  setAttributes (state, attributes) {
+    state.attributes = attributes
   }
 }
 

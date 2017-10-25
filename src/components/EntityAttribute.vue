@@ -56,7 +56,7 @@
 <script type="text/ecmascript-6">
   /* eslint-disable one-var */
 
-  export default{
+  export default {
     name: 'entity-attribute',
     data () {
       return {}
@@ -71,9 +71,8 @@
     methods: {
       // 格式化EAV属性为可用的表单字段
       format (attributes, values) {
-        let result = []
         values = values || {}
-        this._.map(attributes, (attribute) => {
+        return this._.map(attributes, (attribute) => {
           let attributeCode = attribute['attribute_code'],
             value = values[attributeCode]
           attribute['value'] = attribute['is_collection'] ? [] : ''
@@ -93,9 +92,8 @@
               attribute['value'] = new Date(value)
             }
           }
-          result.push(this._.clone(attribute, true))
+          return this._.clone(attribute, true)
         })
-        return result
       },
       // 获取EAV属性的值
       values () {
@@ -115,8 +113,7 @@
         return result
       }
     },
-    watch: {
-    },
+    watch: {},
     mounted () {
     }
   }
