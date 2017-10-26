@@ -17,7 +17,7 @@ const getters = {
         seminarInfo[attribute.attribute_code] = state.seminar[attribute.attribute_code] || ''
       })
     }
-    return state.seminar
+    return seminarInfo
   }
 }
 

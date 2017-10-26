@@ -112,7 +112,7 @@
         seminars: [],
         pager: {
           currentPage: 1,
-          pageSize: 10,
+          pageSize: 9,
           total: 0
         },
         seminarForm: {

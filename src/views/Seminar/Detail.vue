@@ -1,8 +1,24 @@
 <template>
   <div>
-    <el-col :span="12">
-      <el-button @click.native="showSeminarEditor">编辑</el-button>
-    </el-col>
+    <el-breadcrumb separator="/">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">会议管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">基础信息</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-card class="seminar-card">
+      <div slot="header" class="seminar-card-header">
+        <span style="line-height: 36px;">会议名称：{{seminar.title}}</span>
+        <span><el-tag type="primary">{{seminar.entity_type_id}}</el-tag></span>
+        <span class="seminar-time">
+          {{seminar.start_at | moment('YYYY年MM月DD日 HH时mm分')}} -
+          {{seminar.end_at | moment('YYYY年MM月DD日 HH时mm分')}}
+        </span>
+        <el-button class="btn-edit-seminar" type="primary" icon="edit" @click.native="showSeminarEditor">编辑</el-button>
+      </div>
+      <el-row v-for="attribute in seminar.attributes" :key="attribute.id">
+        会议类型：{{seminar[attribute.attribute_code]}}
+      </el-row>
+    </el-card>
     <el-dialog title="编辑会议" size="small" :visible.sync="seminarEditor.visible">
       <el-form class="seminar-form" ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
         <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
@@ -45,6 +61,21 @@
     width: 500px;
     .line {
       text-align: center;
+    }
+  }
+
+  .seminar-card {
+    margin-top: 20px;
+    .seminar-card-header {
+      .seminar-time {
+        font-size: 12px;
+        color: gray;
+      }
+
+      .btn-edit-seminar {
+        float: right;
+        display: block;
+      }
     }
   }
 </style>

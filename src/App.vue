@@ -23,6 +23,8 @@
   body {
     margin: 0;
     padding: 0;
+    min-width: 1020px;
+    word-wrap: break-word;
   }
 
   html, body {
@@ -121,5 +123,9 @@
   .fade-enter,
   .fade-leave-active {
     opacity: 0;
+  }
+
+  .el-dialog {
+    min-width: 550px;
   }
 </style>
