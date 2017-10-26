@@ -112,8 +112,8 @@
         this.seminarEditor.visible = false
       },
       renderEntityAttributes (entityTypeId) {
-        let attributes = this._.find(this.entities, {id: entityTypeId})['attributes']
-        this.seminarForm.attributes = this.$refs['attributes'].format(attributes, this.seminar)
+        let entity = this._.find(this.entities, {id: entityTypeId}) || {}
+        this.seminarForm.attributes = this.$refs['attributes'].format(entity.attributes || [], this.seminar)
       },
       loadEntities () {
         this.axios.get('/api/entities/seminar').then(response => {
@@ -133,6 +133,7 @@
               entity_type_id: this.seminarForm.entity_type_id,
               ...this.$refs['attributes'].values()
             }
+
             this.$store.dispatch('updateSeminar', data).then(response => {
               this.$message.success('保存成功')
               this.seminarEditor.visible = false
