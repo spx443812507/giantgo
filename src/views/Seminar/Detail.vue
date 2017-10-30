@@ -19,7 +19,7 @@
         会议类型：{{seminar[attribute.attribute_code]}}
       </el-row>
     </el-card>
-    <el-dialog title="编辑会议" size="small" :visible.sync="seminarEditor.visible">
+    <el-dialog title="编辑会议" width="700px" :visible.sync="seminarEditor.visible">
       <el-form class="seminar-form" ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
         <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
           <el-input v-model="seminarForm.title"></el-input>
@@ -58,7 +58,6 @@
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
   .seminar-form {
-    width: 500px;
     .line {
       text-align: center;
     }

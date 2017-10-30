@@ -10,17 +10,17 @@
           <el-table-column prop="mobile" label="手机" width="150"></el-table-column>
           <el-table-column prop="name" label="姓名" width="180"></el-table-column>
           <el-table-column label="注册时间" width="180">
-            <template scope="scope">
+            <template slot-scope="scope">
               {{scope.row.created_at | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
           <el-table-column label="最后登录时间" width="180">
-            <template scope="scope">
+            <template slot-scope="scope">
               {{scope.row.last_login | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
           <el-table-column label="操作">
-            <template scope="scope">
+            <template slot-scope="scope">
               <el-button type="text" size="small">查看</el-button>
             </template>
           </el-table-column>

@@ -15,7 +15,7 @@
         <el-table-column prop="company" label="公司" width="300"></el-table-column>
         <el-table-column prop="position" label="职位" width="200"></el-table-column>
         <el-table-column label="操作">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-button size="small" @click="showSpeakerEditor(scope.$index, scope.row, entity)">
               编辑
             </el-button>

@@ -15,18 +15,18 @@
       <el-table :data="attributes" stripe border style="width: 100%">
         <el-table-column prop="attribute_code" label="属性代码"></el-table-column>
         <el-table-column label="类型">
-          <template scope="scope">
+          <template slot-scope="scope">
             {{attributeTypes[scope.row.frontend_input]['label']}}
           </template>
         </el-table-column>
         <el-table-column prop="frontend_label" label="显示名称"></el-table-column>
         <el-table-column prop="is_required" label="是否必填" align="center" width="100">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-switch v-model="scope.row.is_required" on-text="" off-text=""></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-button
               size="small"
               @click="showAttributeEditor(scope.$index, scope.row)">编辑

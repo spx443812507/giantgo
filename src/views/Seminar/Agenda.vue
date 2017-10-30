@@ -12,17 +12,17 @@
       <el-table class="agenda-table" :data="day.agendas" stripe border style="width: 100%">
         <el-table-column prop="title" label="标题" width="300"></el-table-column>
         <el-table-column label="开始时间" width="180">
-          <template scope="scope">
+          <template slot-scope="scope">
             {{scope.row.start_at | moment('YYYY-MM-DD HH:mm:ss')}}
           </template>
         </el-table-column>
         <el-table-column label="结束时间" width="180">
-          <template scope="scope">
+          <template slot-scope="scope">
             {{scope.row.end_at | moment('YYYY-MM-DD HH:mm:ss')}}
           </template>
         </el-table-column>
         <el-table-column label="演讲嘉宾" width="100">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-popover
               :ref="'popover' + scope.row.id"
               placement="right"
@@ -42,7 +42,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-button size="small" @click="showAgendaEditor(scope.$index, day.date, scope.row)">
               编辑
             </el-button>

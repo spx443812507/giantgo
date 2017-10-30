@@ -31,7 +31,7 @@
         </el-pagination>
       </div>
     </el-row>
-    <el-dialog title="创建会议" size="small" :visible.sync="seminarEditor.visible">
+    <el-dialog title="创建会议" width="700px" :visible.sync="seminarEditor.visible">
       <el-form ref="seminarForm" :model="seminarForm" :rules="rules" label-width="80px">
         <el-form-item label="会议名称" prop="title" :error="seminarErrors.title">
           <el-input v-model="seminarForm.title"></el-input>
@@ -106,7 +106,7 @@
 <script type="text/ecmascript-6">
   import navMenu from '../../components/NavMenu.vue'
 
-  export default{
+  export default {
     data () {
       return {
         seminars: [],

@@ -8,12 +8,12 @@
         <el-table :data="seminars.items" :key="Math.random()" stripe border style="width: 100%">
           <el-table-column prop="title" label="会议名称"></el-table-column>
           <el-table-column label="开始时间" width="180">
-            <template scope="scope">
+            <template slot-scope="scope">
               {{scope.row.start_at | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
           <el-table-column label="结束时间" width="180">
-            <template scope="scope">
+            <template slot-scope="scope">
               {{scope.row.end_at | moment('YYYY-MM-DD HH:mm:ss')}}
             </template>
           </el-table-column>
