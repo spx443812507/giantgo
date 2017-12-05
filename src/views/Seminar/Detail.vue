@@ -57,125 +57,125 @@
   </div>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .seminar-form {
-    .line {
-      text-align: center;
+.seminar-form {
+  .line {
+    text-align: center;
+  }
+}
+
+.seminar-card {
+  margin-top: 20px;
+  .seminar-card-header {
+    .seminar-time {
+      font-size: 12px;
+      color: gray;
+    }
+
+    .btn-edit-seminar {
+      float: right;
+      display: block;
     }
   }
-
-  .seminar-card {
-    margin-top: 20px;
-    .seminar-card-header {
-      .seminar-time {
-        font-size: 12px;
-        color: gray;
-      }
-
-      .btn-edit-seminar {
-        float: right;
-        display: block;
-      }
-    }
-  }
+}
 </style>
 <script type="text/ecmascript-6">
-  /* eslint-disable one-var */
-  import { mapGetters } from 'vuex'
-  import entityAttribute from '../../components/EntityAttribute.vue'
+/* eslint-disable one-var */
+import { mapGetters } from 'vuex'
+import entityAttribute from '../../components/EntityAttribute.vue'
 
-  export default {
-    data () {
-      return {
-        seminarInfo: {
-          id: this.$route.params.seminarId
-        },
-        seminarForm: {
-          title: '',
-          start_at: '',
-          end_at: '',
-          entity_type_id: '',
-          attributes: []
-        },
-        seminarErrors: {
-          title: '',
-          start_at: '',
-          end_at: ''
-        },
-        seminarEditor: {
-          visible: false,
-          isSubmitting: false
-        },
-        rules: {
-          title: [
-            {required: true, message: '请输入会议名称'},
-            {max: 255, message: '长度不超过255个字符'}
-          ],
-          start_at: [
-            {type: 'date', required: true, message: '请输入开始时间'}
-          ],
-          end_at: [
-            {type: 'date', required: true, message: '请输入结束时间'}
-          ]
-        },
-        entities: []
-      }
-    },
-    components: {entityAttribute},
-    computed: {
-      ...mapGetters([
-        'seminar'
-      ])
-    },
-    methods: {
-      showSeminarEditor () {
-        this.seminarEditor.visible = true
-        this.$nextTick(() => {
-          this.$refs['seminarForm'].resetFields()
-          this.seminarForm.title = this.seminar.title
-          this.seminarForm.start_at = new Date(this.seminar.start_at)
-          this.seminarForm.end_at = new Date(this.seminar.end_at)
-          this.seminarForm.entity_type_id = this.seminar.entity_type_id || ''
-          this.renderEntityAttributes(this.seminarForm.entity_type_id)
-        })
+export default {
+  data () {
+    return {
+      seminarInfo: {
+        id: this.$route.params.seminarId
       },
-      hideSeminarEditor () {
-        this.seminarEditor.visible = false
+      seminarForm: {
+        title: '',
+        start_at: '',
+        end_at: '',
+        entity_type_id: '',
+        attributes: []
       },
-      renderEntityAttributes (entityTypeId) {
-        let entity = this._.find(this.entities, {id: entityTypeId}) || {}
-        this.seminarForm.attributes = this.$refs['attributes'].format(entity.attributes || [], this.seminar)
+      seminarErrors: {
+        title: '',
+        start_at: '',
+        end_at: ''
       },
-      loadEntities () {
-        this.axios.get('/api/entities/seminar').then(response => {
-          this.entities = response['data']
-        }, response => {
-          this.$message.warning(response['response']['data']['message'])
-        })
+      seminarEditor: {
+        visible: false,
+        isSubmitting: false
       },
-      saveSeminar () {
-        this.$refs['seminarForm'].validate((valid) => {
-          if (valid) {
-            let data = {
-              id: this.seminarInfo.id,
-              title: this.seminarForm.title,
-              start_at: this.$moment(this.seminarForm.start_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
-              end_at: this.$moment(this.seminarForm.end_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
-              entity_type_id: this.seminarForm.entity_type_id,
-              ...this.$refs['attributes'].values()
-            }
-
-            this.$store.dispatch('updateSeminar', data).then(response => {
-              this.$message.success('保存成功')
-              this.seminarEditor.visible = false
-            }, response => {
-              this.$message.warning(response['response']['data']['message'])
-            })
-          }
-        })
-      }
-    },
-    mounted () {
-      this.loadEntities()
+      rules: {
+        title: [
+          { required: true, message: '请输入会议名称' },
+          { max: 255, message: '长度不超过255个字符' }
+        ],
+        start_at: [
+          { type: 'date', required: true, message: '请输入开始时间' }
+        ],
+        end_at: [
+          { type: 'date', required: true, message: '请输入结束时间' }
+        ]
+      },
+      entities: []
     }
+  },
+  components: { entityAttribute },
+  computed: {
+    ...mapGetters([
+      'seminar'
+    ])
+  },
+  methods: {
+    showSeminarEditor () {
+      this.seminarEditor.visible = true
+      this.$nextTick(() => {
+        this.$refs['seminarForm'].resetFields()
+        this.seminarForm.title = this.seminar.title
+        this.seminarForm.start_at = new Date(this.seminar.start_at)
+        this.seminarForm.end_at = new Date(this.seminar.end_at)
+        this.seminarForm.entity_type_id = this.seminar.entity_type_id || ''
+        this.renderEntityAttributes(this.seminarForm.entity_type_id)
+      })
+    },
+    hideSeminarEditor () {
+      this.seminarEditor.visible = false
+    },
+    renderEntityAttributes (entityTypeId) {
+      let entity = this._.find(this.entities, { id: entityTypeId }) || {}
+      this.seminarForm.attributes = this.$refs['attributes'].format(entity.attributes || [], this.seminar)
+    },
+    loadEntities () {
+      this.axios.get('/api/entities/seminar').then(response => {
+        this.entities = response['data']
+      }, response => {
+        this.$message.warning(response['response']['data']['message'])
+      })
+    },
+    saveSeminar () {
+      this.$refs['seminarForm'].validate((valid) => {
+        if (valid) {
+          let data = {
+            id: this.seminarInfo.id,
+            title: this.seminarForm.title,
+            start_at: this.$moment(this.seminarForm.start_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
+            end_at: this.$moment(this.seminarForm.end_at).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
+            entity_type_id: this.seminarForm.entity_type_id,
+            ...this.$refs['attributes'].values()
+          }
+
+          this.$store.dispatch('updateSeminar', data).then(response => {
+            this.$message.success('保存成功')
+            this.seminarEditor.visible = false
+          }, response => {
+            this.$message.warning(response['response']['data']['message'])
+          })
+        }
+      })
+    }
+  },
+  mounted () {
+    this.loadEntities()
   }
+}
 </script>

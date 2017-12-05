@@ -46,119 +46,119 @@
   </el-col>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .checkins {
-    .btn-create {
-      float: right;
-      margin-bottom: 10px;
-    }
+.checkins {
+  .btn-create {
+    float: right;
+    margin-bottom: 10px;
   }
+}
 </style>
 <script type="text/ecmascript-6">
-  /* eslint-disable one-var */
+/* eslint-disable one-var */
 
-  export default{
-    data () {
-      return {
-        seminarId: this.$route.params.seminarId,
-        checkins: [],
-        checkinForm: {
-          id: '',
-          title: '',
-          staff_name: '',
-          staff_mobile: ''
-        },
-        checkinErrors: {
-          title: '',
-          staff_name: '',
-          staff_mobile: ''
-        },
-        checkinEditor: {
-          title: '',
-          visible: false,
-          isSubmitting: false
-        },
-        rules: {
-          title: [
-            {required: true, message: '请输入签到点名称'},
-            {max: 255, message: '长度不超过255个字符'}
-          ]
-        }
+export default {
+  data () {
+    return {
+      seminarId: this.$route.params.seminarId,
+      checkins: [],
+      checkinForm: {
+        id: '',
+        title: '',
+        staff_name: '',
+        staff_mobile: ''
+      },
+      checkinErrors: {
+        title: '',
+        staff_name: '',
+        staff_mobile: ''
+      },
+      checkinEditor: {
+        title: '',
+        visible: false,
+        isSubmitting: false
+      },
+      rules: {
+        title: [
+          { required: true, message: '请输入签到点名称' },
+          { max: 255, message: '长度不超过255个字符' }
+        ]
       }
-    },
-    components: {},
-    methods: {
-      showCheckinEditor (index, row) {
-        this.checkinEditor.visible = true
+    }
+  },
+  components: {},
+  methods: {
+    showCheckinEditor (index, row) {
+      this.checkinEditor.visible = true
 
-        this.$nextTick(() => {
-          this.$refs['checkinForm'].resetFields()
-          if (row && row.id) {
-            this.checkinForm.id = row.id
-            this.checkinForm.title = row.title
-            this.checkinForm.staff_name = row.staff_name
-            this.checkinForm.staff_mobile = row.staff_mobile
-            this.checkinEditor.title = '编辑'
-          } else {
-            this.checkinForm.id = ''
-            this.checkinForm.title = ''
-            this.checkinForm.staff_name = ''
-            this.checkinForm.staff_mobile = ''
-            this.checkinEditor.title = '创建'
+      this.$nextTick(() => {
+        this.$refs['checkinForm'].resetFields()
+        if (row && row.id) {
+          this.checkinForm.id = row.id
+          this.checkinForm.title = row.title
+          this.checkinForm.staff_name = row.staff_name
+          this.checkinForm.staff_mobile = row.staff_mobile
+          this.checkinEditor.title = '编辑'
+        } else {
+          this.checkinForm.id = ''
+          this.checkinForm.title = ''
+          this.checkinForm.staff_name = ''
+          this.checkinForm.staff_mobile = ''
+          this.checkinEditor.title = '创建'
+        }
+      })
+    },
+    hideCheckinEditor () {
+      this.checkinEditor.visible = false
+    },
+    loadCheckins () {
+      this.axios.get('/api/seminars/' + this.seminarId + '/checkins').then(response => {
+        this.checkins = response['data']
+      }, response => {
+        this.$message.warning(response['response']['data']['message'])
+      })
+    },
+    saveCheckin () {
+      this.$refs['checkinForm'].validate((valid) => {
+        if (valid) {
+          let url = '/api/seminars/' + this.seminarId + '/checkins',
+            method = 'post',
+            data = {
+              title: this.checkinForm.title,
+              staff_name: this.checkinForm.staff_name,
+              staff_mobile: this.checkinForm.staff_mobile
+            }
+          if (this.checkinForm.id) {
+            method = 'put'
+            url += '/' + this.checkinForm.id
           }
-        })
-      },
-      hideCheckinEditor () {
-        this.checkinEditor.visible = false
-      },
-      loadCheckins () {
-        this.axios.get('/api/seminars/' + this.seminarId + '/checkins').then(response => {
-          this.checkins = response['data']
+          this.axios[method](url, data).then(response => {
+            this.loadCheckins()
+            this.hideCheckinEditor()
+          }).catch(response => {
+            this.$message.warning(response['response']['data']['message'])
+          })
+        }
+      })
+    },
+    deleteCheckin (index, row) {
+      this.$confirm('此操作将删除此签到点：' + row.title + ', 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios.delete('/api/seminars/' + this.seminarId + '/checkins/' + row.id).then(response => {
+          this.loadCheckins()
+          this.$message.success('删除成功!')
         }, response => {
           this.$message.warning(response['response']['data']['message'])
         })
-      },
-      saveCheckin () {
-        this.$refs['checkinForm'].validate((valid) => {
-          if (valid) {
-            let url = '/api/seminars/' + this.seminarId + '/checkins',
-              method = 'post',
-              data = {
-                title: this.checkinForm.title,
-                staff_name: this.checkinForm.staff_name,
-                staff_mobile: this.checkinForm.staff_mobile
-              }
-            if (this.checkinForm.id) {
-              method = 'put'
-              url += '/' + this.checkinForm.id
-            }
-            this.axios[method](url, data).then(response => {
-              this.loadCheckins()
-              this.hideCheckinEditor()
-            }).catch(response => {
-              this.$message.warning(response['response']['data']['message'])
-            })
-          }
-        })
-      },
-      deleteCheckin (index, row) {
-        this.$confirm('此操作将删除此签到点：' + row.title + ', 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.axios.delete('/api/seminars/' + this.seminarId + '/checkins/' + row.id).then(response => {
-            this.loadCheckins()
-            this.$message.success('删除成功!')
-          }, response => {
-            this.$message.warning(response['response']['data']['message'])
-          })
-        }).catch(() => {
-          this.$message('已取消删除')
-        })
-      }
-    },
-    mounted () {
-      this.loadCheckins()
+      }).catch(() => {
+        this.$message('已取消删除')
+      })
     }
+  },
+  mounted () {
+    this.loadCheckins()
   }
+}
 </script>

@@ -107,200 +107,200 @@
   </el-col>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .agenda-card {
-    width: 100%;
-    margin-top: 20px;
-    .btn-create-agenda {
-      float: right;
-      display: block;
-    }
+.agenda-card {
+  width: 100%;
+  margin-top: 20px;
+  .btn-create-agenda {
+    float: right;
+    display: block;
   }
+}
 </style>
 <script type="text/ecmascript-6">
-  /* eslint-disable one-var */
+/* eslint-disable one-var */
 
-  import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
-  export default {
-    data () {
-      return {
-        seminarId: this.$route.params.seminarId,
-        agendas: [],
-        agendaForm: {
-          title: '',
-          start_at: '',
-          end_at: ''
-        },
-        agendaErrors: {
-          title: '',
-          start_at: '',
-          end_at: ''
-        },
-        agendaEditor: {
-          title: '',
-          visible: false,
-          isSubmitting: false
-        },
-        rules: {
-          title: [
-            {required: true, message: '请输入日程名称'},
-            {max: 255, message: '长度不超过255个字符'}
-          ],
-          start_at: [
-            {required: true, message: '请输入开始时间'},
-            {
-              validator: (rule, value, callback) => {
-                let agendaStartAt = this.$moment(this.agendaForm.date + ' ' + value)
-                if (agendaStartAt.isBefore(this.seminar.start_at)) {
-                  callback(new Error('日程开始时间要晚于会议开始时间'))
-                } else if (agendaStartAt.isAfter(this.seminar.end_at)) {
-                  callback(new Error('日程开始时间要不晚于会议结束时间'))
-                } else {
-                  callback()
-                }
+export default {
+  data () {
+    return {
+      seminarId: this.$route.params.seminarId,
+      agendas: [],
+      agendaForm: {
+        title: '',
+        start_at: '',
+        end_at: ''
+      },
+      agendaErrors: {
+        title: '',
+        start_at: '',
+        end_at: ''
+      },
+      agendaEditor: {
+        title: '',
+        visible: false,
+        isSubmitting: false
+      },
+      rules: {
+        title: [
+          { required: true, message: '请输入日程名称' },
+          { max: 255, message: '长度不超过255个字符' }
+        ],
+        start_at: [
+          { required: true, message: '请输入开始时间' },
+          {
+            validator: (rule, value, callback) => {
+              let agendaStartAt = this.$moment(this.agendaForm.date + ' ' + value)
+              if (agendaStartAt.isBefore(this.seminar.start_at)) {
+                callback(new Error('日程开始时间要晚于会议开始时间'))
+              } else if (agendaStartAt.isAfter(this.seminar.end_at)) {
+                callback(new Error('日程开始时间要不晚于会议结束时间'))
+              } else {
+                callback()
               }
             }
-          ],
-          end_at: [
-            {required: true, message: '请输入结束时间'}
-          ]
-        },
+          }
+        ],
+        end_at: [
+          { required: true, message: '请输入结束时间' }
+        ]
+      },
+      speakers: [],
+      speakerTransfer: {
+        agendaId: '',
         speakers: [],
-        speakerTransfer: {
-          agendaId: '',
-          speakers: [],
-          visible: false,
-          isSubmitting: false
-        },
-        filterMethod (query, item) {
-          return item.name.indexOf(query) > -1
-        }
+        visible: false,
+        isSubmitting: false
+      },
+      filterMethod (query, item) {
+        return item.name.indexOf(query) > -1
       }
-    },
-    computed: {
-      ...mapGetters([
-        'seminar'
-      ]),
-      days () {
-        let startAt = this.seminar.start_at,
-          endAt = this.seminar.end_at,
-          diff = parseInt(Math.abs(startAt - endAt) / 1000 / 60 / 60 / 24),
-          days = []
-        for (let i = -1; i < diff; i++) {
-          let date = this.$moment(startAt).add(i + 1, 'days').format('YYYY-MM-DD')
-          days.push({
-            date: date,
-            agendas: this._.filter(this.agendas, agenda => {
-              return this.$moment(agenda.start_at).format('YYYY-MM-DD') === date
-            })
-          })
-        }
-        return days
-      }
-    },
-    components: {},
-    methods: {
-      showAgendaEditor (index, date, row) {
-        this.agendaEditor.visible = true
-        this.$nextTick(() => {
-          this.$refs['agendaForm'].resetFields()
-          this.agendaForm.date = date
-          if (row && row.id) {
-            this.agendaForm.id = row.id
-            this.agendaForm.title = row.title
-            this.agendaForm.start_at = this.$moment(row.start_at).format('HH:mm')
-            this.agendaForm.end_at = this.$moment(row.end_at).format('HH:mm')
-            this.agendaEditor.title = '编辑'
-          } else {
-            this.agendaForm.id = ''
-            this.agendaForm.title = ''
-            this.agendaForm.start_at = ''
-            this.agendaForm.end_at = ''
-            this.agendaEditor.title = '创建'
-          }
-        })
-      },
-      hideAgendaEditor () {
-        this.agendaEditor.visible = false
-      },
-      showSpeakerTransfer (index, row) {
-        this.speakerTransfer.agendaId = row.id
-        this.speakerTransfer.visible = true
-        this.speakerTransfer.speakers = row.speakerIds
-        this.loadSpeakers()
-      },
-      hideSpeakerTransfer () {
-        this.speakerTransfer.visible = false
-      },
-      saveAgenda () {
-        this.$refs['agendaForm'].validate((valid) => {
-          if (valid) {
-            let statAt = this.agendaForm.date + ' ' + this.agendaForm.start_at,
-              endAt = this.agendaForm.date + ' ' + this.agendaForm.end_at,
-              url = '/api/seminars/' + this.seminarId + '/agendas',
-              method = 'post',
-              data = {
-                entity_type_id: this.agendaForm.entity_type_id,
-                title: this.agendaForm.title,
-                start_at: this.$moment(statAt).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
-                end_at: this.$moment(endAt).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ')
-              }
-            if (this.agendaForm.id) {
-              method = 'put'
-              url += '/' + this.agendaForm.id
-            }
-            this.axios[method](url, data).then(response => {
-              this.loadAgendas()
-              this.hideAgendaEditor()
-            }, response => {
-              this.$message.warning(response['response']['data']['message'])
-            })
-          }
-        })
-      },
-      deleteAgenda (index, row) {
-        this.$confirm('此操作将删除日程：' + row.title + '，是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.axios.delete('/api/seminars/' + this.seminarId + '/agendas/' + row.id).then(response => {
-            this.loadAgendas()
-            this.$message.success('删除成功!')
-          }, response => {
-            this.$message(response['response']['data']['message'])
-          })
-        }).catch(() => {
-          this.$message('已取消删除')
-        })
-      },
-      attachAgendaSpeakers () {
-        this.axios.put('/api/seminars/' + this.seminarId + '/agendas/' + this.speakerTransfer.agendaId + '/speakers', {
-          speakers: this.speakerTransfer.speakers
-        }).then((response) => {
-          this.loadAgendas()
-          this.hideSpeakerTransfer()
-        }, (response) => {
-          this.$message.warning(response['response']['data']['message'])
-        })
-      },
-      loadAgendas () {
-        this.axios.get('/api/seminars/' + this.seminarId + '/agendas').then((response) => {
-          this.agendas = response['data']
-        }, (response) => {
-          this.$message.warning(response['response']['data']['message'])
-        })
-      },
-      loadSpeakers () {
-        this.axios.get('/api/seminars/' + this.seminarId + '/speakers').then((response) => {
-          this.speakers = response['data']
-        }, (response) => {
-          this.$message.warning(response['response']['data']['message'])
-        })
-      }
-    },
-    mounted () {
-      this.loadAgendas()
     }
+  },
+  computed: {
+    ...mapGetters([
+      'seminar'
+    ]),
+    days () {
+      let startAt = this.seminar.start_at,
+        endAt = this.seminar.end_at,
+        diff = parseInt(Math.abs(startAt - endAt) / 1000 / 60 / 60 / 24),
+        days = []
+      for (let i = -1; i < diff; i++) {
+        let date = this.$moment(startAt).add(i + 1, 'days').format('YYYY-MM-DD')
+        days.push({
+          date: date,
+          agendas: this._.filter(this.agendas, agenda => {
+            return this.$moment(agenda.start_at).format('YYYY-MM-DD') === date
+          })
+        })
+      }
+      return days
+    }
+  },
+  components: {},
+  methods: {
+    showAgendaEditor (index, date, row) {
+      this.agendaEditor.visible = true
+      this.$nextTick(() => {
+        this.$refs['agendaForm'].resetFields()
+        this.agendaForm.date = date
+        if (row && row.id) {
+          this.agendaForm.id = row.id
+          this.agendaForm.title = row.title
+          this.agendaForm.start_at = this.$moment(row.start_at).format('HH:mm')
+          this.agendaForm.end_at = this.$moment(row.end_at).format('HH:mm')
+          this.agendaEditor.title = '编辑'
+        } else {
+          this.agendaForm.id = ''
+          this.agendaForm.title = ''
+          this.agendaForm.start_at = ''
+          this.agendaForm.end_at = ''
+          this.agendaEditor.title = '创建'
+        }
+      })
+    },
+    hideAgendaEditor () {
+      this.agendaEditor.visible = false
+    },
+    showSpeakerTransfer (index, row) {
+      this.speakerTransfer.agendaId = row.id
+      this.speakerTransfer.visible = true
+      this.speakerTransfer.speakers = row.speakerIds
+      this.loadSpeakers()
+    },
+    hideSpeakerTransfer () {
+      this.speakerTransfer.visible = false
+    },
+    saveAgenda () {
+      this.$refs['agendaForm'].validate((valid) => {
+        if (valid) {
+          let statAt = this.agendaForm.date + ' ' + this.agendaForm.start_at,
+            endAt = this.agendaForm.date + ' ' + this.agendaForm.end_at,
+            url = '/api/seminars/' + this.seminarId + '/agendas',
+            method = 'post',
+            data = {
+              entity_type_id: this.agendaForm.entity_type_id,
+              title: this.agendaForm.title,
+              start_at: this.$moment(statAt).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ'),
+              end_at: this.$moment(endAt).utcOffset(0).format('YYYY-MM-DDTHH:mm:ssZ')
+            }
+          if (this.agendaForm.id) {
+            method = 'put'
+            url += '/' + this.agendaForm.id
+          }
+          this.axios[method](url, data).then(response => {
+            this.loadAgendas()
+            this.hideAgendaEditor()
+          }, response => {
+            this.$message.warning(response['response']['data']['message'])
+          })
+        }
+      })
+    },
+    deleteAgenda (index, row) {
+      this.$confirm('此操作将删除日程：' + row.title + '，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios.delete('/api/seminars/' + this.seminarId + '/agendas/' + row.id).then(response => {
+          this.loadAgendas()
+          this.$message.success('删除成功!')
+        }, response => {
+          this.$message(response['response']['data']['message'])
+        })
+      }).catch(() => {
+        this.$message('已取消删除')
+      })
+    },
+    attachAgendaSpeakers () {
+      this.axios.put('/api/seminars/' + this.seminarId + '/agendas/' + this.speakerTransfer.agendaId + '/speakers', {
+        speakers: this.speakerTransfer.speakers
+      }).then((response) => {
+        this.loadAgendas()
+        this.hideSpeakerTransfer()
+      }, (response) => {
+        this.$message.warning(response['response']['data']['message'])
+      })
+    },
+    loadAgendas () {
+      this.axios.get('/api/seminars/' + this.seminarId + '/agendas').then((response) => {
+        this.agendas = response['data']
+      }, (response) => {
+        this.$message.warning(response['response']['data']['message'])
+      })
+    },
+    loadSpeakers () {
+      this.axios.get('/api/seminars/' + this.seminarId + '/speakers').then((response) => {
+        this.speakers = response['data']
+      }, (response) => {
+        this.$message.warning(response['response']['data']['message'])
+      })
+    }
+  },
+  mounted () {
+    this.loadAgendas()
   }
+}
 </script>

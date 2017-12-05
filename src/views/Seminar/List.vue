@@ -68,141 +68,141 @@
   </div>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .seminars {
-    position: relative;
-    padding: 20px;
-    .el-button {
-      float: right;
-      display: block;
+.seminars {
+  position: relative;
+  padding: 20px;
+  .el-button {
+    float: right;
+    display: block;
+  }
+}
+
+.seminar-card-container {
+  padding-top: 50px;
+}
+
+.seminar-card {
+  width: 395px;
+  display: inline-block;
+  margin: 0 15px 15px 0;
+  a {
+    color: #20a0ff;
+  }
+}
+
+.el-dialog {
+  .el-form {
+    width: 85%;
+    .line {
+      text-align: center;
     }
   }
+}
 
-  .seminar-card-container {
-    padding-top: 50px;
-  }
-
-  .seminar-card {
-    width: 395px;
-    display: inline-block;
-    margin: 0 15px 15px 0;
-    a {
-      color: #20a0ff;
-    }
-  }
-
-  .el-dialog {
-    .el-form {
-      width: 85%;
-      .line {
-        text-align: center;
-      }
-    }
-  }
-
-  .pager {
-    text-align: center;
-  }
+.pager {
+  text-align: center;
+}
 </style>
 <script type="text/ecmascript-6">
-  import navMenu from '../../components/NavMenu.vue'
+import navMenu from '../../components/NavMenu.vue'
 
-  export default {
-    data () {
-      return {
-        seminars: [],
-        pager: {
-          currentPage: 1,
-          pageSize: 9,
-          total: 0
-        },
-        seminarForm: {
-          title: '',
-          start_at: '',
-          end_at: '',
-          entity_type_id: ''
-        },
-        seminarErrors: {
-          title: '',
-          start_at: '',
-          end_at: '',
-          entity_type_id: ''
-        },
-        seminarEditor: {
-          visible: false,
-          isSubmitting: false
-        },
-        rules: {
-          title: [
-            {required: true, message: '请输入会议名称', trigger: 'change'},
-            {max: 255, message: '长度不超过255个字符', trigger: 'change'}
-          ],
-          start_at: [
-            {type: 'date', required: true, message: '请输入开始时间'}
-          ],
-          end_at: [
-            {type: 'date', required: true, message: '请输入结束时间'}
-          ]
-        },
-        entities: []
-      }
-    },
-    components: {navMenu},
-    methods: {
-      pagerCurrentChange (val) {
-        this.loadSeminars()
+export default {
+  data () {
+    return {
+      seminars: [],
+      pager: {
+        currentPage: 1,
+        pageSize: 9,
+        total: 0
       },
-      showSeminarEditor () {
-        this.seminarEditor.visible = true
-        this.$nextTick(() => {
-          this.$refs['seminarForm'].resetFields()
-          this.loadEntities()
-        })
+      seminarForm: {
+        title: '',
+        start_at: '',
+        end_at: '',
+        entity_type_id: ''
       },
-      hideSeminarEditor () {
-        this.seminarEditor.visible = false
+      seminarErrors: {
+        title: '',
+        start_at: '',
+        end_at: '',
+        entity_type_id: ''
       },
-      loadSeminars () {
-        this.axios.get('/api/seminars', {
-          params: {
-            page: this.pager.currentPage,
-            per_page: this.pager.pageSize
-          }
-        }).then(response => {
-          let data = response['data']
-          this.seminars = data['data']
-          this.pager.currentPage = data['current_page']
-          this.pager.total = data['total']
-        }, response => {
-          this.$message.warning(response['response']['data']['message'])
-        })
+      seminarEditor: {
+        visible: false,
+        isSubmitting: false
       },
-      loadEntities () {
-        this.axios.get('/api/entities/seminar').then(response => {
-          this.entities = response['data']
-        }, response => {
-          this.$message.warning(response['response']['data']['message'])
-        })
+      rules: {
+        title: [
+          { required: true, message: '请输入会议名称', trigger: 'change' },
+          { max: 255, message: '长度不超过255个字符', trigger: 'change' }
+        ],
+        start_at: [
+          { type: 'date', required: true, message: '请输入开始时间' }
+        ],
+        end_at: [
+          { type: 'date', required: true, message: '请输入结束时间' }
+        ]
       },
-      createSeminar () {
-        this.$refs['seminarForm'].validate((valid) => {
-          if (valid) {
-            this.axios.post('/api/seminars', {
-              entity_type_id: this.seminarForm.entity_type_id,
-              title: this.seminarForm.title,
-              start_at: this.$moment(this.seminarForm.start_at).format(),
-              end_at: this.$moment(this.seminarForm.end_at).format()
-            }).then(response => {
-              this.loadSeminars()
-              this.hideSeminarEditor()
-            }, response => {
-              this.$message.warning(response['response']['data']['message'])
-            })
-          }
-        })
-      }
-    },
-    mounted () {
-      this.loadSeminars()
+      entities: []
     }
+  },
+  components: { navMenu },
+  methods: {
+    pagerCurrentChange (val) {
+      this.loadSeminars()
+    },
+    showSeminarEditor () {
+      this.seminarEditor.visible = true
+      this.$nextTick(() => {
+        this.$refs['seminarForm'].resetFields()
+        this.loadEntities()
+      })
+    },
+    hideSeminarEditor () {
+      this.seminarEditor.visible = false
+    },
+    loadSeminars () {
+      this.axios.get('/api/seminars', {
+        params: {
+          page: this.pager.currentPage,
+          per_page: this.pager.pageSize
+        }
+      }).then(response => {
+        let data = response['data']
+        this.seminars = data['data']
+        this.pager.currentPage = data['current_page']
+        this.pager.total = data['total']
+      }, response => {
+        this.$message.warning(response['response']['data']['message'])
+      })
+    },
+    loadEntities () {
+      this.axios.get('/api/entities/seminar').then(response => {
+        this.entities = response['data']
+      }, response => {
+        this.$message.warning(response['response']['data']['message'])
+      })
+    },
+    createSeminar () {
+      this.$refs['seminarForm'].validate((valid) => {
+        if (valid) {
+          this.axios.post('/api/seminars', {
+            entity_type_id: this.seminarForm.entity_type_id,
+            title: this.seminarForm.title,
+            start_at: this.$moment(this.seminarForm.start_at).format(),
+            end_at: this.$moment(this.seminarForm.end_at).format()
+          }).then(response => {
+            this.loadSeminars()
+            this.hideSeminarEditor()
+          }, response => {
+            this.$message.warning(response['response']['data']['message'])
+          })
+        }
+      })
+    }
+  },
+  mounted () {
+    this.loadSeminars()
   }
+}
 </script>
