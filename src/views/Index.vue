@@ -24,7 +24,7 @@
   export default{
     data () {
       return {
-        oAuthUrl: 'http://test-memberb.smarket.net.cn/oauth/qq/login?XDEBUG_SESSION_START=PHPSTORM&app_id=101405226',
+        oAuthUrl: '/oauth/qq/login?XDEBUG_SESSION_START=PHPSTORM&app_id=101405226',
         messages: []
       }
     },
